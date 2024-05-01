@@ -1,0 +1,12 @@
+README.md
+pyproject.toml
+setup.cfg
+setup.py
+pso/__init__.py
+pso.egg-info/PKG-INFO
+pso.egg-info/SOURCES.txt
+pso.egg-info/dependency_links.txt
+pso.egg-info/not-zip-safe
+pso.egg-info/requires.txt
+pso.egg-info/top_level.txt
+tests/test.py

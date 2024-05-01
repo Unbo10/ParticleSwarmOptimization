@@ -1,3 +1,13 @@
+Metadata-Version: 2.1
+Name: pso
+Version: 0.1
+Summary: A Particle Swarm Optimization implementation in Python
+Author: Paula Isabella Moreno, Juan Sebastián Rueda, Santiago Rocha
+Author-email: , , srochap@unal.edu.co
+Requires-Python: >=3.6
+Requires-Dist: numpy
+Requires-Dist: setuptools>=61.0
+
 # LaHerencia
 
 ``` mermaid
