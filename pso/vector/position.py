@@ -1,4 +1,17 @@
-""""""
+"""
+A module to represent the position vector in a Particle Swarm
+Optimization (PSO) algorithm.
+The Position class inherits from the Vector class and provides
+methods for updating the position based on the velocity vector.
+
+## Classes
+Position: Represents the position vector in a PSO algorithm.
+Child of Vector.
+
+### Methods
+- _update(velocity): Updates the position based on the given velocity
+vector.
+"""
 
 from pso.vector.abstract_vector import Vector
 from pso.vector.velocity import Velocity 
@@ -12,7 +25,7 @@ class Position(Vector):
         The coordinates of the position vector.
 
     ## Methods
-    _update(velocity)
+    - _update(velocity)
         Updates the position by adding the coordinates of the given velocity vector.
     """
 

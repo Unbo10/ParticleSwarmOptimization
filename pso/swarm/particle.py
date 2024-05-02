@@ -1,4 +1,23 @@
-""""""
+"""
+This module defines the Particle class, which represents a particle in a swarm in the context of the Particle Swarm Optimization (PSO) algorithm.
+
+## Classes
+- Particle: Represents a particle in a swarm in the context of the PSO algorithm.
+
+### Methods
+- initialize_randomly(bound=10): Initializes the position, velocity, heuristic, and pbest of the particle randomly.
+- _update_pbest(): Updates the best position of the particle (__pbest) comparing the heuristic value.
+
+#### Getters and setters
+- get_heuristic() -> Heuristic
+- get_pbest() -> Position
+- get_position() -> Position
+- get_velocity() -> Velocity
+- set_heuristic(heuristic: Vector) -> None
+- set_pbest(pbest: Position) -> None
+- set_position(position: Position) -> None
+- set_velocity(velocity: Velocity) -> None
+"""
 
 import numpy as np
 
@@ -25,6 +44,11 @@ class Particle:
         Current velocity of the particle.
 
     ## Methods
+    initialize_randomly(bound=10)
+        Initializes the position, velocity, heuristic and pbest of the particle randomly.
+
+    ### Getters and setters
+
     get_heuristic() -> Vector
         Returns the fitness or heuristic value of the particle.
     get_pbest() -> Position
@@ -54,12 +78,22 @@ class Particle:
         return f"Particle at {self.__position.get_coordinates()} with pbest at {self.__pbest.get_coordinates()}, velocity {self.__velocity.get_coordinates()} and a heuristic value of {self.__heuristic.get_coordinates()}.\n"
     
     def initialize_randomly(self, bound: int = 10) -> None:
+        """Initializes the (__)position, (__)velocity, (__)heuristic and (__)pbest of the particle randomly.
+        
+        ## Parameters
+        bound : int
+            The upper bound for the random initialization. Default is 10.
+        """
         self.__position.initialize_randomly(bound, self.__position.get_dimensions())
         self.__heuristic._update(self.__position)
         self.__pbest.set_coordinates(self.__position.get_coordinates().copy())
         self.__velocity.initialize_randomly(np.linalg.norm(self.__position.get_coordinates().copy()), self.__velocity.get_dimensions())
 
     def _update_pbest(self) -> None:
+        """Updates the best position of the particle (__pbest) comparing the heuristic
+        value (last coordinate of the heuristic vector) of the current position 
+        (__position) with the heuristic value of the best position found up to the i-th
+        iteration (__pbest)."""
         heuristic_f = self.__heuristic.get_heuristic_f()
         if heuristic_f(self.__position) < heuristic_f(self.__pbest):
             self.__pbest.set_coordinates(self.__position.get_coordinates().copy())

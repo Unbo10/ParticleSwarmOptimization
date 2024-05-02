@@ -1,12 +1,25 @@
 """
 A module to represent a vector as a data type with added functionality.
-Contains only the class Vector.
+Contains the class Vector and its related attributes and methods.
+It is intended to be an abstract class to be inherited by other classes.
 
-### Classes
-
-(class) Vector:
-    A class to represent a vector in a n-dimensional space and
+## Classes
+Vector: A class to represent a vector in a n-dimensional space and
     facilitate its graphical representation.
+
+### Methods
+- initialize_randomly(bound: float = 10): Initialize the coordinates of a
+vector randomly within
+- _update(): Abstract method.
+
+#### Getters and setters
+- get_color() -> dict
+- get_coordinates() -> np.ndarray
+- get_dimensions() -> int
+- set_color(red: int, green: int, blue: int, alpha: int = 255)
+- set_coordinates(coordinates: np.ndarray)
+- set_dimensions(dimensions: int)
+
 """
 
 from typing import Any
@@ -18,29 +31,29 @@ class Vector:
     facilitate its graphical representation.
     
     ## Attributes
-    __color : dict
+    - _color : dict
         A dictionary with the values of the color of the vector.
-    __coordinates : np.ndarray
+    - _coordinates : np.ndarray
         An array with the coordinates of the vector.
-    _dimensions : int
+    - _dimensions : int
         The number of dimensions of the vector.
     
     ## Methods
-    initialize_randomly(bound: float = 10)
+    - initialize_randomly(bound: float = 10)
         Initialize the coordinates of a vector randomly within 
         the interval [-bound, bound].
-    __lt__(other)
+    - __lt__(other)
         Overriding of the less than operator. Compares two vectors depending on their norm.
-    _update()
+    - _update()
         Abstract method.
     
     Getters and setters
-        get_color() -> dict
-        get_coordinates() -> np.ndarray
-        get_dimensions() -> int
-        set_color(red: int, green: int, blue: int, alpha: int = 255)
-        set_coordinates(coordinates: np.ndarray)
-        set_dimensions(dimensions: int) 
+    - get_color() -> dict
+    - get_coordinates() -> np.ndarray
+    - get_dimensions() -> int
+    - set_color(red: int, green: int, blue: int, alpha: int = 255)
+    - set_coordinates(coordinates: np.ndarray)
+    - set_dimensions(dimensions: int) 
         
     """
     
@@ -48,6 +61,7 @@ class Vector:
         self._color: dict = {"R": 0, "G": 0, "B": 0, "A": 255}
         self._coordinates: np.ndarray = np.zeros(dimensions)
         self._dimensions: int = dimensions
+        print(self._coordinates)
 
     def __repr__(self) -> str:
         return f"Vector with coordinates {self.get_coordinates()} and color {list(self.get_color().values())}."
@@ -56,8 +70,7 @@ class Vector:
         """Initialize the coordinates of a vector randomly within 
         the interval [-bound, bound].
 
-        Parameters
-        ---
+        ## Parameters
         bound (float): 
             The maximum absolute value of the coordinates in all of its dimmensions.
         """
