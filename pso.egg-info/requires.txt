@@ -1,2 +1,0 @@
-numpy
-setuptools>=61.0

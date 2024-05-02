@@ -52,7 +52,7 @@ class Vector:
     def __repr__(self) -> str:
         return f"Vector with coordinates {self.get_coordinates()} and color {list(self.get_color().values())}."
     
-    def initialize_randomly(self, bound: float = 10) -> None:
+    def initialize_randomly(self, bound: float = 10, dimensions: int = 2) -> None:
         """Initialize the coordinates of a vector randomly within 
         the interval [-bound, bound].
 
@@ -61,16 +61,17 @@ class Vector:
         bound (float): 
             The maximum absolute value of the coordinates in all of its dimmensions.
         """
-        self._coordinates = np.random.uniform(low=0, high=np.nextafter(bound, bound + 1), size=self._dimensions)
+        self._coordinates = np.random.uniform(low=-bound, high=np.nextafter(bound, bound + 1), size=dimensions)
 
     def _update() -> None:
         """Abstract method"""
         raise NotImplementedError("This method must be implemented in a subclass.")
     
-    def __lt__(self, other) -> bool:
-        if not isinstance(other, Vector):
-            raise TypeError("The object to compare must be a Vector. The provided object is of type {}.".format(type(other)))
-        return np.linalg.norm(self._coordinates) < np.linalg.norm(other._coordinates)
+    # def __lt__(self, other) -> bool:
+    #     if not isinstance(other, Vector):
+    #         raise TypeError("The object to compare must be a Vector. The provided object is of type {}.".format(type(other)))
+    #     print(other.get_dimensions(), self._dimensions)
+    #     return self._coordinates[self._dimensions - 1] < other._coordinates[self._dimensions - 1]
 
     # * Getters and setters
     def get_color(self) -> dict:
@@ -86,7 +87,7 @@ class Vector:
         self._color = {"R": red, "G": green, "B": blue, "A": alpha}
 
     def set_coordinates(self, coordinates: np.ndarray) -> None:
-        self.__coordinates = coordinates
+        self._coordinates = coordinates
     
     def set_dimensions(self, dimensions: int) -> None:
         self._dimensions = dimensions

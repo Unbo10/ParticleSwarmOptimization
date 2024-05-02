@@ -3,6 +3,7 @@
 import numpy as np
 
 from pso.vector.abstract_vector import Vector
+from pso.vector.heuristic import Heuristic, default_heuristic
 from pso.vector.position import Position
 from pso.vector.velocity import Velocity
 
@@ -14,7 +15,7 @@ class Particle:
     ## Attributes
     
     All are private.
-    __heuristic_vector : Vector
+    __heuristic : Heuristic
         Fitness or heuristic value of the particle.
     __pbest : Position
         Position where the best heuristic value was found.
@@ -24,7 +25,7 @@ class Particle:
         Current velocity of the particle.
 
     ## Methods
-    get_heuristic_vector() -> Vector
+    get_heuristic() -> Vector
         Returns the fitness or heuristic value of the particle.
     get_pbest() -> Position
         Returns the position where the best heuristic value was found.
@@ -32,7 +33,7 @@ class Particle:
         Returns the current position of the particle.
     get_velocity() -> Velocity
         Returns the current velocity of the particle.
-    set_heuristic_vector(heuristic_vector: Vector) -> None
+    set_heuristic(heuristic: Vector) -> None
         Sets the fitness or heuristic value of the particle.
     set_pbest(pbest: Position) -> None
         Sets the position where the best heuristic value was found.
@@ -42,29 +43,31 @@ class Particle:
         Sets the current velocity of the particle.
     """
 
-    def __init__(self, dimensions: int = 3) -> None:
-        self.__heuristic_vector: Vector = Vector(dimensions)
-        self.__pbest: Position = Position(dimensions-1)
+    def __init__(self, dimensions: int = 3, heuristic: callable = default_heuristic) -> None:
         self.__position: Position = Position(dimensions-1)
+        self.__pbest: Position = Position(dimensions-1)
+        self.__heuristic: Heuristic = Heuristic(dimensions, heuristic)
+        self.__heuristic._update(self.get_pbest())
         self.__velocity: Velocity = Velocity(dimensions-1)
 
     def __repr__(self) -> str:
-        return f"Particle at {self.__position.get_coordinates()} with pbest at {self.__pbest.get_coordinates()}, velocity {self.__velocity.get_coordinates()} and a heuristic value of {self.__heuristic_vector.get_coordinates()}.\n"
+        return f"Particle at {self.__position.get_coordinates()} with pbest at {self.__pbest.get_coordinates()}, velocity {self.__velocity.get_coordinates()} and a heuristic value of {self.__heuristic.get_coordinates()}.\n"
     
     def initialize_randomly(self, bound: int = 10) -> None:
-        self.__heuristic_vector.initialize_randomly(bound)
-        self.__position.initialize_randomly(bound)
-        self.__pbest = self.__position
-        self.__velocity.initialize_randomly(bound)
+        self.__position.initialize_randomly(bound, self.__position.get_dimensions())
+        self.__heuristic._update(self.__position)
+        self.__pbest.set_coordinates(self.__position.get_coordinates().copy())
+        self.__velocity.initialize_randomly(np.linalg.norm(self.__position.get_coordinates().copy()), self.__velocity.get_dimensions())
 
     def _update_pbest(self) -> None:
-        if self.__position < self.__pbest:
-            self.__pbest.set_coordinates(self.__pbest.get_coordinates())
+        heuristic_f = self.__heuristic.get_heuristic_f()
+        if heuristic_f(self.__position) < heuristic_f(self.__pbest):
+            self.__pbest.set_coordinates(self.__position.get_coordinates().copy())
     
     # * Getters and setters
 
-    def get_heuristic_vector(self) -> Vector:
-        return self.__heuristic_vector
+    def get_heuristic(self) -> Heuristic:
+        return self.__heuristic
     
     def get_pbest(self) -> Position:
         return self.__pbest
@@ -75,8 +78,8 @@ class Particle:
     def get_velocity(self) -> Velocity:
         return self.__velocity
     
-    def set_heuristic_vector(self, heuristic_vector: Vector) -> None:
-        self.__heuristic_vector = heuristic_vector
+    def set_heuristic(self, heuristic: Vector) -> None:
+        self.__heuristic = heuristic
     
     def set_pbest(self, pbest: Position) -> None:
         self.__pbest = pbest
@@ -91,7 +94,7 @@ class Particle:
 if __name__ ==  "__main__":
     dimensions: int = 4
     p = Particle()
-    print(p.get_heuristic_vector().get_coordinates())
+    print(p.get_heuristic().get_coordinates())
     print(p.get_pbest().get_coordinates())
     print(p.get_position().get_coordinates())
     print(p.get_velocity().get_coordinates())
