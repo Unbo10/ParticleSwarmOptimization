@@ -43,9 +43,9 @@ class Main:
         The number of iterations to run the algorithm. Default is 20.
     
     ## Attributes
-    __cognitive_coefficient : float
+    - __cognitive_coefficient : float
         The cognitive coefficient used in the PSO algorithm.
-    __dimensions : int
+    - __dimensions : int
         The number of dimensions in the search space.
     - __inertia_coefficient : float
         The inertia coefficient used in the PSO algorithm.
@@ -104,6 +104,7 @@ class Main:
         """Heuristic function to be optimized."""
         # TODO: Make a better implementation of choosing the desired function, at the moment it's done manually, by modifying the variable selection through the parameters
         # TODO: Implement the second function to the dimension that the user selects. It is set to two dimensions. ? A dimension parameter in the heuristic ? 
+        # * Agree, but what should be then the type of the heuristic_value? A list or maybe an ndarray?
         
         if selection == "1":
             return np.sum(np.square(position.get_coordinates()))

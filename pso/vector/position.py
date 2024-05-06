@@ -8,9 +8,14 @@ methods for updating the position based on the velocity vector.
 Position: Represents the position vector in a PSO algorithm.
 Child of Vector.
 
+Vector: Inherited from the abstract_vector module.
+
+Velocity: Inherited from the velocity module.
+
 ### Methods
 - _update(velocity): Updates the position based on the given velocity
 vector.
+- Other getters and setters inherited from the abstract_vector module.
 """
 
 from pso.vector.abstract_vector import Vector
@@ -20,20 +25,33 @@ class Position(Vector):
     """
     Represents the position of an object in a multi-dimensional space.
 
+    ## Parameters
+    - dimensions : int, optional
+        The number of dimensions of the vector. Default is 3.
+
     ## Attributes
-    _coordinates : ndarray
+    - _color : dict
+        The color of the vector (inherited).
+    - _coordinates: np.ndarray
+        The coordinates of the vector (inherited).
+    - _dimensions : int
+        The number of dimensions of the vector (inherited).
+    - _coordinates : ndarray
         The coordinates of the position vector.
 
     ## Methods
     - _update(velocity)
-        Updates the position by adding the coordinates of the given velocity vector.
+        Updates the position by adding the coordinates of the given 
+        velocity vector.
+    - Other getters and setters inherited.
     """
 
     def __init__(self, dimensions: int = 3) -> None:
         super().__init__(dimensions)
     
     def _update(self, velocity: Velocity) -> None:
-        """Updates the position by adding the coordinates of the given velocity vector."""
+        """Updates the position by adding the coordinates of the given
+        velocity vector."""
         self._coordinates += velocity.get_coordinates()
 
 if __name__ ==  "__main__":
