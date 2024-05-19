@@ -67,12 +67,14 @@ class Particle:
         Sets the current velocity of the particle.
     """
 
-    def __init__(self, dimensions: int = 3, heuristic: callable = default_heuristic) -> None:
+    def __init__(self, index: int, has_gbest: bool, dimensions: int = 3, heuristic: callable = default_heuristic) -> None:
+        self.__index: int = index
         self.__position: Position = Position(dimensions-1)
         self.__pbest: Position = Position(dimensions-1)
         self.__heuristic: Heuristic = Heuristic(dimensions, heuristic)
         self.__heuristic._update(self.get_pbest())
         self.__velocity: Velocity = Velocity(dimensions-1)
+        self.has_gbest = False
 
     def __repr__(self) -> str:
         return f"Particle at {self.__position.get_coordinates()} with pbest at {self.__pbest.get_coordinates()}, velocity {self.__velocity.get_coordinates()} and a heuristic value of {self.__heuristic.get_coordinates()}.\n"
@@ -103,6 +105,9 @@ class Particle:
     def get_heuristic(self) -> Heuristic:
         return self.__heuristic
     
+    def get_index(self) -> int:
+        return self.__index
+    
     def get_pbest(self) -> Position:
         return self.__pbest
     
@@ -127,7 +132,7 @@ class Particle:
 
 if __name__ ==  "__main__":
     dimensions: int = 4
-    p = Particle()
+    p = Particle(0)
     print(p.get_heuristic().get_coordinates())
     print(p.get_pbest().get_coordinates())
     print(p.get_position().get_coordinates())

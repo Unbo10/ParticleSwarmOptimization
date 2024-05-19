@@ -27,6 +27,14 @@
         - get_swarm()
     }
     Main --o ParticleSwarm
+    Main --o Data
+
+    class Data {
+        - ~~~float/str~~~ history
+        <!-- * Contains three pd.DataFrame, corresponding to the last three attempts -->
+        <!-- ? Should it be the last three attempts or the last n-attempts? -->
+        <!-- ! Before creating any .xslx file it should check for existent ones and change the file's name if that happens. -->
+    }
 
     class ParticleSwarm{
         - float cognitive_coefficient

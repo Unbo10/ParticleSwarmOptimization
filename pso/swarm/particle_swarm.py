@@ -79,7 +79,7 @@ class ParticleSwarm:
             print("Amount defaulted to 10.")
             self.__particle_amount = 10
         # ? Should the following line be inside a finally block?
-        self.__particles: list[Particle] = [Particle(dimensions, heuristic) for _ in range(self.__particle_amount)]
+        self.__particles: list[Particle] = [Particle(index=p, has_gbest=False, dimensions=dimensions, heuristic=heuristic) for p in range(self.__particle_amount)] # ! Test change of Particle's constructor
         self.__gbest: Position = Position(dimensions - 1)
         self._heuristic_f: callable = heuristic
     
@@ -104,10 +104,13 @@ class ParticleSwarm:
     def update_gbest(self) -> None:
         """Compares each particles' position (accessed through get_position()) 
         with the global best position (__gbest)"""
+        dimensions: int = self.__particles[0].get_position().get_dimensions() # ? Might be a better way to do it
+        gbest_index: int = 0
         for particle in self.__particles:
-            dimensions: int = particle.get_position().get_dimensions() # ? Might be a better way to do it
             if particle.get_heuristic().get_coordinates()[dimensions] < self._heuristic_f(self.__gbest):
                 self.__gbest.set_coordinates(particle.get_position().get_coordinates().copy())
+                gbest_index = particle.get_index()
+        self.__particles[gbest_index].has_gbest = True
 
     # * Getters (setters not necessary for now)
 
