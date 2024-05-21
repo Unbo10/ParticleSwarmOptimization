@@ -17,12 +17,17 @@ class Data:
         self.__gbest_history.append(optimization_gbest_indexes)
         self.__number_of_optimizations += 1
 
+    def create_spreadsheet(self) -> None:
+        pass
+
     def print_optimization(self, optimization_index: int) -> None:
         pd.set_option('display.max_columns', None)
         pd.set_option('display.expand_frame_repr', False)
         pd.set_option('max_colwidth', None)
         pd.set_option('display.max_rows', None)
         print(self.__particle_history[optimization_index])
+
+    # * Getters
 
     def get_particle_history(self) -> list[pd.DataFrame]:
         return self.__particle_history

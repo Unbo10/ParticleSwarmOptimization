@@ -74,7 +74,8 @@ class Particle:
         self.__heuristic: Heuristic = Heuristic(dimensions, heuristic)
         self.__heuristic._update(self.get_pbest())
         self.__velocity: Velocity = Velocity(dimensions-1)
-        self.has_gbest = False
+        self.color : dict = {"r": 0, "g": 0, "b": 0}
+        self.has_gbest = has_gbest
 
     def __repr__(self) -> str:
         return f"Particle at {self.__position.get_coordinates()} with pbest at {self.__pbest.get_coordinates()}, velocity {self.__velocity.get_coordinates()} and a heuristic value of {self.__heuristic.get_coordinates()}.\n"
@@ -102,6 +103,9 @@ class Particle:
     
     # * Getters and setters
 
+    def get_color(self) -> dict:
+        return self.color
+
     def get_heuristic(self) -> Heuristic:
         return self.__heuristic
     
@@ -116,6 +120,9 @@ class Particle:
     
     def get_velocity(self) -> Velocity:
         return self.__velocity
+    
+    def set_color(self, red: int, green: int, blue: int, alpha: int = 255) -> None:
+        self.color = {"R": red, "G": green, "B": blue, "A": alpha}
     
     def set_heuristic(self, heuristic: Vector) -> None:
         self.__heuristic = heuristic

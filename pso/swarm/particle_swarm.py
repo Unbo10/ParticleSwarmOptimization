@@ -65,19 +65,21 @@ class ParticleSwarm:
     - get_heuristic() -> callable
         Returns the heuristic function to be optimized.
     """
-    
+
+    # ? ARE THE PSO COEFFICIENTS REALLY NEEDED HERE?
     def __init__(self, inertia_coefficient: float = 1, cognitive_coefficient: float = 2, social_coefficient: float = 2, dimensions: int = 3, particle_amount: int = 10, heuristic: callable = default_heuristic) -> None:
         self.__inertia_coefficient: float = inertia_coefficient
         self.__cognitive_coefficient: float = cognitive_coefficient
         self.__social_coefficient: float = social_coefficient
         try:
-            self.__particle_amount: int = particle_amount
+            self.__particle_amount: int = int(particle_amount)
             if self.__particle_amount < 1:
                 raise ValueError("The amount of particles must be greater than zero.") # ! Maybe include a TypeError to deal with floats
         except ValueError as e:
             print(e)
             print("Amount defaulted to 10.")
             self.__particle_amount = 10
+        # TODO: Except TypeError (double)
         # ? Should the following line be inside a finally block?
         self.__particles: list[Particle] = [Particle(index=p, has_gbest=False, dimensions=dimensions, heuristic=heuristic) for p in range(self.__particle_amount)] # ! Test change of Particle's constructor
         self.__gbest: Position = Position(dimensions - 1)

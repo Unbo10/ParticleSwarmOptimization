@@ -59,6 +59,7 @@ class Velocity(Vector):
     def __init__(self, dimensions: int = 3) -> None:
         super().__init__(dimensions)
 
+    # ! THIS PARAMETERS SHOULD BE CLASS ATTRIBUTES
     def _update(self, w: float, c1: float, c2: float, position: np.ndarray, pbest: np.ndarray, gbest: np.ndarray) -> None:
         """
         Updates the velocity vector based on the given parameters.
