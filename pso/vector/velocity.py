@@ -9,18 +9,18 @@ position (pbest) and the global best position (gbest).
 Velocity: Represents the velocity vector in a PSO algorithm.
 Child of Vector.
 
-Vector: Inherited from the abstract_vector module.
+Vector: Inherited from the base_vector module.
 
 ### Methods
 - _update(w, c1, c2, pbest, gbest): Updates the velocity
 vector based on the given parameters.
 - Other getters and setters inherited from the 
-abstract_vector module.
+base_vector module.
 """
 
 import numpy as np
 
-from pso.vector.abstract_vector import Vector
+from pso.vector.base_vector import Vector
 
 class Velocity(Vector):
     """
@@ -58,38 +58,6 @@ class Velocity(Vector):
 
     def __init__(self, dimensions: int = 3) -> None:
         super().__init__(dimensions)
-
-    # ! THIS PARAMETERS SHOULD BE CLASS ATTRIBUTES
-    def _update(self, w: float, c1: float, c2: float, position: np.ndarray, pbest: np.ndarray, gbest: np.ndarray) -> None:
-        """
-        Updates the velocity vector based on the given parameters.
-
-        The velocity vector is updated using the particle swarm optimization formula:
-        v(i + 1) = w * v(i) + c1 * r1 * (pbest - x(i)) + c2 * r2 * (gbest - x(i))
-
-        ## Parameters
-        - w : float
-            The inertia weight.
-        - c1 : float
-            The cognitive weight.
-        - c2 : float
-            The social weight.
-        - position : np.ndarray
-            The current position of the particle (x(i) in the formula).
-        - pbest : np.ndarray
-            The particle's best position.
-        - gbest : np.ndarray
-            The global best position.
-
-        ### Notes
-        - The `position`, `pbest`, and `gbest` parameters should have the same shape as the velocity vector.
-        - The `w` parameter (inertia coefficient) ranges between 0 and 1.
-        - The `c1` (cognitive coefficient) and `c2` (social coefficient) parameters range between 1 and 3.
-        - The `r1` and `r2` values are random numbers between 0 and 1.
-        """
-        r1: float = np.random.random()
-        r2: float = np.random.random()
-        self._coordinates = (w * self._coordinates) + (c1 * r1 * (pbest - position)) + (c2 * r2 * (gbest - position))
     
 if __name__ ==  "__main__":
     v = Velocity(3)

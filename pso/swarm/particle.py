@@ -21,7 +21,7 @@ This module defines the Particle class, which represents a particle in a swarm i
 
 import numpy as np
 
-from pso.vector.abstract_vector import Vector
+from pso.vector.base_vector import Vector
 from pso.vector.heuristic import Heuristic, default_heuristic
 from pso.vector.position import Position
 from pso.vector.velocity import Velocity
@@ -33,46 +33,55 @@ class Particle:
 
     ## Attributes
     
-    All are private.
-    __heuristic : Heuristic
+    ### Private
+    - __heuristic : Heuristic
         Fitness or heuristic value of the particle.
-    __pbest : Position
+    - __pbest : Position
         Position where the best heuristic value was found.
-    __position : Position
+    - __position : Position
         Current position of the particle.
-    __velocity : Velocity
+    - __velocity : Velocity
         Current velocity of the particle.
+    
+    ### Public
+    - color : dict
+        Color of the particle's heuristic.
+    - has_gbest : bool
+        If the particle has a global best position.
 
     ## Methods
-    initialize_randomly(bound=10)
+    - initialize_randomly(bound=10)
         Initializes the position, velocity, heuristic and pbest of the particle randomly.
 
     ### Getters and setters
 
-    get_heuristic() -> Vector
+    - get_heuristic() -> Vector
         Returns the fitness or heuristic value of the particle.
-    get_pbest() -> Position
+    - get_pbest() -> Position
         Returns the position where the best heuristic value was found.
-    get_position() -> Position
+    - get_position() -> Position
         Returns the current position of the particle.
-    get_velocity() -> Velocity
+    - get_velocity() -> Velocity
         Returns the current velocity of the particle.
-    set_heuristic(heuristic: Vector) -> None
+    - set_heuristic(heuristic: Vector) -> None
         Sets the fitness or heuristic value of the particle.
-    set_pbest(pbest: Position) -> None
+    - set_pbest(pbest: Position) -> None
         Sets the position where the best heuristic value was found.
-    set_position(position: Position) -> None
+    - set_position(position: Position) -> None
         Sets the current position of the particle.
-    set_velocity(velocity: Velocity) -> None
+    - set_velocity(velocity: Velocity) -> None
         Sets the current velocity of the particle.
     """
 
-    def __init__(self, index: int, has_gbest: bool, dimensions: int = 3, heuristic: callable = default_heuristic) -> None:
+    def __init__(self, index: int, has_gbest: bool, cognitive_coefficient: float = 2.0, dimensions: int = 3, heuristic: callable = default_heuristic, inertia_coefficient: float = 1.0, social_coefficient: float = 2.0) -> None:
+        self.__cognitive_coefficient: float = cognitive_coefficient
         self.__index: int = index
+        self.__inertia_coefficient: float = inertia_coefficient
         self.__position: Position = Position(dimensions-1)
         self.__pbest: Position = Position(dimensions-1)
         self.__heuristic: Heuristic = Heuristic(dimensions, heuristic)
         self.__heuristic._update(self.get_pbest())
+        self.__social_coefficient: float = social_coefficient
         self.__velocity: Velocity = Velocity(dimensions-1)
         self.color : dict = {"r": 0, "g": 0, "b": 0}
         self.has_gbest = has_gbest
@@ -92,6 +101,34 @@ class Particle:
         self.__pbest.set_coordinates(self.__position.get_coordinates().copy())
         self.__velocity.initialize_randomly(np.linalg.norm(self.__position.get_coordinates().copy()), self.__velocity.get_dimensions())
 
+    def _update_velocity(self, gbest: Position) -> None:
+        """
+        Updates the velocity vector based on the particle swarm optimization
+        formula:
+        v(i + 1) = w * v(i) + c1 * r1 * (pbest - x(i)) + c2 * r2 * (gbest - x(i))
+
+        ### Notes
+        - The `position`, `pbest`, and `gbest` constants should have the same shape as the velocity vector.
+        - The `w` constant (inertia coefficient) ranges between 0 and 1.
+        - The `c1` (cognitive coefficient) and `c2` (social coefficient) constants range between 1 and 3.
+        - The `r1` and `r2` values are random numbers between 0 and 1.
+        """
+
+        initial_position: np.ndarray = self.__position.get_coordinates()
+        pbest: np.ndarray = self.__pbest.get_coordinates()
+        initial_velocity: np.ndarray = self.__velocity.get_coordinates()
+        r1: float = np.random.random()
+        r2: float = np.random.random()
+        print("Random: ", r1, r2)
+        w: float = self.__inertia_coefficient
+        c1: float = self.__cognitive_coefficient
+        c2: float = self.__social_coefficient
+        final_velocity: np.ndarray = (w * initial_velocity) + (c1 * r1 * (pbest - initial_position)) + (c2 * r2 * (gbest.get_coordinates() - initial_position))
+        self.__velocity.set_coordinates(final_velocity)
+        final_position: np.ndarray = initial_position + final_velocity
+        # TODO: Confirm the coordinates of the velocity match the final velocity
+        self.__position.set_coordinates(final_position)
+
     def _update_pbest(self) -> None:
         """Updates the best position of the particle (__pbest) comparing the heuristic
         value (last coordinate of the heuristic vector) of the current position 
@@ -100,11 +137,11 @@ class Particle:
         heuristic_f = self.__heuristic.get_heuristic_f()
         if heuristic_f(self.__position) < heuristic_f(self.__pbest):
             self.__pbest.set_coordinates(self.__position.get_coordinates().copy())
+
+    def update_velocity() -> None:
+        pass
     
     # * Getters and setters
-
-    def get_color(self) -> dict:
-        return self.color
 
     def get_heuristic(self) -> Heuristic:
         return self.__heuristic
@@ -120,9 +157,6 @@ class Particle:
     
     def get_velocity(self) -> Velocity:
         return self.__velocity
-    
-    def set_color(self, red: int, green: int, blue: int, alpha: int = 255) -> None:
-        self.color = {"R": red, "G": green, "B": blue, "A": alpha}
     
     def set_heuristic(self, heuristic: Vector) -> None:
         self.__heuristic = heuristic

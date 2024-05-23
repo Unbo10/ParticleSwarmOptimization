@@ -95,7 +95,7 @@ class Main:
         self.__particle_amount: int = particle_amount
         self.__social_coefficient: float = social_coefficient
         # * So it doesn't create two particle swarms with different dimensions
-        self.__swarm: ParticleSwarm = None
+        self.__swarm: ParticleSwarm = ParticleSwarm(inertia_coefficient, cognitive_coefficient, social_coefficient, dimensions, particle_amount, self.heuristic)
         self.__data = Data(iterations, particle_amount)
 
     def graph_heuristic(self) -> None:
@@ -127,34 +127,27 @@ class Main:
             return (x + 2*y - 7)**2 + (2*x + y - 5)**2
         
         else:
-            print(np.sum(np.square(position.get_coordinates())))
+            # print(np.sum(np.square(position.get_coordinates())))
             return np.sum(np.square(position.get_coordinates()))
         
     def optimize(self) -> None:
         """Optimizes the heuristic function using the PSO algorithm."""
         # ! CHECK: Optimization not working properly. Might have to do with
         # ! how the data is being passed.
-        self.__swarm = ParticleSwarm(self.__inertia_coefficient, self.__cognitive_coefficient, self.__social_coefficient, self.__dimensions, self.__particle_amount, self.heuristic)
-        self.__swarm._initialize_particles_randomly()
-        self.__swarm.update_gbest()
+        swarm = self.__swarm
+        swarm._initialize_particles_randomly()
+        swarm.update_gbest()
         swarm_gbest_index: list[int] = []
         optimization_df: pd.DataFrame = pd.DataFrame(columns = ["Heuristic",
                                             "Position", "Velocity", "Pbest"])
-        nan_df = pd.DataFrame(([np.NaN] * 4), index = ["Heuristic", "Position", "Velocity", "Pbest"]).T
+        nan_df = pd.DataFrame(([np.NaN] * 4), index = ["Heuristic", "Position",
+                                                       "Velocity", "Pbest"]).T
 
         for iteration_num in range(self.__iterations):
             iteration_data: dict = {"Heuristic": [], "Position": [],
                                     "Velocity": [], "Pbest": []}
-            for particle in self.__swarm.get_particles():    
-                particle.get_velocity()._update
-                (
-                self.__inertia_coefficient,
-                self.__cognitive_coefficient, 
-                self.__social_coefficient, 
-                particle.get_position().get_coordinates().copy(),
-                particle.get_pbest().get_coordinates().copy(),
-                self.__swarm.get_gbest().get_coordinates().copy()
-                )
+            for particle in swarm.get_particles():    
+                particle._update_velocity(swarm.get_gbest())
                 particle.get_position()._update(particle.get_velocity())
                 particle.get_heuristic()._update(particle.get_position())
                 particle._update_pbest()
@@ -175,11 +168,11 @@ class Main:
 
             # * Append the last iteration's data and the index of the particle
             # * with the best heuristic to the database.
-            self.__swarm.update_gbest()
+            swarm.update_gbest()
             optimization_df = pd.concat([optimization_df, pd.DataFrame(iteration_data)])
             if iteration_num != self.__iterations:
                 optimization_df = pd.concat([optimization_df, nan_df])
-            print(f"Global best: {self.__swarm.get_gbest()}\n")
+            print(f"Global best: {swarm.get_gbest()}\n")
 
         # * Append the indexes of the particles with the best heuristic to the
         # * database
@@ -215,6 +208,6 @@ def run():
     pass
 
 if __name__ == "__main__":
-    main = Main(2, 0.8, 2, 15, 3, 20)
+    main = Main(cognitive_coefficient=2, inertia_coefficient=1, social_coefficient=2, particle_amount=10, dimensions=3, iterations=10)
     main.optimize()
-    print(main.get_swarm().get_gbest())
+    # print(main.get_swarm().get_gbest())

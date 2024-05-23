@@ -61,7 +61,6 @@ class Vector:
     def __init__(self, dimensions = 3) -> None:
         self._coordinates: np.ndarray = np.zeros(dimensions)
         self._dimensions: int = dimensions
-        print(self._coordinates)
 
     def __repr__(self) -> str:
         return f"Vector with coordinates {self.get_coordinates()}."
@@ -75,10 +74,6 @@ class Vector:
             The maximum absolute value of the coordinates in all of its dimmensions.
         """
         self._coordinates = np.random.uniform(low=-bound, high=np.nextafter(bound, bound + 1), size=dimensions)
-
-    def _update() -> None:
-        """Abstract method"""
-        raise NotImplementedError("This method must be implemented in a subclass.")
     
     # def __lt__(self, other) -> bool:
     #     if not isinstance(other, Vector):

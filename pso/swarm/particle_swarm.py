@@ -81,7 +81,13 @@ class ParticleSwarm:
             self.__particle_amount = 10
         # TODO: Except TypeError (double)
         # ? Should the following line be inside a finally block?
-        self.__particles: list[Particle] = [Particle(index=p, has_gbest=False, dimensions=dimensions, heuristic=heuristic) for p in range(self.__particle_amount)] # ! Test change of Particle's constructor
+        self.__particles: list[Particle] = [
+            Particle(index=p, has_gbest=False, cognitive_coefficient=cognitive_coefficient,
+            dimensions=dimensions, heuristic=heuristic, 
+            inertia_coefficient=inertia_coefficient, 
+            social_coefficient=social_coefficient) 
+            for p in range(self.__particle_amount)
+            ] # ! Test change of Particle's constructor
         self.__gbest: Position = Position(dimensions - 1)
         self._heuristic_f: callable = heuristic
     
@@ -99,7 +105,7 @@ class ParticleSwarm:
         for particle in self.__particles:
             particle.initialize_randomly(bound)
         self.__gbest.set_coordinates(self.__particles[0].get_position().get_coordinates().copy())
-        print("BBBB", self.__gbest.get_coordinates())
+        # print("BBBB", self.__gbest.get_coordinates())
         self.update_gbest()
 
     # ? Should gbest be an instance of another class for it to have its own update method?
@@ -109,7 +115,7 @@ class ParticleSwarm:
         dimensions: int = self.__particles[0].get_position().get_dimensions() # ? Might be a better way to do it
         gbest_index: int = 0
         for particle in self.__particles:
-            if particle.get_heuristic().get_coordinates()[dimensions] < self._heuristic_f(self.__gbest):
+            if particle.get_heuristic().get_coordinates()[dimensions] < self._heuristic_f(self.__gbest, 0):
                 self.__gbest.set_coordinates(particle.get_position().get_coordinates().copy())
                 gbest_index = particle.get_index()
         self.__particles[gbest_index].has_gbest = True
