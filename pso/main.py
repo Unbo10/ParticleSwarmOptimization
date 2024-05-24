@@ -104,7 +104,7 @@ class Main:
     def graph_particles(self) -> None:
         pass
     
-    def heuristic(self, position: Position, selection: int = "3") -> float:
+    def heuristic(self, position: Position, selection: int = 1) -> float:
         """Heuristic function to be optimized."""
         # TODO: Make a better implementation of choosing the desired function, at the moment it's done manually, by modifying the variable selection through the parameters
         # TODO: Implement the second function to the dimension that the user selects. It is set to two dimensions. ? A dimension parameter in the heuristic ? 
@@ -143,26 +143,27 @@ class Main:
         nan_df = pd.DataFrame(([np.NaN] * 4), index = ["Heuristic", "Position",
                                                        "Velocity", "Pbest"]).T
 
-        for iteration_num in range(self.__iterations):
+        for iteration_num in range(self.__iterations + 1):
             iteration_data: dict = {"Heuristic": [], "Position": [],
                                     "Velocity": [], "Pbest": []}
-            for particle in swarm.get_particles():    
-                particle._update_velocity(swarm.get_gbest())
-                particle.get_position()._update(particle.get_velocity())
-                particle.get_heuristic()._update(particle.get_position())
-                particle._update_pbest()
+            for particle in swarm.get_particles():   
+                if iteration_num > 0: 
+                    particle._update_velocity(swarm.get_gbest())
+                    particle.get_position()._update(particle.get_velocity())
+                    particle.get_heuristic()._update(particle.get_position())
+                    particle._update_pbest()
 
                 # * Append the data of each particle after a certain iteration
                 # * to a temporary dictionary
                 # ? Should the np.ndarrays be copies?
-                iteration_data["Heuristic"].append(np.round(particle.get_heuristic( ). 
-                                            get_coordinates().copy(), 2))
-                iteration_data["Position"].append(np.round(particle.get_position().
-                                            get_coordinates().copy(), 2))
-                iteration_data["Velocity"].append(np.round(particle.get_velocity().
-                                            get_coordinates().copy(), 2))
-                iteration_data["Pbest"].append(np.round(particle.get_pbest().
-                                            get_coordinates().copy(), 2))
+                iteration_data["Heuristic"].append(np.round(particle.
+                    get_heuristic( ).get_coordinates().copy(), 2))
+                iteration_data["Position"].append(np.round(particle.
+                    get_position().get_coordinates().copy(), 2))
+                iteration_data["Velocity"].append(np.round(particle.
+                    get_velocity().get_coordinates().copy(), 2))
+                iteration_data["Pbest"].append(np.round(particle.
+                    get_pbest().get_coordinates().copy(), 2))
 
                 # print(particle, end="")
 

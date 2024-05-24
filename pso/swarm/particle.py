@@ -99,9 +99,10 @@ class Particle:
         self.__position.initialize_randomly(bound, self.__position.get_dimensions())
         self.__heuristic._update(self.__position)
         self.__pbest.set_coordinates(self.__position.get_coordinates().copy())
-        self.__velocity.initialize_randomly(np.linalg.norm(self.__position.get_coordinates().copy()), self.__velocity.get_dimensions())
+        self._update_velocity(Vector(self.__position.get_dimensions()))
 
     def _update_velocity(self, gbest: Position) -> None:
+        # ! There must be something wrong with this method: the operation is not being performed correctly.
         """
         Updates the velocity vector based on the particle swarm optimization
         formula:
@@ -117,9 +118,8 @@ class Particle:
         initial_position: np.ndarray = self.__position.get_coordinates()
         pbest: np.ndarray = self.__pbest.get_coordinates()
         initial_velocity: np.ndarray = self.__velocity.get_coordinates()
-        r1: float = np.random.random()
-        r2: float = np.random.random()
-        print("Random: ", r1, r2)
+        r1: float = 0.8 
+        r2: float = 0.8
         w: float = self.__inertia_coefficient
         c1: float = self.__cognitive_coefficient
         c2: float = self.__social_coefficient
@@ -132,8 +132,8 @@ class Particle:
     def _update_pbest(self) -> None:
         """Updates the best position of the particle (__pbest) comparing the heuristic
         value (last coordinate of the heuristic vector) of the current position 
-        (__position) with the heuristic value of the best position found up to the i-th
-        iteration (__pbest)."""
+        (__position) with the heuristic value of the best position found up to
+        the i-th iteration (__pbest)."""
         heuristic_f = self.__heuristic.get_heuristic_f()
         if heuristic_f(self.__position) < heuristic_f(self.__pbest):
             self.__pbest.set_coordinates(self.__position.get_coordinates().copy())
