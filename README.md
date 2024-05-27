@@ -3,15 +3,11 @@
 ``` mermaid
     classDiagram
 
-    <!-- TODO: Figure out exaclty what the heuristic is: a vector, a function or a class-->
-
     class Test{
         - int dimensions
-        <!-- ? Could this be defined inside a Heuristic class?>
         - int iterations
-        - Vector heuristic 
-        <!-- * function -->
 
+        - test_function()
         - start_test(heuristic, iterations)
         - graph_heuristic(heuristic)
         - graph_particle(Particle)
@@ -26,18 +22,23 @@
         - ~float~ coordinates
         - ~int~ color
         <!-- * To distinguish between gbest and other particles -->
+        - int dimensions
 
-        - initialize()
+        - initialize_randomly(float)
 
         + get_coordinates(): ~float~
+        + set_coordinates(): ~float~
+    }
+
+    class Velocity {
+        - update_velocity(velocity, gbest, cognitive_coefficient, social_coefficient, inertia, pbest, position, r_1, r_2) 
     }
 
     class ParticleSwarm{
         - float cognitive_coefficient
         - float inertia
         - float social_coefficient
-        - int particles_amount
-        <!-- * Taken from class Test -->
+        - int particle_amount
         - ~Particle~ particles
         - Vector gbest
 
@@ -54,17 +55,13 @@
     ParticleSwarm o-- Vector
 
     class Particle{
-        - float r_1
-        - float r_2
         <!-- ? Are r_1 and r_2 chosen for every iteration or at each iteration? -->
-        - Vector heuristic
-        <!-- ? Is this name okay? This is the vector that will define if a position is gbest or pbest, therefore 'rewarding' or 'punishing' each particle based on its position-->
-        - Vector pbest
-        - Vector position
-        - Vector velocity
+        # Vector heuristic_value
+        # Vector pbest
+        # Vector position
+        # Vector velocity
 
-        - update_velocity(velocity, gbest, cognitive_coefficient, social_coefficient, inertia, pbest, position, r_1, r_2) 
-        - update_heuristic(Vector) <!-- * Previously evaluate_function-->
+        - update_heuristic(Vector)
         - update_position(position)
         - update_pbest(position)
         
