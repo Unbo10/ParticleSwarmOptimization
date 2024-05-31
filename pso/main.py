@@ -146,10 +146,11 @@ class Main:
         for iteration_num in range(self.__iterations + 1):
             iteration_data: dict = {"Heuristic": [], "Position": [],
                                     "Velocity": [], "Pbest": []}
-            for particle in swarm.get_particles():   
+            for particle in swarm.get_particles():
                 if iteration_num > 0: 
                     particle._update_velocity(swarm.get_gbest())
                     particle.get_position()._update(particle.get_velocity())
+                    # ! Gbest is not actually gbest
                     particle.get_heuristic()._update(particle.get_position())
                     particle._update_pbest()
 
@@ -170,7 +171,9 @@ class Main:
             # * Append the last iteration's data and the index of the particle
             # * with the best heuristic to the database.
             swarm.update_gbest()
+            print(swarm.get_gbest())
             optimization_df = pd.concat([optimization_df, pd.DataFrame(iteration_data)])
+            # TODO: Check the logic behind the if
             if iteration_num != self.__iterations:
                 optimization_df = pd.concat([optimization_df, nan_df])
             print(f"Global best: {swarm.get_gbest()}\n")
@@ -209,6 +212,6 @@ def run():
     pass
 
 if __name__ == "__main__":
-    main = Main(cognitive_coefficient=2, inertia_coefficient=1, social_coefficient=2, particle_amount=10, dimensions=3, iterations=10)
+    main = Main(cognitive_coefficient=2, inertia_coefficient=0.8, social_coefficient=2, particle_amount=10, dimensions=3, iterations=10)
     main.optimize()
     # print(main.get_swarm().get_gbest())

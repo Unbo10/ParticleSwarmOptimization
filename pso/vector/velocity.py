@@ -50,9 +50,6 @@ class Velocity(Vector):
     - initialize_randomly(bound: float = 10)
         Initialize the coordinates of a vector randomly within 
         the interval [-bound, bound] (inherited).
-    - _update(w, c1, c2, pbest, gbest)
-        Updates the velocity vector based on the given parameters
-        (overriden).
     - Other getters and setters inherited.
     """
 

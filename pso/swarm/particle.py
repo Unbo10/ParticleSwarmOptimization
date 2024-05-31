@@ -72,6 +72,7 @@ class Particle:
     - set_velocity(velocity: Velocity) -> None
         Sets the current velocity of the particle.
     """
+    # ! Update documentation
 
     def __init__(self, index: int, has_gbest: bool, cognitive_coefficient: float = 2.0, dimensions: int = 3, heuristic: callable = default_heuristic, inertia_coefficient: float = 1.0, social_coefficient: float = 2.0) -> None:
         self.__cognitive_coefficient: float = cognitive_coefficient
@@ -97,9 +98,10 @@ class Particle:
             The upper bound for the random initialization. Default is 10.
         """
         self.__position.initialize_randomly(bound, self.__position.get_dimensions())
+        self.__velocity.initialize_randomly(bound / 5, self.__position.get_dimensions())
+        self.__position._update(self.__velocity)
         self.__heuristic._update(self.__position)
         self.__pbest.set_coordinates(self.__position.get_coordinates().copy())
-        self._update_velocity(Vector(self.__position.get_dimensions()))
 
     def _update_velocity(self, gbest: Position) -> None:
         # ! There must be something wrong with this method: the operation is not being performed correctly.
@@ -118,16 +120,17 @@ class Particle:
         initial_position: np.ndarray = self.__position.get_coordinates()
         pbest: np.ndarray = self.__pbest.get_coordinates()
         initial_velocity: np.ndarray = self.__velocity.get_coordinates()
-        r1: float = 0.8 
-        r2: float = 0.8
+        r1: float = np.random.uniform(0, 1)
+        r2: float = np.random.uniform(0, 1)
         w: float = self.__inertia_coefficient
         c1: float = self.__cognitive_coefficient
         c2: float = self.__social_coefficient
         final_velocity: np.ndarray = (w * initial_velocity) + (c1 * r1 * (pbest - initial_position)) + (c2 * r2 * (gbest.get_coordinates() - initial_position))
+        # print(w, initial_velocity, w * initial_velocity)
+        # print(c1, r1, pbest, initial_position, c1 * r1 * (pbest - initial_position))
+        # print(c2, r2, gbest.get_coordinates(), initial_position, c2 * r2 * (gbest.get_coordinates() - initial_position))
+        print("A", gbest)
         self.__velocity.set_coordinates(final_velocity)
-        final_position: np.ndarray = initial_position + final_velocity
-        # TODO: Confirm the coordinates of the velocity match the final velocity
-        self.__position.set_coordinates(final_position)
 
     def _update_pbest(self) -> None:
         """Updates the best position of the particle (__pbest) comparing the heuristic

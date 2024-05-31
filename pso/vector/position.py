@@ -52,8 +52,16 @@ class Position(Vector):
     
     def _update(self, velocity: Velocity) -> None:
         # ? Should it be public?
-        """Updates the position by adding the coordinates of the given
-        velocity vector."""
+        """
+        Updates the position by adding the coordinates of the given
+        velocity vector.
+
+        ## Parameters
+
+        - velocity : Velocity
+            The velocity vector that contains the coordinates to be added to
+            the position.
+        """
         self._coordinates += velocity.get_coordinates()
 
 if __name__ ==  "__main__":
