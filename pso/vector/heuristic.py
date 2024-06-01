@@ -5,24 +5,24 @@ heuristic value.
 ## Classes
 Heuristic: A class that represents a vector with a heuristic value.
 
-Vector: Inherited from the base_vector module
+Vector: Inherited from the abstract_vector module
 
 ### Methods
 _update (position): Updates the vector based on the given position vector.
 
-Other methods inherited from the Vector class of the base_vector module.
+Other methods inherited from the Vector class of the abstract_vector module.
 
 #### Getters
 get_heuristic_f(): Returns the heuristic function
 
-Other getters inherited from the Vector class of the base_vector module.
+Other getters inherited from the Vector class of the abstract_vector module.
 """
 
 import numpy as np
 
-from pso.vector.base_vector import Vector
+from pso.vector.abstract_vector import Vector
 
-def default_heuristic(position: Vector, choice: int) -> float:
+def default_heuristic(position: Vector) -> float:
     return np.sum(np.square(position.get_coordinates()))
 
 class Heuristic(Vector):
@@ -67,7 +67,7 @@ class Heuristic(Vector):
         position : Position
             The position object used to update the vector.
         """
-        heuristic_value = self._heuristic_f(position, 1) # TODO: Static type to be defined
+        heuristic_value = self._heuristic_f(position) # TODO: Static type to be defined
         new_coordinates: np.ndarray = self.get_coordinates().copy()
         for i in range(self.get_dimensions() - 1):
             new_coordinates[i] = position.get_coordinates().copy()[i]

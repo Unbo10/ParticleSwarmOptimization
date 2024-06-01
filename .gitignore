@@ -25,9 +25,6 @@
 # Ignore pycache
 **/__pycache__/
 
-# Ignore Excel files (optimization results)
-*.xlsx
-
 # Ignore system files
 .DS_Store
 Thumbs.db

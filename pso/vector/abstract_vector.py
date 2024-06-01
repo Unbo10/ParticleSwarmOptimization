@@ -13,8 +13,10 @@ vector randomly within
 - _update(): Abstract method.
 
 #### Getters and setters
+- get_color() -> dict
 - get_coordinates() -> np.ndarray
 - get_dimensions() -> int
+- set_color(red: int, green: int, blue: int, alpha: int = 255)
 - set_coordinates(coordinates: np.ndarray)
 - set_dimensions(dimensions: int)
 
@@ -33,6 +35,8 @@ class Vector:
         The number of dimensions of the vector. Default is 3.
     
     ## Attributes
+    - _color : dict
+        A dictionary with the values of the color of the vector.
     - _coordinates : np.ndarray
         An array with the coordinates of the vector.
     - _dimensions : int
@@ -59,8 +63,10 @@ class Vector:
     """
     
     def __init__(self, dimensions = 3) -> None:
+        self._color: dict = {"R": 0, "G": 0, "B": 0, "A": 255}
         self._coordinates: np.ndarray = np.zeros(dimensions)
         self._dimensions: int = dimensions
+        print(self._coordinates)
 
     def __repr__(self) -> str:
         return f"Vector with coordinates {self.get_coordinates()}."
@@ -74,6 +80,10 @@ class Vector:
             The maximum absolute value of the coordinates in all of its dimmensions.
         """
         self._coordinates = np.random.uniform(low=-bound, high=np.nextafter(bound, bound + 1), size=dimensions)
+
+    def _update() -> None:
+        """Abstract method"""
+        raise NotImplementedError("This method must be implemented in a subclass.")
     
     # def __lt__(self, other) -> bool:
     #     if not isinstance(other, Vector):
@@ -82,12 +92,17 @@ class Vector:
     #     return self._coordinates[self._dimensions - 1] < other._coordinates[self._dimensions - 1]
 
     # * Getters and setters
+    def get_color(self) -> dict:
+        return self._color
     
     def get_coordinates(self) -> np.ndarray:
         return self._coordinates
     
     def get_dimensions(self) -> int:
         return self._dimensions
+    
+    def set_color(self, red: int, green: int, blue: int, alpha: int = 255) -> None:
+        self._color = {"R": red, "G": green, "B": blue, "A": alpha}
 
     def set_coordinates(self, coordinates: np.ndarray) -> None:
         self._coordinates = coordinates
