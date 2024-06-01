@@ -4,27 +4,13 @@
     classDiagram
     direction TB
 
-    class Main {
-        - <Optimization> optimizations
-        - <Data> history
-    }
-
-    Main --o Optimization
-    Main --* Data
-
-    class Data {
-
-    }
-
-    class Optimization{
-
-        - Data data
+    class Main{
         - float cognitive_coefficient
-        - float inertia_coefficient
-        - float social_coefficient
         - int dimensions
+        - float inertia_coefficient
         - int iterations
         - int particle_amount
+        - float social_coefficient
         - ParticleSwarm swarm
 
         - graph_heuristic(heuristic)
@@ -40,8 +26,8 @@
         - get_particle_amount()
         - get_swarm()
     }
-    Optimization --o ParticleSwarm
-    Optimization --* Data
+    Main --o ParticleSwarm
+    Main --o Data
 
     class Data {
         - ~~~float/str~~~ history
@@ -75,7 +61,6 @@
 
     class Particle{
         <!-- ? Are r_1 and r_2 chosen for every iteration or at each iteration? -->
-        + dict color
         - Heuristic heuristic
         - Position pbest
         - Position position
@@ -98,6 +83,7 @@
 
 
     class Vector {
+        # dict color
         # np.ndarray coordinates
         # int dimensions
 
@@ -128,6 +114,9 @@
     Position --|> Vector
 
     class Velocity {
+        # dict color
+        # np.ndarray coordinates
+        # int dimensions
         # update_velocity(velocity, gbest, cognitive_coefficient, social_coefficient, inertia, pbest, position, r_1, r_2) 
     }
     Velocity --|> Vector
