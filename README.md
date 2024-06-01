@@ -4,13 +4,27 @@
     classDiagram
     direction TB
 
-    class Main{
+    class Main {
+        - <Optimization> optimizations
+        - <Data> history
+    }
+
+    Main --o Optimization
+    Main --* Data
+
+    class Data {
+
+    }
+
+    class Optimization{
+
+        - Data data
         - float cognitive_coefficient
-        - int dimensions
         - float inertia_coefficient
+        - float social_coefficient
+        - int dimensions
         - int iterations
         - int particle_amount
-        - float social_coefficient
         - ParticleSwarm swarm
 
         - graph_heuristic(heuristic)
@@ -26,8 +40,8 @@
         - get_particle_amount()
         - get_swarm()
     }
-    Main --o ParticleSwarm
-    Main --o Data
+    Optimization --o ParticleSwarm
+    Optimization --* Data
 
     class Data {
         - ~~~float/str~~~ history

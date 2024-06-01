@@ -117,7 +117,7 @@ class Particle:
         - The `r1` and `r2` values are random numbers between 0 and 1.
         """
 
-        initial_position: np.ndarray = self.__position.get_coordinates()
+        x_i: np.ndarray = self.__position.get_coordinates()
         pbest: np.ndarray = self.__pbest.get_coordinates()
         initial_velocity: np.ndarray = self.__velocity.get_coordinates()
         r1: float = np.random.uniform(0, 1)
@@ -125,11 +125,7 @@ class Particle:
         w: float = self.__inertia_coefficient
         c1: float = self.__cognitive_coefficient
         c2: float = self.__social_coefficient
-        final_velocity: np.ndarray = (w * initial_velocity) + (c1 * r1 * (pbest - initial_position)) + (c2 * r2 * (gbest.get_coordinates() - initial_position))
-        # print(w, initial_velocity, w * initial_velocity)
-        # print(c1, r1, pbest, initial_position, c1 * r1 * (pbest - initial_position))
-        # print(c2, r2, gbest.get_coordinates(), initial_position, c2 * r2 * (gbest.get_coordinates() - initial_position))
-        print("A", gbest)
+        final_velocity: np.ndarray = (w * initial_velocity) + (c1 * r1 * (pbest - x_i)) + (c2 * r2 * (gbest.get_coordinates() - x_i))
         self.__velocity.set_coordinates(final_velocity)
 
     def _update_pbest(self) -> None:
