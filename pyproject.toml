@@ -12,7 +12,10 @@ repository = "https://github.com/Unbo10/ParticleSwarmOptimization"
 
 [tool.poetry.dependencies]
 python = "^3.6"
+pandas = "*"
 numpy = "*"
+openpyxl = "*"
+xlsxwriter = "*"
 setuptools = ">=61.0"
 
 [tool.poetry.dev-dependencies]
