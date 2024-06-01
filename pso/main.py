@@ -20,6 +20,7 @@ Main: Main class to run the Particle Swarm Optimization (PSO) algorithm.
 - get_swarm() -> ParticleSwarm
 """
 import numpy as np
+import math
 
 from pso.swarm.particle_swarm import ParticleSwarm
 from pso.vector.position import Position
@@ -42,9 +43,9 @@ class Main:
         The number of iterations to run the algorithm. Default is 20.
     
     ## Attributes
-    __cognitive_coefficient : float
+    - __cognitive_coefficient : float
         The cognitive coefficient used in the PSO algorithm.
-    __dimensions : int
+    - __dimensions : int
         The number of dimensions in the search space.
     - __inertia_coefficient : float
         The inertia coefficient used in the PSO algorithm.
@@ -99,10 +100,32 @@ class Main:
     def graph_particles(self) -> None:
         pass
     
-    def heuristic(self, position: Position) -> float:
+    def heuristic(self, position: Position, selection: int = "3") -> float:
         """Heuristic function to be optimized."""
-        return np.sum(np.square(position.get_coordinates()))
-    
+        # TODO: Make a better implementation of choosing the desired function, at the moment it's done manually, by modifying the variable selection through the parameters
+        # TODO: Implement the second function to the dimension that the user selects. It is set to two dimensions. ? A dimension parameter in the heuristic ? 
+        # * Agree, but what should be then the type of the heuristic_value? A list or maybe an ndarray?
+        
+        if selection == "1":
+            return np.sum(np.square(position.get_coordinates()))
+        
+        elif selection == "2":
+            return 20 + np.sum(np.square(position.get_coordinates()) - 10*math.cos(2 * math.pi *position.get_coordinates()))
+        
+        elif selection == "3":
+            x = position.get_coordinates()[0]
+            y = position.get_coordinates()[1]
+            return((1 + (x+y+1)**2 * (19 - 14 * x + 3 * x**2 - 14 * y + 6*x*y + 3*y**2)) * (30 + (2*x - 3*y)**2 * (18 - 32 * x + 12 * x**2 + 48 * y - 36*x*y + 27 * y**2)))
+        
+        elif selection == "4":
+            x = position.get_coordinates()[0]
+            y = position.get_coordinates()[1]
+            return (x + 2*y - 7)**2 + (2*x + y - 5)**2
+        
+        else:
+            print(np.sum(np.square(position.get_coordinates())))
+            return np.sum(np.square(position.get_coordinates()))
+        
     def optimize(self) -> None:
         """Optimizes the heuristic function using the PSO algorithm."""
         self.__swarm = ParticleSwarm(self.__inertia_coefficient, self.__cognitive_coefficient, self.__social_coefficient, self.__dimensions, self.__particle_amount, self.heuristic)
@@ -147,6 +170,6 @@ def run():
     pass
 
 if __name__ == "__main__":
-    main = Main(2, 0.8, 2, 10, 2, 20)
+    main = Main(2, 0.8, 2, 15, 3, 50)
     main.optimize()
     print(main.get_swarm().get_gbest())

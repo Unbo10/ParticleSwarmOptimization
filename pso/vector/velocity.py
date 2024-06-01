@@ -9,9 +9,13 @@ position (pbest) and the global best position (gbest).
 Velocity: Represents the velocity vector in a PSO algorithm.
 Child of Vector.
 
+Vector: Inherited from the abstract_vector module.
+
 ### Methods
 - _update(w, c1, c2, pbest, gbest): Updates the velocity
 vector based on the given parameters.
+- Other getters and setters inherited from the 
+abstract_vector module.
 """
 
 import numpy as np
@@ -20,11 +24,12 @@ from pso.vector.abstract_vector import Vector
 
 class Velocity(Vector):
     """
-    Represents the velocity vector in a particle swarm optimization algorithm.
+    Represents the velocity vector in a particle swarm optimization
+    algorithm.
 
-    This class inherits from the Vector class and provides additional methods
-    for updating the velocity based on the particle's best position (pbest) and
-    the global best position (gbest).
+    This class inherits from the Vector class and provides additional
+    methods for updating the velocity based on the particle's best
+    position (pbest) and the global best position (gbest).
 
     ## Parameters
     - dimensions : int, optional
@@ -32,11 +37,23 @@ class Velocity(Vector):
 
     ## Attributes
     - _coordinates : numpy.ndarray
-        The coordinates of the velocity vector.
+        The coordinates of the velocity vector (inherited but redefined).
+    - _color : dict
+        The color of the velocity vector (inherited).
+    - _dimensions : int
+        The number of dimensions of the velocity vector (inherited).
 
     ## Methods
+    - __repr__() -> str
+        Overwrites the __repr__ method to return a string with the
+        coordinates of the vector (inherited).
+    - initialize_randomly(bound: float = 10)
+        Initialize the coordinates of a vector randomly within 
+        the interval [-bound, bound] (inherited).
     - _update(w, c1, c2, pbest, gbest)
-        Updates the velocity vector based on the given parameters.
+        Updates the velocity vector based on the given parameters
+        (overriden).
+    - Other getters and setters inherited.
     """
 
     def __init__(self, dimensions: int = 3) -> None:

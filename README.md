@@ -2,77 +2,115 @@
 
 ``` mermaid
     classDiagram
+    direction TB
 
-    class Test{
+    class Main{
+        - float cognitive_coefficient
         - int dimensions
+        - float inertia_coefficient
         - int iterations
+        - int particle_amount
+        - float social_coefficient
+        - ParticleSwarm swarm
 
-        - test_function()
-        - start_test(heuristic, iterations)
         - graph_heuristic(heuristic)
         - graph_particle(Particle)
+        - heuristic(Position position)
+        - optimize()
+
+        - get_cognitive_coefficient()
+        - get_dimensions()
+        - get_inertia_coefficient()
+        - get_iterations()
+        - get_social_coefficient()
+        - get_particle_amount()
+        - get_swarm()
     }
-
-    Test o-- Vector
-    Test --> ParticleSwarm : Uses
-
-    class Vector {
-        <!-- * Proposed class -->
-        <!-- ! Since we need to use inheritance, we could consider each vector -velocity, heuristic and position-, to inherit from the vector class. I don't see many other classes were this could happen -->
-        - ~float~ coordinates
-        - ~int~ color
-        <!-- * To distinguish between gbest and other particles -->
-        - int dimensions
-
-        - initialize_randomly(float)
-
-        + get_coordinates(): ~float~
-        + set_coordinates(): ~float~
-    }
-
-    class Velocity {
-        - update_velocity(velocity, gbest, cognitive_coefficient, social_coefficient, inertia, pbest, position, r_1, r_2) 
-    }
+    Main --o ParticleSwarm
 
     class ParticleSwarm{
         - float cognitive_coefficient
-        - float inertia
+        - float inertia_coefficient
         - float social_coefficient
         - int particle_amount
-        - ~Particle~ particles
-        - Vector gbest
+        - list[Particle] particles
+        - Position gbest
+        + callable heuristic_f
 
-        - update_gbest(particles)
+        - __repr__() : str
+        # initialize_particles_randomly(int bound)
+        + update_gbest(): None
 
         + get_cognitive_coefficient(): float
         + get_inertia(): float
         + get_social_coefficient(): float
         + get_particles_amount(): int
         + get_gbest(): Vector
-
+        + get_particles(): ~Particle~
+        + get_heuristic(): callable
     }
-    ParticleSwarm o-- Particle :The swarm contains Particles, but they can exist without the swarm (Aggreggation) 
-    ParticleSwarm o-- Vector
+    ParticleSwarm o-- Particle
 
     class Particle{
         <!-- ? Are r_1 and r_2 chosen for every iteration or at each iteration? -->
-        # Vector heuristic_value
-        # Vector pbest
-        # Vector position
-        # Vector velocity
+        - Heuristic heuristic
+        - Position pbest
+        - Position position
+        - Velocity velocity
 
-        - update_heuristic(Vector)
-        - update_position(position)
-        - update_pbest(position)
+        # update_pbest(position)
+        + initialize_randomly(int bound)
         
+        + get_pbest()
         + get_position()
         + get_velocity()
-        + get_pbest()
 
+        + set_pbest()
         + set_position()
         + set_velocity()
-        + set_pbest()
     }
-    Particle o-- Vector
+    Particle o-- Heuristic
+    Particle o-- Position
+    Particle o-- Velocity
+
+
+    class Vector {
+        # dict color
+        # np.ndarray coordinates
+        # int dimensions
+
+        - __repr__() : str
+        + initialize_randomly(float)
+        # update()
+        
+        + get_color() : dict
+        + get_coordinates() : np.ndarray
+        + get_dimensions() : int
+        + set_color(red: int, green: int, blue: int, alpha: int = 255)
+        + set_coordinates(coordinates: np.ndarray)
+        + set_dimensions(dimensions: int)  
+    }
+
+    class Heuristic{
+        <!-- ? Should the inherited attributes be kept in the child class?-->
+        <!-- ? Should ndarrays be simply called arrays since the fact they are np has to do more with the implementation? -->
+        # callable heuristic
+        # update()
+        + get_heuristic_f()
+    }
+    Heuristic --|> Vector
+
+    class Position{
+        # update(Velocity: velocity)
+    }
+    Position --|> Vector
+
+    class Velocity {
+        # dict color
+        # np.ndarray coordinates
+        # int dimensions
+        # update_velocity(velocity, gbest, cognitive_coefficient, social_coefficient, inertia, pbest, position, r_1, r_2) 
+    }
+    Velocity --|> Vector
 
     ```

@@ -29,6 +29,10 @@ import numpy as np
 class Vector:
     """A class to represent a vector in a n-dimensional space and
     facilitate its graphical representation.
+
+    ## Parameters
+    - dimensions : int
+        The number of dimensions of the vector. Default is 3.
     
     ## Attributes
     - _color : dict
@@ -39,11 +43,12 @@ class Vector:
         The number of dimensions of the vector.
     
     ## Methods
+    - __repr__() -> str
+        Overwrites the __repr__ method to return a string with the
+        coordinates of the vector.
     - initialize_randomly(bound: float = 10)
         Initialize the coordinates of a vector randomly within 
         the interval [-bound, bound].
-    - __lt__(other)
-        Overriding of the less than operator. Compares two vectors depending on their norm.
     - _update()
         Abstract method.
     
@@ -64,7 +69,7 @@ class Vector:
         print(self._coordinates)
 
     def __repr__(self) -> str:
-        return f"Vector with coordinates {self.get_coordinates()} and color {list(self.get_color().values())}."
+        return f"Vector with coordinates {self.get_coordinates()}."
     
     def initialize_randomly(self, bound: float = 10, dimensions: int = 2) -> None:
         """Initialize the coordinates of a vector randomly within 
