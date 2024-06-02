@@ -62,10 +62,6 @@ class Optimization:
         The particle swarm used in the optimization process.
     
     ## Methods
-    - graph_heuristic() -> None
-        Graphs the heuristic function to be optimized.
-    - graph_particles() -> None
-        Graphs the particles in the swarm.
     - heuristic(position: Position) -> float
         Heuristic function to be optimized.
     - optimize() -> None
@@ -98,12 +94,6 @@ class Optimization:
         # * So it doesn't create two particle swarms with different dimensions
         self.__swarm: ParticleSwarm = ParticleSwarm(inertia_coefficient, cognitive_coefficient, social_coefficient, dimensions, particle_amount, self.heuristic)
         self.__data = Data(iterations, particle_amount)
-
-    def graph_heuristic(self) -> None:
-        pass
-
-    def graph_particles(self) -> None:
-        pass
     
     def heuristic(self, position: Position, selection: int = 1) -> float:
         """Heuristic function to be optimized."""
