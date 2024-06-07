@@ -4,7 +4,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name = "pso"
-version = "0.1.0"
+version = "0.2.0"
 description = "A Particle Swarm Optimization package"
 authors = ["Paula Isabella Moreno, Juan Sebastián Rueda, Santiago Rocha <srochap@unal.edu.co>"]
 readme = "README.md"
@@ -15,6 +15,8 @@ python = "^3.6"
 pandas = "*"
 numpy = "*"
 openpyxl = "*"
+time = "*"
+toml = ">=0.10.2"
 xlsxwriter = "*"
 setuptools = ">=61.0"
 

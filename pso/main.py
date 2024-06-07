@@ -3,12 +3,17 @@
 # * classes. It will contain the Data object that will store the results of
 # * any optimization done while the program is running.
 
+import toml
+
 from pso.database.data import Data
+from pso.graphics.gui import GUI
 from pso.optimization import Optimization
+from pyproject_hooks import __version__
 class Main:
     def __init__(self) -> None:
         self.__history: Data = Data()
         self.optimizations: list[Optimization] = []
+        self.gui: GUI = GUI(program_version=self.get_version())
     
     def initialize_optimization(self) -> None:
         self.__optimizations.append(Optimization())
@@ -46,10 +51,22 @@ class Main:
     #         else:
     #             print("Invalid input. Please enter a number between 1 and 4.")
 
+    def get_version(self) -> str:
+        # Define the file path
+        conf_file_path = '../pyproject.toml'
+
+        # Load the .toml file
+        data = toml.load(conf_file_path)
+
+        # Get the version
+        version = data.get('tool', {}).get('poetry', {}).get('version', 'Version not found')
+
+        return version
 
 if __name__ == "__main__":
     try:
         main = Main()
+        print(main.get_version())
         main.user_interface()
     except KeyboardInterrupt:
         print("Exiting the program.")
