@@ -93,48 +93,82 @@ class GUI:
             "borderwidth": 0
             }
         # TODO: Consider loading the active image with a darker color over a lighter background
+
         info_image: tk.PhotoImage = tk.PhotoImage(file="assets/info.png").subsample(3)
         info_active_image: tk.PhotoImage = tk.PhotoImage(file="assets/info-active.png").subsample(3)
+        help_image: tk.PhotoImage = tk.PhotoImage(file="assets/help.png").subsample(3)
+        help_active_image: tk.PhotoImage = tk.PhotoImage(file="assets/help-active.png").subsample(3)
+        images_str: dict = {
+                "info_image": "pyimage5",
+                "info_active_image": "pyimage7",
+                "help_image": "pyimage9",
+                "help_active_image": "pyimage11"
+            }
+
+        def bottom_on_enter(e, button:tk.Button) -> None:
+            if button.cget("image") == images_str["info_image"]:
+                button.config(image=info_active_image)
+            else:
+                button.config(image=help_active_image)
+
+        def bottom_on_leave(e, button:tk.Button) -> None:
+            if button.cget("image") == images_str["info_active_image"]:
+                button.config(image=info_image)
+            else:
+                button.config(image=help_image)
+
+        def bottom_on_click(e, button: tk.Button) -> None:
+            if button.cget("image") == images_str["info_active_image"]:
+                button.config(
+                    image=info_image,
+                    activebackground=Color.bottom_button_cbg,
+                    activeforeground=Color.bottom_button_cfg
+                    )
+            else:
+                button.config(
+                    image=help_image,
+                    activebackground=Color.bottom_button_cbg,
+                    activeforeground=Color.bottom_button_cfg
+                    )
+
+        def bottom_on_release(e, button: tk.Button) -> None:
+            if button.cget("image") == images_str["info_image"]:
+                button.config(
+                    image=info_active_image,
+                    activebackground=Color.bottom_button_abg,
+                    activeforeground=Color.bottom_button_afg
+                    )
+            else:
+                button.config(
+                    image=help_active_image,
+                    activebackground=Color.bottom_button_abg,
+                    activeforeground=Color.bottom_button_afg
+                    )
+
+
         info_button: tk.Button = tk.Button(
             bottom_frame,
             image=info_image,
             **bottom_button_parameters
             )
         info_button.grid(row=0, column=0, sticky="nsew")
-        
-        def info_on_enter(e) -> None:
-            info_button.config(image=info_active_image)
+        info_button.bind("<Enter>", lambda event: bottom_on_enter(event, info_button))
+        info_button.bind("<Leave>", lambda event: bottom_on_leave(event, info_button))
+        info_button.bind("<Button-1>", lambda event: bottom_on_click(event, info_button))
+        info_button.bind("<ButtonRelease-1>", lambda event: bottom_on_release(event, info_button))
 
-        def info_on_leave(e) -> None:
-            info_button.config(image=info_image)
-        
-        def info_on_click(e) -> None:
-            pass
-
-        info_button.bind("<Enter>", info_on_enter)
-        info_button.bind("<Leave>", info_on_leave)
-        info_button.bind("<Button-1>", info_on_click)
-        help_image: tk.PhotoImage = tk.PhotoImage(file="assets/help.png").subsample(3)
-        help_active_image: tk.PhotoImage = tk.PhotoImage(file="assets/help-active.png").subsample(3)
         help_button: tk.Button = tk.Button(
             bottom_frame,
             image=help_image,
             **bottom_button_parameters
             )
         help_button.grid(row=0, column=1, sticky="nsew")
-        
-        def help_on_enter(e) -> None:
-            help_button.config(image=help_active_image)
 
-        def help_on_leave(e) -> None:
-            help_button.config(image=help_image)
-
-        def help_on_click(e) -> None:
-            pass
-
-        help_button.bind("<Enter>", help_on_enter)
-        help_button.bind("<Leave>", help_on_leave)
-        help_button.bind("<Button-1>", help_on_click)
+        help_button.bind("<Enter>", lambda event: bottom_on_enter(event, help_button))
+        help_button.bind("<Leave>", lambda event: bottom_on_leave(event, help_button))
+        help_button.bind("<Button-1>",
+            lambda event: bottom_on_click(event, help_button))
+        help_button.bind("<ButtonRelease-1>", lambda event: bottom_on_release(event, help_button))
 
         # ! NEXT STEP
         # TODO: Configure the on click functions for each of the two buttons. They could display another window (might be the easiest to do) or a frame that contains the information, although a quit button would be needed.
@@ -154,7 +188,7 @@ class GUI:
         # * Setting center (optimization) frame
         BUTTON_WIDTH: int = 10
         BUTTON_PADDING: int = 10
-        button_frame: tk.Frame = tk.Frame(self.root, height=self.__window_height - (main_title_height + bottom_frame_height), bg=Color.window_bg)
+        button_frame: tk.Frame = tk.Frame(self.root,height=self.__window_height - (main_title_height + bottom_frame_height), bg=Color.window_bg)
         button_frame.rowconfigure(0, weight=1)
         button_frame.rowconfigure(1, weight=1)
         button_frame.rowconfigure(2, weight=1)
@@ -233,8 +267,6 @@ class GUI:
         exit_button.grid(row=3, column=0, pady=(0,BUTTON_PADDING), padx=4*BUTTON_PADDING, sticky="nsew")
         # ? How do you add multiple suggestions to parameters like sticky does?
         button_frame.pack(fill="both", expand=True, pady=(main_title_height, bottom_frame_height))
-                                           
-        # Todo: Could think of a frame that adds a little menu at the bottom like the one in VsCode. It could contain the authors, info, version, etc. 
 
 if __name__ == "__main__":
     gui = GUI("0.2.0") # * Version can be obtained from Main's method get_version(). Therefore, when GUI is created inside Main, the method will be called as an argument (?).

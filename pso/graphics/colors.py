@@ -21,7 +21,7 @@ class Color:
     bottom_button_hbg: str = bottom_button_abg
     optim_button_hbg: str = "#000000"
     # * Clicked background
-    bottom_button_cbg: str = "#0c49b9"
+    bottom_button_cbg: str = "#033186" # Todo: Consider changing it
     optim_button_cbg: str = "#012422"
     # * Clicked foreground
     bottom_button_cfg: str = bottom_button_afg
