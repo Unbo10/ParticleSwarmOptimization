@@ -28,6 +28,9 @@
 # Ignore Excel files (optimization results)
 *.xlsx
 
+# Ignore lock files (created by Excel or similar apps when a file is opened)
+.~lock.*
+
 # Ignore system files
 .DS_Store
 Thumbs.db

@@ -3,53 +3,25 @@
 # * classes. It will contain the Data object that will store the results of
 # * any optimization done while the program is running.
 
+import os
+import re
+
 import toml
 
 from pso.database.data import Data
 from pso.graphics.gui import GUI
 from pso.optimization import Optimization
-from pyproject_hooks import __version__
 class Main:
     def __init__(self) -> None:
-        self.__history: Data = Data()
+        self.__history: Data = Data(excel_file_name=self.get_last_xslx_file())
         self.optimizations: list[Optimization] = []
         self.gui: GUI = GUI(program_version=self.get_version())
     
     def initialize_optimization(self) -> None:
         self.__optimizations.append(Optimization())
 
-    # def menu(self) -> None:
-    #     print("------MAIN MENU-------")
-    #     print("1. Create optimization")
-    #     print("2. Select optimization")
-    #     print("3. Delete optimization")
-    #     print("4. Exit")
-
     def run_optimization(self) -> None:
         pass
-
-    # def user_interface(self) -> None:
-    #     exit: bool = False
-    #     print("---WELCOME TO THE PARTICLE SWARM OPTIMIZATION PROGRAM!---")
-    #     print("You will be able to initialize and run multiple optimizations, and store the results.")
-    #     print("To exit at any point from the program press the key  combination \'Ctrl + C\'.")
-    #     while not exit:
-    #         print("What would you like to do?")
-    #         print("1. Initialize an optimization.")
-    #         print("2. Run an optimization.")
-    #         print("3. Print the results of an optimization.")
-    #         print("4. Exit the program.")
-    #         user_input = input("Enter the number of your choice: ")
-    #         if user_input == "1":
-    #             self.initialize_optimization()
-    #         elif user_input == "2":
-    #             self.run_optimization()
-    #         elif user_input == "3":
-    #             pass
-    #         elif user_input == "4":
-    #             exit = True
-    #         else:
-    #             print("Invalid input. Please enter a number between 1 and 4.")
 
     def get_version(self) -> str:
         # Define the file path
@@ -62,6 +34,24 @@ class Main:
         version = data.get('tool', {}).get('poetry', {}).get('version', 'Version not found')
 
         return version
+    
+    def get_last_xslx_file (self) -> str:
+        path: str = 'database'
+        files: list[str] = os.listdir(path)
+        last_session: int = 0
+        # * Refers to the number of the session to be looked at in the
+        # * for cycle
+        current_session: int = 0
+        xlsx_files: list[str] = [f for f in files if f.endswith('.xlsx')]
+        if len(xlsx_files) == 0:
+            return "session1_results"
+        else:
+            for i in range(len(xlsx_files)):
+                current_session = int(re.findall(r'\d+', xlsx_files[i])[0])
+                if current_session > last_session:
+                    last_session = current_session
+            return f'session{last_session}_results'
+        # ? Maybe raise an exception here?
 
 if __name__ == "__main__":
     try:

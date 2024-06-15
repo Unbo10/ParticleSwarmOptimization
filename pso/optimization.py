@@ -93,7 +93,7 @@ class Optimization:
         self.__social_coefficient: float = social_coefficient
         # * So it doesn't create two particle swarms with different dimensions
         self.__swarm: ParticleSwarm = ParticleSwarm(inertia_coefficient, cognitive_coefficient, social_coefficient, dimensions, particle_amount, self.heuristic)
-        self.__data = Data(iterations, particle_amount)
+        self.__data = data
     
     def heuristic(self, position: Position, selection: int = 1) -> float:
         """Heuristic function to be optimized."""
@@ -190,8 +190,7 @@ class Optimization:
         # * database and create a spreadsheet with the optimization results.
         self.__data.append_gbest_indexes(swarm_gbest_index)
         self.__data.append_optimization(optimization_df)
-        self.__data.print_optimization(0)
-        self.__data.create_spreadsheet()
+        # self.__data.print_optimization(0)
             
 
     # * Getters
@@ -221,6 +220,7 @@ def run():
     pass
 
 if __name__ == "__main__":
-    main = Optimization(cognitive_coefficient=2.05, inertia_coefficient=0.6, social_coefficient=2.05, particle_amount=10, dimensions=3, iterations=20)
+    data = Data(excel_file_name="session1_results")
+    main = Optimization(data=data, cognitive_coefficient=2.05, inertia_coefficient=0.6, social_coefficient=2.05, particle_amount=10, dimensions=3, iterations=20)
     main.optimize()
     # print(main.get_swarm().get_gbest())

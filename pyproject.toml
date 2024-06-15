@@ -20,6 +20,8 @@ toml = ">=0.10.2"
 xlsxwriter = "*"
 setuptools = ">=61.0"
 
+# ? Will we still have to check for built-in modules? Seems to me checking the Python version should be enough
+
 [tool.poetry.dev-dependencies]
 
 [tool.poetry.scripts]
