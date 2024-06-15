@@ -75,10 +75,16 @@ class ParticleSwarm:
             self.__particle_amount: int = int(particle_amount)
             if self.__particle_amount < 1:
                 raise ValueError("The amount of particles must be greater than zero.") # ! Maybe include a TypeError to deal with floats
+            if dimensions <= 1:
+                raise IndexError("The number of dimensions must be greater than one.")
         except ValueError as e:
             print(e)
             print("Amount defaulted to 10.")
             self.__particle_amount = 10
+        except IndexError as e:
+            print(e)
+            print("Dimensions defaulted to 3.")
+            dimensions = 3
         # TODO: Except TypeError (double)
         # ? Should the following line be inside a finally block?
         self.__particles: list[Particle] = [

@@ -120,24 +120,6 @@ class Optimization:
         else:
             return np.sum(np.square(position.get_coordinates()))
         
-    # def menu(self) -> None:
-        
-    #     print("----OPTIMIZATION MENU----")
-    #     print("1. Run")
-    #     print("2. Print results")
-    #     print("3. Save results")
-    #     print("4. Graph")
-    #     print("5. All of the above")
-    #     print("6. Back to main menu")
-    #     try:
-    #         user_choice: int = int(input("Enter any option's number: "))
-    #         if (user_choice < 1) or (user_choice > 6):
-    #             raise ValueError
-    #     except ValueError:
-    #         print("Invalid input. Please enter a number between 1 and 6.")
-    #         self.menu()
-        
-        
     def optimize(self) -> None:
         """Optimizes the heuristic function using the PSO algorithm."""
         # ! CHECK: Optimization not working properly. Might have to do with
@@ -221,6 +203,6 @@ def run():
 
 if __name__ == "__main__":
     data = Data(excel_file_name="session1_results")
-    main = Optimization(data=data, cognitive_coefficient=2.05, inertia_coefficient=0.6, social_coefficient=2.05, particle_amount=10, dimensions=3, iterations=20)
+    main = Optimization(data=data, cognitive_coefficient=2.05, inertia_coefficient=0.7, social_coefficient=2.05, particle_amount=11, dimensions=2, iterations=17) # ! CHECK: Minimum dimension
     main.optimize()
     # print(main.get_swarm().get_gbest())
