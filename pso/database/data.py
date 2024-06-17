@@ -13,7 +13,7 @@ class Data:
         self.__gbest_history: list[list[int]] = []
         self.__number_of_optimizations: int = 0
         self.__xlsx_name: str = excel_file_name # * Without the extension and directory
-        self.__xlsx_path: str = f"database/{self.__xlsx_name}.xlsx" # * It is determined if it exists in Main
+        self.__xlsx_path: str = f"database/optimization_results/{self.__xlsx_name}.xlsx" # * It is determined if it exists in Main
 
     def append_gbest_indexes(self, optimization_gbest_indexes: list[int]) -> None:
         self.__gbest_history.append(optimization_gbest_indexes)
@@ -22,6 +22,8 @@ class Data:
     def append_optimization(self, optimization_df: pd.DataFrame) -> None:
         # TODO: Test the whole class with multiple sessions and files. Also, update and add documentation and the class diagram.
         
+        if "optimization_results" not in os.listdir("database"):
+            os.mkdir("database/optimization_results")
         if self.__xlsx_name not in os.listdir():
             self.create_spreadsheet()
         
