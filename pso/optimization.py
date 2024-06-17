@@ -203,6 +203,6 @@ def run():
 
 if __name__ == "__main__":
     data = Data(excel_file_name="session1_results")
-    main = Optimization(data=data, cognitive_coefficient=2.05, inertia_coefficient=0.7, social_coefficient=2.05, particle_amount=11, dimensions=2, iterations=17) # ! CHECK: Minimum dimension
+    main = Optimization(data=data, cognitive_coefficient=2.05, inertia_coefficient=0.7, social_coefficient=2.05, particle_amount=13, dimensions=2, iterations=7) # ! CHECK: Minimum dimension
     main.optimize()
     # print(main.get_swarm().get_gbest())
