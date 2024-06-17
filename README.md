@@ -1,5 +1,6 @@
 # LaHerencia
 
+
 ``` mermaid
     classDiagram
     direction TB
