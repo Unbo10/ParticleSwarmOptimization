@@ -1,13 +1,15 @@
 class Color:
     # ? Would it be better to do it with a dictionary?
     # * WINDOWS AND FRAMES
-    window_bg: str = "#f0f0f0"
     bottom_menu_bg: str = "#0d42a3"
+    help_frame_bg: str = "#a1adc4"
+    info_frame_bg: str = "#a1adc4"
+    window_bg: str = "#f0f0f0"
     # * BUTTONS AND LABELS
     # * Background
     bottom_button_bg: str = "#0d42a3"
     hide_button_bg: str = "#a3490d"
-    info_frame_bg: str = "#a1adc4"
+    info_label_bg: str = info_frame_bg
     optim_button_bg: str = "#89e379"
     optim_label_bg: str = "#d3d3d3"
     # * Foreground (font color)
@@ -21,7 +23,7 @@ class Color:
     # * Active foreground (hovered)
     bottom_button_afg: str = "#ffffff"
     optim_button_afg: str = "#ffffff"
-    hide_button_afg: str = "#ffffff"
+    hide_button_afg: str = "#000000"
     # * Highlight background (focused)
     bottom_button_hbg: str = bottom_button_abg
     optim_button_hbg: str = "#000000"
@@ -33,4 +35,8 @@ class Color:
     # * Clicked foreground
     bottom_button_cfg: str = bottom_button_afg
     optim_button_cfg: str = optim_button_afg
-    hide_button_cfg: str = hide_button_afg
+    hide_button_cfg: str = hide_button_fg
+    # * SCROLLBAR
+    info_scrollbar_bg: str = "#2b2a2a"
+    info_scrollbar_trough: str = info_label_bg
+    info_scrollbar_abg: str = "#0f0f0f"
