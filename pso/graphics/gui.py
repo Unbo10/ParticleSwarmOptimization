@@ -4,6 +4,7 @@ import tkinter as tk
 import toml
 
 from pso.graphics.colors import Color
+from pso.graphics.fonts import Font
 
 class GUI:
     def __init__(self, program_version: str = "Error") -> None:
@@ -67,7 +68,7 @@ class GUI:
         main_title: tk.Label = tk.Label(self.root, 
                                         text="PSO manager",
                                         bg=Color.optim_label_bg,
-                                        font=("Ubuntu", 15),
+                                        font=(Font.title, 15),
                                         wraplength=450,
                                         anchor="center")
         main_title.place(x=0, y=0, width=self.__window_width, height=main_title_height)
@@ -78,27 +79,35 @@ class GUI:
         INFO_FRAME_HEIGHT: int = self.__window_height - (main_title_height + bottom_frame_height)
         HIDING_BUTTON_PADDING: int = 10
         info_frame_state: dict = {"visible": False}
-        info_frame: tk.Frame = tk.Frame(self.root, bg=Color.test_bg,
+        info_frame: tk.Frame = tk.Frame(self.root,
                                         height=INFO_FRAME_HEIGHT)
         info_frame.columnconfigure(0, weight=1)
-        info_frame.rowconfigure(0, weight=1)
+        info_frame.rowconfigure(0, weight=0)
         info_frame.rowconfigure(1, weight=1)
-        # TODO: Fix the button height. It is not being shown despite packing it correctly and adding padding to it.
     
         # info_scrollbar: tk.Scrollbar = tk.Scrollbar(info_frame)
-        info_hide_button: tk.Button = tk.Button(info_frame,
+        hide_button_parameters: dict = {
+            "bg": Color.hide_button_bg,
+            "fg": Color.hide_button_fg,
+            "relief": "flat",
+            "activebackground": Color.hide_button_abg,
+            "highlightbackground": Color.hide_button_hbg,
+            "highlightcolor": Color.hide_button_hbg,
+            "highlightthickness": 0,
+            "borderwidth": 0
+            }
+        hide_button: tk.Button = tk.Button(info_frame,
                                                 text="Hide",
-                                                bg=Color.bottom_button_bg,
-                                                padx=10,
-                                                pady=10,)
-        info_hide_button.grid(row=0, column=0, sticky="nsew", pady=(0, HIDING_BUTTON_PADDING))
-        info_text: tk.Text = tk.Text(info_frame, bg=Color.test_bg)
+                                                **hide_button_parameters)
+        hide_button.grid(row=0, column=0, sticky="nsew")
+        info_text: tk.Text = tk.Text(info_frame, bg=Color.info_frame_bg,
+                                     font=(Font.label, 10))
         info_text.insert(index=tk.END, chars="This is the information text.")
         info_text.config(state=tk.DISABLED)
         # info_scrollbar.config(command=info_text.yview)
-        info_text.grid(row=1, column=0, sticky="nsew")
+        info_text.grid(row=1, column=0)
         # info_scrollbar.grid(row=1, column=1, sticky="ns")
-        print(info_hide_button.cget("height"))
+        print(hide_button.cget("height"))
         
         # * Setting bottom frame
         bottom_frame: tk.Frame = tk.Frame(
@@ -212,7 +221,7 @@ class GUI:
             text=f"V {self.__version}",
             bg=Color.bottom_button_bg,
             fg=Color.bottom_button_fg,
-            font=("Ubuntu", 10, "bold")
+            font=(Font.label, 10, "bold")
             )
         # * To avoid being deleted by Python's garbage collector
         info_button.image = info_image
@@ -233,7 +242,7 @@ class GUI:
             "bg": Color.optim_button_bg,
             "fg": Color.optim_button_fg,
             "relief": "flat",
-            "font": ("Ubuntu", 10),
+            "font": (Font.button, 10),
             "activebackground": Color.optim_button_abg,
             "activeforeground": Color.optim_button_afg,
             "highlightbackground": Color.optim_button_hbg,
