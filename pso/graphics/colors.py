@@ -26,3 +26,6 @@ class Color:
     # * Clicked foreground
     bottom_button_cfg: str = bottom_button_afg
     optim_button_cfg: str = optim_button_afg
+
+    # * Testing
+    test_bg: str = "#ff0000"
