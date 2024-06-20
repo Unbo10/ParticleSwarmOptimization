@@ -130,7 +130,7 @@ class Optimization:
         swarm_gbest_index: list[int] = []
         optimization_df: pd.DataFrame = pd.DataFrame(columns = ["Heuristic",
                                             "Position", "Velocity", "Pbest"])
-        nan_df = pd.DataFrame(([np.NaN] * 4), index = ["Heuristic", "Position",
+        nan_df = pd.DataFrame(([np.nan] * 4), index = ["Heuristic", "Position",
                                                        "Velocity", "Pbest"]).T
 
         for iteration_num in range(self.__iterations + 1):

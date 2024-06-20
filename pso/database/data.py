@@ -106,13 +106,13 @@ class Data:
         # * Couting the AMOUNT OF PARTICLES
         # ? It could be passed as a parameter of the class's constructor
         number_of_particles: int = 0
-        while optimization_records[number_of_particles][0] is not np.NaN:
+        while optimization_records[number_of_particles][0] is not np.nan:
             number_of_particles += 1
         particle_index: int = 1
         # * Setting the particle indexes in the "C" column and styling them
         for row in range(optimization_df.shape[0]):
             cell = sheet.cell(row=row + 4, column=3)
-            if optimization_records[row][0] is not np.NaN:
+            if optimization_records[row][0] is not np.nan:
                 cell.value = particle_index
                 cell.alignment = px_styles.Alignment(horizontal="center",
                     vertical="center")
