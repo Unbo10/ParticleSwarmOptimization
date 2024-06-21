@@ -40,16 +40,16 @@ class GUI:
 
     def run(self):
         self.__initialize_root()
-        self.main_menu()
+        self.display_main_menu()
         self.root.mainloop()
 
-    def create_menu(self) -> None:
+    def display_create_menu(self) -> None:
         print("c")
 
-    def select_menu(self) -> None:
+    def display_select_menu(self) -> None:
         print("s")
 
-    def delete_menu(self) -> None:
+    def display_delete_menu(self) -> None:
         print("d")
 
     def exit_menu(self) -> None:
@@ -61,7 +61,7 @@ class GUI:
     def info_on_click (cls, e) -> None:
         pass
 
-    def main_menu(self):
+    def display_main_menu(self):
         # TODO: Style the hide button depending on the event triggered.
 
         # * Setting title
@@ -143,19 +143,39 @@ class GUI:
                     activeforeground=Color.bottom_button_afg
                     )
                 if info_frame_state["visible"] == False:
+                    button_frame.place_forget()
+                    help_frame.place_forget()
                     info_frame.place(x=0, y=main_title_height, width=self.__window_width, height=INFO_FRAME_HEIGHT)
-                    button_frame.pack_forget()
                     info_frame_state["visible"] = True
+                    help_frame_state["visible"] = False
                 else:
-                    info_frame.pack_forget()
-                    button_frame.pack(fill="both", expand=True, pady=(main_title_height, bottom_frame_height))
+                    info_frame.place_forget()
+                    help_frame.place_forget()
+                    button_frame.place(x=0, y=main_title_height, width=self.__window_width, height=self.__window_height - (main_title_height + bottom_frame_height))
                     info_frame_state["visible"] = False
-            else:
+                    help_frame_state["visible"] = False
+
+            elif button.cget("image") == images_str["help_image"]:
                 button.config(
                     image=help_active_image,
                     activebackground=Color.bottom_button_abg,
                     activeforeground=Color.bottom_button_afg
                     )
+                if help_frame_state["visible"] == False:
+                    button_frame.place_forget()
+                    info_frame.place_forget()
+                    help_frame.place(x=0, y=main_title_height, width=self.__window_width, height=INFO_FRAME_HEIGHT)
+                    help_frame_state["visible"] = True
+                    info_frame_state["visible"] = False
+                else:
+                    help_frame.place_forget()
+                    info_frame.place_forget()
+                    button_frame.place(x=0, y=main_title_height, width=self.__window_width, height=self.__window_height - (main_title_height + bottom_frame_height))
+                    help_frame_state["visible"] = False
+                    info_frame_state["visible"] = False
+            
+            else:
+                raise ValueError("Invalid button pressed.")
 
 
         info_button: tk.Button = tk.Button(
@@ -198,7 +218,7 @@ class GUI:
 
         # * Setting information frame
         INFO_FRAME_HEIGHT: int = self.__window_height - (main_title_height + bottom_frame_height)
-        HIDING_BUTTON_PADDING: int = 10
+        help_frame_state:dict = {"visible": False}
         info_frame_state: dict = {"visible": False}
         info_frame: tk.Frame = tk.Frame(self.root,
                                         height=INFO_FRAME_HEIGHT)
@@ -217,38 +237,35 @@ class GUI:
             "font": (Font.label, 10, "bold"),
             "relief": "flat",
             "borderwidth": 0,
-            "cursor": "hand2"
+            "cursor": "hand2",
+            "text": "Hide"
             }
 
         hide_button: tk.Button = tk.Button(info_frame,
-                                                text="Hide",
                                                 **hide_button_parameters)
 
-        def hide_button_on_enter(e) -> None:
-            hide_button.config(activebackground=Color.hide_button_abg,
-                activeforeground=Color.hide_button_afg)
-
-        def hide_button_on_leave(e) -> None:
-            hide_button.config(activebackground=Color.hide_button_abg,
-                activeforeground=Color.hide_button_afg)
-
-        def hide_button_on_click(e) -> None:
-            hide_button.config(activebackground=Color.hide_button_cbg,
+        def hide_button_on_click(e, button: tk.Button) -> None:
+            button.config(activebackground=Color.hide_button_cbg,
                 activeforeground=Color.hide_button_cfg)
 
         def hide_button_on_release(e) -> None:
             hide_button.config(activebackground=Color.hide_button_abg,
                 activeforeground=Color.hide_button_afg)
+            if info_frame_state["visible"] == True:
+                info_frame.place_forget()
+                help_frame.place_forget()
+                button_frame.place(x=0, y=main_title_height, width=self.__window_width, height=self.__window_height - (main_title_height + bottom_frame_height))
+            elif help_frame_state["visible"] == True:
+                help_frame.place_forget()
+                info_frame.place_forget()
+                button_frame.place(x=0, y=main_title_height, width=self.__window_width, height=self.__window_height - (main_title_height + bottom_frame_height))
             info_frame_state["visible"] = False
-            info_frame.pack_forget()
-            button_frame.pack(fill="both", expand=True, pady=(main_title_height, bottom_frame_height))
+            help_frame_state["visible"] = False
 
         hide_button.grid(row=0, column=0, columnspan=2, sticky="nsew")
-        hide_button.bind("<Enter>", hide_button_on_enter)
-        hide_button.bind("<Leave>", hide_button_on_leave)
-        hide_button.bind("<Button-1>", hide_button_on_click)
+        hide_button.bind("<Button-1>", lambda event: hide_button_on_click(event, hide_button))
         hide_button.bind("<ButtonRelease-1>", hide_button_on_release)
-        info_scrollbar_parameters: dict = {
+        scrollbar_parameters: dict = {
             "bg": Color.info_scrollbar_bg,
             "activebackground": Color.info_scrollbar_abg,
             "troughcolor": Color.info_scrollbar_trough,
@@ -257,11 +274,11 @@ class GUI:
             "elementborderwidth": 0,
             "width": 10,
         }
-        info_scrollbar: tk.Scrollbar = tk.Scrollbar(info_frame, **info_scrollbar_parameters)
+        info_scrollbar: tk.Scrollbar = tk.Scrollbar(info_frame, **scrollbar_parameters)
         # * For now, the scrollbar will be left as it comes with the
         # * tkinter API. In later versions a migration to tools like
         # * CTtkinter or ttk will be considered.
-        info_text_parameters: dict = {
+        text_parameters: dict = {
             "bg": Color.info_label_bg,
             "font": (Font.label, 10),
             "wrap": "word",
@@ -270,7 +287,7 @@ class GUI:
             "borderwidth": 0,
             "highlightthickness": 0
         }
-        info_text: tk.Text = tk.Text(info_frame, **info_text_parameters)
+        info_text: tk.Text = tk.Text(info_frame, **text_parameters)
         info_text.config(state="normal")
         info_text.insert(index="end", chars="Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?")
         # ? We could create a function to justify the text
@@ -283,10 +300,32 @@ class GUI:
         info_scrollbar.grid(row=1, column=1, sticky="ns")
 
         # * Setting the help frame
-        help_frame_state:dict = {"visible": False}
         help_frame:tk.Frame = tk.Frame(self.root, height=INFO_FRAME_HEIGHT,
-            bg=Color.help_frame_bg) # ! bg might not be necessary
+            bg=Color.hide_button_cbg) # ! bg might not be necessary
         help_frame.rowconfigure(0, weight=0)
+        help_frame.rowconfigure(1, weight=1)
+        help_frame.columnconfigure(0, weight=1)
+        help_frame.columnconfigure(1, weight=0)
+
+        help_hide_button: tk.Button = tk.Button(master=help_frame,
+            **hide_button_parameters)
+        help_hide_button.bind("<Button-1>", lambda event : hide_button_on_click (event, help_hide_button))
+        help_hide_button.bind("<ButtonRelease-1>", hide_button_on_release)
+        help_hide_button.grid(row=0, column=0, columnspan=2, sticky="nsew")
+
+        help_text: tk.Text = tk.Text(master=help_frame, **text_parameters)
+        help_scrollbar: tk.Scrollbar = tk.Scrollbar(help_frame,
+            **scrollbar_parameters)
+        help_text.config(state="normal")
+        help_text.insert(index="end",
+            chars="aaaaaaaaaaaaaaaaaaaaaaaaaaaaa lo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam que")
+        help_text.config(state="disabled")
+        help_text.tag_config(tagName="center", justify="center")
+        help_text.tag_add("center", "1.0", "end")
+        help_text.config(yscrollcommand=help_scrollbar.set)
+        help_scrollbar.config(command=help_text.yview)
+        help_text.grid(row=1, column=0, sticky="nsew")
+        help_scrollbar.grid(row=1, column=1, sticky="ns")
 
         # * Setting center (optimization) frame
         OPTIM_BUTTON_PADDING: int = 10
@@ -317,11 +356,11 @@ class GUI:
             button.config(activebackground=Color.optim_button_abg, activeforeground=Color.optim_button_afg)
             button_text: str = button.cget("text")
             if button_text == "Create optimization":
-                self.create_menu()
+                self.display_create_menu()
             elif button_text == "Select optimization":
-                self.select_menu()
+                self.display_select_menu()
             elif button_text == "Delete optimization":
-                self.delete_menu()
+                self.display_delete_menu()
             elif button_text == "Exit":
                 self.exit_menu()
             else:
@@ -371,7 +410,7 @@ class GUI:
         # ? How do you add multiple suggestions to parameters like sticky does?
 
         # * Packing frames
-        button_frame.pack(fill="both", expand=True, pady=(main_title_height, bottom_frame_height))
+        button_frame.place(x=0, y=main_title_height, width=self.__window_width, height=self.__window_height - (main_title_height + bottom_frame_height))
 
 
 if __name__ == "__main__":
