@@ -1,86 +1,97 @@
 
+# TODO: When select, create and delete menus are implemented, documentation must be added to the gui, fonts and colors modules.
 
 import tkinter as tk
-import toml
 
 from pso.graphics.colors import Color
 from pso.graphics.fonts import Font
 
 class GUI:
+    """
+    A class to initialize and display a Graphical User Interface (GUI) to interact visually with the optimization processes and the database. It is designed in a way it should be contained in a Main class to work. Therefore, any object client cannot modify anything apart from the version of the program.
+
+    ## Attributes
+
+    ### Private
+    - `root` : tk.Tk
+        The main window of the GUI.
+    - `version `: str
+        The version of the program. Assumed to be given as a string to the class constructor. Default is "Error".
+    - `window_height` : int
+        The height of the main window.
+    - `window_width` : int
+        The width of the main window.
+
+    ## Methods
+    - `__init__(program_version: str = "Error") -> None`
+        Class constructor.
+    
+    ### Public
+    - `display_create_menu() -> None`
+        Displays the menu to create a new optimization.
+    - `display_delete_menu() -> None`
+        Displays the menu to delete an optimization.
+    - `display_exit_menu() -> None`
+        Displays a goodbye message and exits the program.
+    - `display_main_menu() -> None`
+        Displays the main menu of the program.
+    - `display_select_menu() -> None`
+        Displays the menu to select an optimization.
+    - `run() -> None`
+        Initializes the main window and runs the GUI.
+    """
+    __root: tk.Tk = tk.Tk()
     def __init__(self, program_version: str = "Error") -> None:
         # * Will probably need to pass as a parameter the __optimizations attribute of Main.
-        # * This is done in order to be able to do the actions stated in the main menu.
+        # * This would be done in order to be able to do the actions stated in the main menu.
+        # ? Future versions could include thread management. Could be an interesting way to start learning about parallelism and concurrency.
         self.__version: str = program_version
-        self.root: tk.Tk = tk.Tk()
         self.__window_height: int = 0
         self.__window_width: int = 0
 
-    def __initialize_root(self) -> None:
-        self.root.title("Particle Swarm Optimization")
-
-        # * Setting initial geometry (dimensions)
-        self.root.resizable(False, False)
-        screen_width: int = self.root.winfo_screenwidth()
-        screen_height: int= self.root.winfo_screenheight()
-        self.__window_width: int = 250
-        self.__window_height: int = 250
-        top_left_x: int = (screen_width // 2) - (self.__window_width // 2)
-        top_left_y: int = (screen_height // 2) - (self.__window_height // 2)
-        self.root.geometry(f"{self.__window_width}x{self.__window_height}+{top_left_x}+{top_left_y}")
-
-        # * Setting icon for the application switcher, the dock and the taskbar (Windows)
-        small_logo_path: str = "assets/small-logo.png"
-        large_logo_path: str = small_logo_path
-        small_logo: tk.PhotoImage = tk.PhotoImage(file=small_logo_path).subsample(10)
-        large_logo: tk.PhotoImage = tk.PhotoImage(file=large_logo_path)
-        self.root.iconphoto(False, small_logo, large_logo)
-
-        # * Setting background color
-        self.root.configure(bg=Color.window_bg)
-
-    def run(self):
-        self.__initialize_root()
-        self.display_main_menu()
-        self.root.mainloop()
-
-    def display_create_menu(self) -> None:
+    def __display_create_menu(self) -> None:
         print("c")
 
-    def display_select_menu(self) -> None:
-        print("s")
-
-    def display_delete_menu(self) -> None:
+    def __display_delete_menu(self) -> None:
         print("d")
 
-    def exit_menu(self) -> None:
-        self.root.quit()
-
-    def help_on_click (cls, e) -> None:
-        pass
-
-    def info_on_click (cls, e) -> None:
-        pass
-
-    def display_main_menu(self):
-        # TODO: Style the hide button depending on the event triggered.
-
-        # * Setting title
+    def __display_exit_menu(self) -> None:
+        goodbye_frame: tk.Frame = tk.Frame(GUI.__root,
+            bg=Color.goodbye_frame_bg)
+        goodbye_frame.rowconfigure(0, weight=0)
+        goodbye_frame.rowconfigure(1, weight=1)
+        goodbye_frame.columnconfigure(0, weight=1)
+        goodbye_image: tk.PhotoImage = tk.PhotoImage(
+            file="assets/goodbye.png").subsample(2)
+        goodbye_label: tk.Label = tk.Label(goodbye_frame, image=goodbye_image, bg=Color.goodbye_label_bg, borderwidth=0, highlightthickness=0) 
+        goodby_text: tk.Text = tk.Text(goodbye_frame, bg=Color.goodbye_frame_bg, wrap="word", font=(Font.label, 25), fg=Color.goodbye_text_fg, background=Color.goodbye_text_bg, borderwidth=0, highlightthickness=0)
+        goodby_text.insert(index="end", chars="Goodbye!")
+        goodby_text.tag_config(tagName="center", justify="center")
+        goodby_text.tag_add("center", "1.0", "end")
+        goodby_text.config(state="disabled")
+        goodbye_label.grid(row=0, column=0, pady=(25, 0), sticky="nsew")
+        goodby_text.grid(row=1, column=0, pady=(25, 25), sticky="nsew")
+        # ? A more rigurous way of centering the label and the text could be implemented.
+        goodbye_label.image = goodbye_image
+        goodbye_frame.place(x=0, y=0, width=self.__window_width, height=self.__window_height)
+    
+    def __display_main_menu(self):
+        """
+        """
+    # * Setting title
         main_title_height: int = 40
-        main_title: tk.Label = tk.Label(self.root,
-                                        text="PSO manager",
-                                        bg=Color.optim_label_bg,
-                                        font=(Font.title, 15),
-                                        wraplength=450,
-                                        anchor="center")
-        main_title.place(x=0, y=0, width=self.__window_width, height=main_title_height)
+        main_title: tk.Label = tk.Label(GUI.__root, text="PSO manager",
+            bg=Color.optim_label_bg, font=(Font.title, 15), wraplength=450,
+            anchor="center")
+        main_title.place(x=0, y=0, width=self.__window_width,
+            height=main_title_height)
 
         bottom_frame_height: int = 30
 
-        # * Setting bottom frame
-        bottom_frame: tk.Frame = tk.Frame(
-            self.root,
-            bg=Color.bottom_button_abg
-            )
+    # ! In future versions the bottom, help and info frames could be instance attributes to allow object clients to modify them to their requirements.
+    # * Setting bottom frame
+        bottom_frame: tk.Frame = tk.Frame( GUI.__root,
+            bg=Color.bottom_button_abg)
         bottom_frame.rowconfigure(0, weight=1)
         bottom_frame.columnconfigure(0, weight=1)
         bottom_frame.columnconfigure(1, weight=1)
@@ -216,11 +227,11 @@ class GUI:
         bottom_frame.place(x=0, y=self.__window_height - bottom_frame_height, width=self.__window_width,
                            height=bottom_frame_height)
 
-        # * Setting information frame
+    # * Setting information frame
         INFO_FRAME_HEIGHT: int = self.__window_height - (main_title_height + bottom_frame_height)
         help_frame_state:dict = {"visible": False}
         info_frame_state: dict = {"visible": False}
-        info_frame: tk.Frame = tk.Frame(self.root,
+        info_frame: tk.Frame = tk.Frame(GUI.__root,
                                         height=INFO_FRAME_HEIGHT)
         info_frame.columnconfigure(0, weight=1)
         info_frame.columnconfigure(1, weight=0)
@@ -231,8 +242,7 @@ class GUI:
             "bg": Color.hide_button_bg,
             "fg": Color.hide_button_fg,
             "activebackground": Color.hide_button_abg,
-            "highlightbackground": Color.hide_button_hbg,
-            "highlightcolor": Color.hide_button_hbg,
+            "activeforeground": Color.hide_button_afg,
             "highlightthickness": 0,
             "font": (Font.label, 10, "bold"),
             "relief": "flat",
@@ -241,15 +251,15 @@ class GUI:
             "text": "Hide"
             }
 
-        hide_button: tk.Button = tk.Button(info_frame,
+        info_hide_button: tk.Button = tk.Button(info_frame,
                                                 **hide_button_parameters)
 
         def hide_button_on_click(e, button: tk.Button) -> None:
             button.config(activebackground=Color.hide_button_cbg,
                 activeforeground=Color.hide_button_cfg)
 
-        def hide_button_on_release(e) -> None:
-            hide_button.config(activebackground=Color.hide_button_abg,
+        def hide_button_on_release(e, button: tk.Button) -> None:
+            button.config(activebackground=Color.hide_button_abg,
                 activeforeground=Color.hide_button_afg)
             if info_frame_state["visible"] == True:
                 info_frame.place_forget()
@@ -262,9 +272,9 @@ class GUI:
             info_frame_state["visible"] = False
             help_frame_state["visible"] = False
 
-        hide_button.grid(row=0, column=0, columnspan=2, sticky="nsew")
-        hide_button.bind("<Button-1>", lambda event: hide_button_on_click(event, hide_button))
-        hide_button.bind("<ButtonRelease-1>", hide_button_on_release)
+        info_hide_button.grid(row=0, column=0, columnspan=2, sticky="nsew")
+        info_hide_button.bind("<Button-1>", lambda event: hide_button_on_click(event, info_hide_button))
+        info_hide_button.bind("<ButtonRelease-1>", lambda event: hide_button_on_release(event, info_hide_button))
         scrollbar_parameters: dict = {
             "bg": Color.info_scrollbar_bg,
             "activebackground": Color.info_scrollbar_abg,
@@ -279,7 +289,8 @@ class GUI:
         # * tkinter API. In later versions a migration to tools like
         # * CTtkinter or ttk will be considered.
         text_parameters: dict = {
-            "bg": Color.info_label_bg,
+            "bg": Color.bottom_label_bg,
+            "fg": Color.bottom_label_fg,
             "font": (Font.label, 10),
             "wrap": "word",
             "padx": 5,
@@ -299,18 +310,18 @@ class GUI:
         info_text.grid(row=1, column=0)
         info_scrollbar.grid(row=1, column=1, sticky="ns")
 
-        # * Setting the help frame
-        help_frame:tk.Frame = tk.Frame(self.root, height=INFO_FRAME_HEIGHT,
-            bg=Color.hide_button_cbg) # ! bg might not be necessary
+    # * Setting the help frame
+        help_frame:tk.Frame = tk.Frame(GUI.__root)
         help_frame.rowconfigure(0, weight=0)
         help_frame.rowconfigure(1, weight=1)
         help_frame.columnconfigure(0, weight=1)
         help_frame.columnconfigure(1, weight=0)
 
+        # ! Check the functionality of the hovering, clicking and releasing of the help_button. Seems to be working fine but there could be problems when entering the help frame from the info frame
         help_hide_button: tk.Button = tk.Button(master=help_frame,
             **hide_button_parameters)
         help_hide_button.bind("<Button-1>", lambda event : hide_button_on_click (event, help_hide_button))
-        help_hide_button.bind("<ButtonRelease-1>", hide_button_on_release)
+        help_hide_button.bind("<ButtonRelease-1>", lambda event: hide_button_on_release(event, help_hide_button))
         help_hide_button.grid(row=0, column=0, columnspan=2, sticky="nsew")
 
         help_text: tk.Text = tk.Text(master=help_frame, **text_parameters)
@@ -327,9 +338,9 @@ class GUI:
         help_text.grid(row=1, column=0, sticky="nsew")
         help_scrollbar.grid(row=1, column=1, sticky="ns")
 
-        # * Setting center (optimization) frame
+    # * Setting center (optimization) frame
         OPTIM_BUTTON_PADDING: int = 10
-        button_frame: tk.Frame = tk.Frame(self.root,height=self.__window_height - (main_title_height + bottom_frame_height), bg=Color.window_bg)
+        button_frame: tk.Frame = tk.Frame(GUI.__root, bg=Color.window_bg)
         button_frame.rowconfigure(0, weight=1)
         button_frame.rowconfigure(1, weight=1)
         button_frame.rowconfigure(2, weight=1)
@@ -355,14 +366,18 @@ class GUI:
         def menu_button_on_release(self, e, button: tk.Button) -> None:
             button.config(activebackground=Color.optim_button_abg, activeforeground=Color.optim_button_afg)
             button_text: str = button.cget("text")
+            main_title.place_forget()
+            button_frame.place_forget()
+            bottom_frame.place_forget()
             if button_text == "Create optimization":
-                self.display_create_menu()
+                self.__display_create_menu()
             elif button_text == "Select optimization":
-                self.display_select_menu()
+                self.__display_select_menu()
             elif button_text == "Delete optimization":
-                self.display_delete_menu()
+                self.__display_delete_menu()
             elif button_text == "Exit":
-                self.exit_menu()
+                self.__display_exit_menu()
+                GUI.__root.after(1000, GUI.__root.quit)
             else:
                 raise ValueError("Invalid button pressed.")
 
@@ -409,10 +424,39 @@ class GUI:
         exit_button.grid(row=3, column=0, pady=(0,OPTIM_BUTTON_PADDING), padx=4*OPTIM_BUTTON_PADDING, sticky="nsew")
         # ? How do you add multiple suggestions to parameters like sticky does?
 
-        # * Packing frames
         button_frame.place(x=0, y=main_title_height, width=self.__window_width, height=self.__window_height - (main_title_height + bottom_frame_height))
 
+    def __display_select_menu(self) -> None:
+        print("s")
+
+    def __initialize_root(self) -> None:
+        GUI.__root.title("Particle Swarm Optimization")
+
+        # * Setting initial geometry (dimensions)
+        GUI.__root.resizable(False, False)
+        screen_width: int = GUI.__root.winfo_screenwidth()
+        screen_height: int= GUI.__root.winfo_screenheight()
+        self.__window_width: int = 250
+        self.__window_height: int = 250
+        top_left_x: int = (screen_width // 2) - (self.__window_width // 2)
+        top_left_y: int = (screen_height // 2) - (self.__window_height // 2)
+        GUI.__root.geometry(f"{self.__window_width}x{self.__window_height}+{top_left_x}+{top_left_y}")
+
+        # * Setting icon for the application switcher, the dock and the taskbar (Windows)
+        small_logo_path: str = "assets/small-logo.png"
+        large_logo_path: str = small_logo_path
+        small_logo: tk.PhotoImage = tk.PhotoImage(file=small_logo_path).subsample(10)
+        large_logo: tk.PhotoImage = tk.PhotoImage(file=large_logo_path)
+        GUI.__root.iconphoto(False, small_logo, large_logo)
+
+        # * Setting background color
+        GUI.__root.configure(bg=Color.window_bg)
+
+    def run(self):
+        self.__initialize_root()
+        self.__display_main_menu()
+        GUI.__root.mainloop()
 
 if __name__ == "__main__":
     gui = GUI("0.2.0") # * Version can be obtained from Main's method get_version(). Therefore, when GUI is created inside Main, the method will be called as an argument (?).
-    gui.run()
+    gui.run() # ? Should run be the only public method?
