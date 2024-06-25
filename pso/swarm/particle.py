@@ -34,13 +34,13 @@ class Particle:
     ## Attributes
     
     ### Private
-    - __heuristic : Heuristic
+    - heuristic : Heuristic
         Fitness or heuristic value of the particle.
-    - __pbest : Position
+    - pbest : Position
         Position where the best heuristic value was found.
-    - __position : Position
+    - position : Position
         Current position of the particle.
-    - __velocity : Velocity
+    - velocity : Velocity
         Current velocity of the particle.
     
     ### Public
