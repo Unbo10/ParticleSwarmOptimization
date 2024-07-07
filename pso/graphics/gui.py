@@ -5,6 +5,7 @@ import tkinter as tk
 
 from pso.graphics.colors import Color
 from pso.graphics.fonts import Font
+from pso.optimization import Optimization
 
 class GUI:
     """
@@ -45,6 +46,7 @@ class GUI:
         # * Will probably need to pass as a parameter the __optimizations attribute of Main.
         # * This would be done in order to be able to do the actions stated in the main menu.
         # ? Future versions could include thread management. Could be an interesting way to start learning about parallelism and concurrency.
+        self.__optimization_history: list[Optimization] = [Optimization(0), Optimization(1), Optimization(2), Optimization(3), Optimization(4), Optimization(5), Optimization(6), Optimization(7), Optimization(8), Optimization(9)]
         self.__version: str = program_version
         self.__window_height: int = 0
         self.__window_width: int = 0
@@ -79,12 +81,12 @@ class GUI:
         """
         """
     # * Setting title
-        main_title_height: int = 40
-        main_title: tk.Label = tk.Label(GUI.__root, text="PSO manager",
+        title_height: int = 40
+        title: tk.Label = tk.Label(GUI.__root, text="PSO manager",
             bg=Color.optim_label_bg, font=(Font.title, 15), wraplength=450,
             anchor="center")
-        main_title.place(x=0, y=0, width=self.__window_width,
-            height=main_title_height)
+        title.place(x=0, y=0, width=self.__window_width,
+            height=title_height)
 
         bottom_frame_height: int = 30
 
@@ -156,13 +158,13 @@ class GUI:
                 if info_frame_state["visible"] == False:
                     button_frame.place_forget()
                     help_frame.place_forget()
-                    info_frame.place(x=0, y=main_title_height, width=self.__window_width, height=INFO_FRAME_HEIGHT)
+                    info_frame.place(x=0, y=title_height, width=self.__window_width, height=INFO_FRAME_HEIGHT)
                     info_frame_state["visible"] = True
                     help_frame_state["visible"] = False
                 else:
                     info_frame.place_forget()
                     help_frame.place_forget()
-                    button_frame.place(x=0, y=main_title_height, width=self.__window_width, height=self.__window_height - (main_title_height + bottom_frame_height))
+                    button_frame.place(x=0, y=title_height, width=self.__window_width, height=self.__window_height - (title_height + bottom_frame_height))
                     info_frame_state["visible"] = False
                     help_frame_state["visible"] = False
 
@@ -175,13 +177,13 @@ class GUI:
                 if help_frame_state["visible"] == False:
                     button_frame.place_forget()
                     info_frame.place_forget()
-                    help_frame.place(x=0, y=main_title_height, width=self.__window_width, height=INFO_FRAME_HEIGHT)
+                    help_frame.place(x=0, y=title_height, width=self.__window_width, height=INFO_FRAME_HEIGHT)
                     help_frame_state["visible"] = True
                     info_frame_state["visible"] = False
                 else:
                     help_frame.place_forget()
                     info_frame.place_forget()
-                    button_frame.place(x=0, y=main_title_height, width=self.__window_width, height=self.__window_height - (main_title_height + bottom_frame_height))
+                    button_frame.place(x=0, y=title_height, width=self.__window_width, height=self.__window_height - (title_height + bottom_frame_height))
                     help_frame_state["visible"] = False
                     info_frame_state["visible"] = False
             
@@ -228,7 +230,7 @@ class GUI:
                            height=bottom_frame_height)
 
     # * Setting information frame
-        INFO_FRAME_HEIGHT: int = self.__window_height - (main_title_height + bottom_frame_height)
+        INFO_FRAME_HEIGHT: int = self.__window_height - (title_height + bottom_frame_height)
         help_frame_state:dict = {"visible": False}
         info_frame_state: dict = {"visible": False}
         info_frame: tk.Frame = tk.Frame(GUI.__root,
@@ -264,11 +266,11 @@ class GUI:
             if info_frame_state["visible"] == True:
                 info_frame.place_forget()
                 help_frame.place_forget()
-                button_frame.place(x=0, y=main_title_height, width=self.__window_width, height=self.__window_height - (main_title_height + bottom_frame_height))
+                button_frame.place(x=0, y=title_height, width=self.__window_width, height=self.__window_height - (title_height + bottom_frame_height))
             elif help_frame_state["visible"] == True:
                 help_frame.place_forget()
                 info_frame.place_forget()
-                button_frame.place(x=0, y=main_title_height, width=self.__window_width, height=self.__window_height - (main_title_height + bottom_frame_height))
+                button_frame.place(x=0, y=title_height, width=self.__window_width, height=self.__window_height - (title_height + bottom_frame_height))
             info_frame_state["visible"] = False
             help_frame_state["visible"] = False
 
@@ -366,7 +368,7 @@ class GUI:
         def menu_button_on_release(self, e, button: tk.Button) -> None:
             button.config(activebackground=Color.optim_button_abg, activeforeground=Color.optim_button_afg)
             button_text: str = button.cget("text")
-            main_title.place_forget()
+            title.place_forget()
             button_frame.place_forget()
             bottom_frame.place_forget()
             if button_text == "Create optimization":
@@ -424,20 +426,66 @@ class GUI:
         exit_button.grid(row=3, column=0, pady=(0,OPTIM_BUTTON_PADDING), padx=4*OPTIM_BUTTON_PADDING, sticky="nsew")
         # ? How do you add multiple suggestions to parameters like sticky does?
 
-        button_frame.place(x=0, y=main_title_height, width=self.__window_width, height=self.__window_height - (main_title_height + bottom_frame_height))
+        button_frame.place(x=0, y=title_height, width=self.__window_width, height=self.__window_height - (title_height + bottom_frame_height))
 
     def __display_select_menu(self) -> None:
-        print("s")
+        self.__initialize_root(width=500, height=500, title="Select optimization - PSO")
+        title_height: int = 40
+        title: tk.Label = tk.Label(GUI.__root, text="Select a previous optimization",
+            bg=Color.select_title_bg, fg=Color.select_title_fg, font=(Font.title, 15))
+        title.place(x=0, y=0, width=self.__window_width, height=title_height)
 
-    def __initialize_root(self) -> None:
-        GUI.__root.title("Particle Swarm Optimization")
+        list_scrollbar_width: int = 20
+        list_canvas: tk.Canvas = tk.Canvas(GUI.__root, bg=Color.hide_button_abg)
+        list_canvas.place(y=title_height + 15, x=15, width=self.__window_width - (30 + list_scrollbar_width), height=self.__window_height - (title_height + 30))
+        list_scrollbar: tk.Scrollbar = tk.Scrollbar(GUI.__root, orient="vertical", command=list_canvas.yview)
+        list_canvas.configure(yscrollcommand=list_scrollbar.set)
+        list_scrollbar.place(x=self.__window_width - (15 + list_scrollbar_width), y=title_height + 15, height=self.__window_height - (title_height + 30), width=list_scrollbar_width)
+
+        list_parent_frame_height: int = self.__window_height - (title_height + 30)
+        list_parent_frame_width: int = self.__window_width - (30 + list_scrollbar_width)
+        list_parent_frame: tk.Frame = tk.Frame(list_canvas, bg=Color.optim_button_bg, width=list_parent_frame_width, height=list_parent_frame_height)
+        list_parent_frame.bind("<Configure>", lambda e: list_canvas.configure
+        (scrollregion=list_canvas.bbox("all")))
+        inner_frame_height: int = 100
+        inner_frame_separation: int = 25
+        inner_frame_width: int = self.__window_width - (list_scrollbar_width + 60)
+
+        def create_inner_frame(optimization) -> tk.Frame:
+            inner_frame = tk.Frame(list_parent_frame, bg=Color.bottom_button_abg, width=inner_frame_width, height=inner_frame_height)
+            for col in range(5):
+                inner_frame.columnconfigure(col, weight=1)
+            inner_frame.rowconfigure(0, weight=1)
+            inner_frame.rowconfigure(1, weight=1)
+            name_label: tk.Label = tk.Label(inner_frame, text=f"Optimization {optimization.get_index() + 1}", bg=Color.select_label_optim_bg, fg=Color.select_label_optim_fg, font=(Font.label, 12, "bold"))
+            name_label.grid(row=0, column=0, sticky="nsew")
+
+            return inner_frame
+
+        list_inner_frames: list[tk.Frame] = [create_inner_frame(optimization) for optimization in self.__optimization_history]
+        frame_index = 0
+        while frame_index < len(self.__optimization_history):
+            list_parent_frame.rowconfigure(frame_index, weight=1)
+            list_inner_frames[frame_index].grid(row=frame_index, column=0, sticky="nsew")
+            frame_index += 1
+        if frame_index*(inner_frame_height + inner_frame_separation) - 2*inner_frame_separation > list_parent_frame_height:
+            list_parent_frame_height = frame_index*(inner_frame_height + inner_frame_separation) - 2*inner_frame_separation
+
+        # list_canvas.configure(scrollregion=list_canvas.bbox("all"))
+        # ! May not be necessary as 445 already does that # * Ensures the scroll encompasses all the elements in the canvas.
+        list_canvas.create_window((0, 0), window=list_parent_frame, anchor="nw")
+
+
+    def __initialize_root(self, width: int, height: int,
+        title: str = "Particle Swarm Optimization (PSO)") -> None:
+        GUI.__root.title(title)
 
         # * Setting initial geometry (dimensions)
         GUI.__root.resizable(False, False)
         screen_width: int = GUI.__root.winfo_screenwidth()
         screen_height: int= GUI.__root.winfo_screenheight()
-        self.__window_width: int = 250
-        self.__window_height: int = 250
+        self.__window_width: int = width
+        self.__window_height: int = height
         top_left_x: int = (screen_width // 2) - (self.__window_width // 2)
         top_left_y: int = (screen_height // 2) - (self.__window_height // 2)
         GUI.__root.geometry(f"{self.__window_width}x{self.__window_height}+{top_left_x}+{top_left_y}")
@@ -453,7 +501,7 @@ class GUI:
         GUI.__root.configure(bg=Color.window_bg)
 
     def run(self):
-        self.__initialize_root()
+        self.__initialize_root(width=250, height=250)
         self.__display_main_menu()
         GUI.__root.mainloop()
 
