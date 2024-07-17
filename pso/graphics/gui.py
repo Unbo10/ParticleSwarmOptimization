@@ -5,6 +5,11 @@ import tkinter as tk
 
 from pso.graphics.colors import Color
 from pso.graphics.fonts import Font
+import numpy as np
+import matplotlib.pyplot as plt
+from tkinter import ttk
+from matplotlib.figure import Figure
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 class GUI:
     """
@@ -426,8 +431,53 @@ class GUI:
 
         button_frame.place(x=0, y=main_title_height, width=self.__window_width, height=self.__window_height - (main_title_height + bottom_frame_height))
 
-    def __display_select_menu(self) -> None:
-        print("s")
+    def __display_select_menu(self, optimizations_list: list = [[]]) -> None:
+        """
+        cognitive_coefficient = 2.05, inertia_coefficient=0.7, social_coefficient=2.05, particle_amount=13, dimensions=2, iterations=7, gbest_position=np.array([0, 0])
+        """
+        def default_optimization() -> None:
+            """In case the user doesn't select any optimization, a default one will be displayed.
+            """
+            work = optimizations_list[0]
+            work.append(2.05)
+            work.append(0.7)
+            work.append(2.05)
+            work.append(13)
+            work.append(2)
+            work.append(7)
+            work.append(np.array([0, 0]))
+            
+            x = np.arange(-5, 5.1, 0.2)
+            y = np.arange(-5, 5.1, 0.2)
+            X, Y = np.meshgrid(x, y)
+            work.append(X**2 + Y**2)
+            
+            fig = plt.figure(figsize = (12,10))
+            ax = plt.axes(projection='3d')
+            Z = work[7]
+            surf = ax.plot_surface(X, Y, Z, cmap = plt.cm.cividis)
+
+            #graph gbest position
+            ax.scatter(work[6][0], work[6][1], 0, c="red", marker="o", label="gbest position")
+            
+            # Set axes label
+            ax.set_xlabel('x', labelpad=20)
+            ax.set_ylabel('y', labelpad=20)
+            ax.set_zlabel('z', labelpad=20)
+            fig.colorbar(surf, shrink=0.5, aspect=8)
+            
+            frame = ttk.Frame(gui.__root)
+            frame.pack(fill=tk.BOTH, expand=1)  
+            canvas = FigureCanvasTkAgg(fig, master=frame)
+            canvas.draw()
+
+            #Creating a button that shows the 3d graph
+            fig_button = tk.Button(GUI.__root, text="Show 3D graph", command=lambda: canvas.get_tk_widget().pack(fill=tk.BOTH, expand=1), font=(Font.button, 10))
+            fig_button.place(x=0, y=0, width=100, height=30)
+            fig_button.config(bg=Color.optim_button_bg, fg=Color.optim_button_fg, relief="flat", activebackground=Color.optim_button_abg, activeforeground=Color.optim_button_afg, highlightbackground=Color.optim_button_hbg, highlightcolor=Color.optim_button_hbg, highlightthickness=1, borderwidth=1, cursor="hand2")
+        
+        if optimizations_list == [[]]:
+            default_optimization()        
 
     def __initialize_root(self) -> None:
         GUI.__root.title("Particle Swarm Optimization")
