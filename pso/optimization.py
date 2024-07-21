@@ -87,6 +87,8 @@ class Optimization:
         self.__data: Data = data
         self.__cognitive_coefficient: float = cognitive_coefficient
         self.__dimensions: int = dimensions
+        # ? Might need to make a heuristic function class or at least a
+        # ? heuristic function attribute to display it in the select menu of the GUI.
         self.__index: int = index # ! Left to add in docs
         self.__inertia_coefficient: float = inertia_coefficient
         self.__iterations: int = iterations

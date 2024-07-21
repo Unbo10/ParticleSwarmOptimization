@@ -447,24 +447,34 @@ class GUI:
         list_parent_frame: tk.Frame = tk.Frame(list_canvas, bg=Color.optim_button_bg, width=list_parent_frame_width, height=list_parent_frame_height)
         list_parent_frame.bind("<Configure>", lambda e: list_canvas.configure
         (scrollregion=list_canvas.bbox("all")))
-        inner_frame_height: int = 100
+        inner_frame_height: int = 75
         inner_frame_separation: int = 25
         inner_frame_width: int = self.__window_width - (list_scrollbar_width + 60)
 
-        def create_inner_frame(optimization) -> tk.Frame:
+        def create_inner_frame(optimization: Optimization) -> tk.Frame:
+            """
+            This function initializes a frame for a single optimization.
+            It adds multiple labels, buttons and images that correspond to
+            the optimization in question. Finally, it returns them to be
+            stored somewhere else and displayed.
+            """
             inner_frame = tk.Frame(list_parent_frame, bg=Color.bottom_button_abg, width=inner_frame_width, height=inner_frame_height)
             for col in range(5):
                 inner_frame.columnconfigure(col, weight=1)
             inner_frame.rowconfigure(0, weight=1)
             inner_frame.rowconfigure(1, weight=1)
+            inner_frame.rowconfigure(2, weight=1)
             name_label: tk.Label = tk.Label(inner_frame, text=f"Optimization {optimization.get_index() + 1}", bg=Color.select_label_optim_bg, fg=Color.select_label_optim_fg, font=(Font.label, 12, "bold"))
             name_label.grid(row=0, column=0, sticky="nsew")
+            function_label: tk.Label = tk.Label(inner_frame, text=f"Function: {optimization.get_data().get_function()}", bg=Color.select_label_optim_bg, fg=Color.select_label_optim_fg, font=(Font.label, 10))
 
             return inner_frame
 
         list_inner_frames: list[tk.Frame] = [create_inner_frame(optimization) for optimization in self.__optimization_history]
         frame_index = 0
         while frame_index < len(self.__optimization_history):
+            # * This cycle adds all of the inner (optimization) frames to the
+            # * parent frame contained inside the canvas.
             list_parent_frame.rowconfigure(frame_index, weight=1)
             list_inner_frames[frame_index].grid(row=frame_index, column=0, sticky="nsew")
             frame_index += 1

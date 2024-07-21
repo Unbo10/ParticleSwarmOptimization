@@ -8,6 +8,11 @@ class Color:
     window_bg: str = "#f0f0f0"
     goodbye_frame_bg: str = "#1b1b1b"
 
+        # * Select menu
+    select_inner_frame_bg: str = "#91b5e4"
+    select_inner_frame_fg: str = "#000000"
+    select_inner_button_bg: str = "#f0f0f0"
+
     # * BUTTONS, LABELS AND TEXT
 
     # * Background
