@@ -13,28 +13,10 @@ from pso.graphics.gui import GUI
 from pso.optimization import Optimization
 class Main:
     def __init__(self) -> None:
-        self.__history: Data = Data(excel_file_name=self.get_last_xslx_file())
+        self.history: Data = Data(excel_file_name=self.get_last_xslx_file())
         self.optimizations: list[Optimization] = []
         self.gui: GUI = GUI(program_version=self.get_version())
-    
-    def initialize_optimization(self) -> None:
-        self.__optimizations.append(Optimization())
 
-    def run_optimization(self) -> None:
-        pass
-
-    def get_version(self) -> str:
-        # Define the file path
-        conf_file_path = '../pyproject.toml'
-
-        # Load the .toml file
-        data = toml.load(conf_file_path)
-
-        # Get the version
-        version = data.get('tool', {}).get('poetry', {}).get('version', 'Version not found')
-
-        return version
-    
     def get_last_xslx_file (self) -> str:
         path: str = 'database'
         files: list[str] = os.listdir(path)
@@ -51,7 +33,14 @@ class Main:
                 if current_session > last_session:
                     last_session = current_session
             return f'session{last_session}_results'
-        # ? Maybe raise an exception here?
+        raise OSError("No excel files found.")
+
+    def get_version(self) -> str:
+        conf_file_path = '../pyproject.toml'
+        data = toml.load(conf_file_path)
+        version = data.get('tool', {}).get('poetry', {}).get('version', 'Version not found')
+
+        return version
 
 if __name__ == "__main__":
     try:

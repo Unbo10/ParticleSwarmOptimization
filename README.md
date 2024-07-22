@@ -5,15 +5,32 @@
     direction TB
 
     class Main {
-        - <Optimization> optimizations
-        - <Data> history
+        + GUI gui
+        + Data history
+        + <Optimization> optimizations
+
+        + get_last_xslx_file(): str
+        + get_version(): str
     }
 
     Main --o Optimization
     Main --* Data
+    Main --* GUI
 
-    class Data {
+    class GUI {
+        - tk.Tk root
+        - str version
+        - int window_height
+        - int windo_width
 
+        - __init__(version: str) : None
+        - display_create_menu(): None
+        - display_delete_menu(): None
+        - display_exit_menu(): None
+        - display_main_menu(): None
+        - display_select_menu(): None
+        - initialize_root(): None
+        + run(): None
     }
 
     class Optimization{
