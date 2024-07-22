@@ -79,3 +79,7 @@ class Color:
     info_scrollbar_bg: str = "#2b2a2a"
     info_scrollbar_trough: str = bottom_label_bg
     info_scrollbar_abg: str = "#0f0f0f"
+
+    # * TESTS
+    test1_bg: str = "#ff0000"
+    test2_bg: str = "#00ff00"

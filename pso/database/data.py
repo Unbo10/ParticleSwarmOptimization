@@ -13,8 +13,9 @@ class Data:
         self.__gbest_history: list[list[int]] = []
         self.__number_of_optimizations: int = 0
         self.__xlsx_name: str = excel_file_name # * Without the extension and directory
-        self.__xlsx_path: str = f"database/{self.__xlsx_name}.xlsx" # * It is determined if it exists in Main
-
+        self.__xlsx_path: str = f"../database/{self.__xlsx_name}.xlsx" # * It is determined if it exists in Main
+        # * The two dots are needed if the GUI is directly executed.
+        # ! For now, the execution will continue to be done in the gui.py file, but the final version MUST CHANGE the paths to execute everything from the main.py file.
     def append_gbest_indexes(self, optimization_gbest_indexes: list[int]) -> None:
         self.__gbest_history.append(optimization_gbest_indexes)
         self.__number_of_optimizations += 1
