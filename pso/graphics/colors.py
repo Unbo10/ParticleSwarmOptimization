@@ -31,6 +31,7 @@ class Color:
     select_button: str = "#f0f0f0"
     select_label_optim_bg: str = "#d3d3d3"
     select_title_bg: str = "#d3d3d3"
+    back_button_bg = select_title_bg
 
     # * Foreground (font color)
     # * Main menu
@@ -51,16 +52,25 @@ class Color:
     optim_button_abg: str = "#123f0a" # ! Consider changing optim (gets confused in select menu)
     hide_button_abg: str = "#d25e0a"
 
+    # * Select menu
+    back_button_abg: str = "#f0f0f0"
+
     # * Active foreground (hovered)
     # * Main menu
     bottom_button_afg: str = "#ffffff"
     optim_button_afg: str = "#ffffff"
     hide_button_afg: str = "#000000"
 
+    # * Select menu
+    back_button_afg: str = "#000000"
+
     # * Highlight background (focused)
     # * Main menu
     bottom_button_hbg: str = bottom_button_abg
     optim_button_hbg: str = "#000000"
+
+    # * Select menu
+    back_button_hbg: str = "#922929"
 
     # * Clicked background
     # * Main menu
@@ -68,11 +78,17 @@ class Color:
     optim_button_cbg: str = "#012422"
     hide_button_cbg: str = "#a23d0a"
 
+    # * Select menu
+    back_button_cbg: str = back_button_bg
+
     # * Clicked foreground
     # * Main menu
     bottom_button_cfg: str = bottom_button_afg
     optim_button_cfg: str = optim_button_afg
     hide_button_cfg: str = hide_button_fg
+
+    # * Select menu
+    back_button_cfg: str = "#000000"
 
     # * SCROLLBAR
     # * Main menu
@@ -83,3 +99,4 @@ class Color:
     # * TESTS
     test1_bg: str = "#ff0000"
     test2_bg: str = "#00ff00"
+    test3_bg: str = "#0000ff"

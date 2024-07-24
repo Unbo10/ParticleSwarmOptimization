@@ -47,7 +47,7 @@ class GUI:
         # * Will probably need to pass as a parameter the __optimizations attribute of Main.
         # * This would be done in order to be able to do the actions stated in the main menu.
         # ? Future versions could include thread management. Could be an interesting way to start learning about parallelism and concurrency.
-        self.__optimization_history: list[Optimization] = [Optimization(0), Optimization(1), Optimization(2), Optimization(3), Optimization(4)]
+        self.__optimization_history: list[Optimization] = [Optimization(0), Optimization(1)]
         for optimization in self.__optimization_history:
             optimization.optimize()
         self.__version: str = program_version
@@ -83,6 +83,7 @@ class GUI:
     def __display_main_menu(self):
         """
         """
+        self.__initialize_root(width=250, height=250)
     # * Setting title
         title_height: int = 40
         title: tk.Label = tk.Label(GUI.__root, text="PSO manager",
@@ -124,6 +125,8 @@ class GUI:
                 "help_image": "pyimage9",
                 "help_active_image": "pyimage11"
             }
+
+        # ! BUG: When switching from the select menu to the main menu (after pressing the back arrow button), the images in the info_frame are both appearing as question marks, and one cannot access the info nor the help frame. Might be because, after switching, the name of the images changes, so it is not entering any if statement in the buttom_on_release function. NEEDS TO BE FIXED.
 
         def bottom_button_on_enter(e, button:tk.Button) -> None:
             if button.cget("image") == images_str["info_image"]:
@@ -432,7 +435,7 @@ class GUI:
         button_frame.place(x=0, y=title_height, width=self.__window_width, height=self.__window_height - (title_height + bottom_frame_height))
 
     def __display_select_menu(self) -> None:
-        self.__initialize_root(width=650, height=500, title="Select optimization - PSO")
+        self.__initialize_root(width=750, height=500, title="Select optimization - PSO")
         title_height: int = 40
         title: tk.Label = tk.Label(GUI.__root, text="Select a previous optimization", bg=Color.select_title_bg, fg=Color.select_title_fg, font=(Font.title, 15))
         title.place(x=0, y=0, width=self.__window_width, height=title_height)
@@ -440,6 +443,7 @@ class GUI:
         list_scrollbar_width: int = 20
         list_canvas: tk.Canvas = tk.Canvas(GUI.__root, bg=Color.test1_bg)
         list_canvas.place(y=title_height + 15, x=15, width=self.__window_width - (30 + list_scrollbar_width), height=self.__window_height - (title_height + 30))
+
         list_scrollbar: tk.Scrollbar = tk.Scrollbar(GUI.__root, orient="vertical", command=list_canvas.yview)
         # ! The scrollbar only scrolls with the wheel if the cursor is over it. Needs to be changed.
         list_canvas.configure(yscrollcommand=list_scrollbar.set)
@@ -448,8 +452,7 @@ class GUI:
         list_parent_frame_height: int = self.__window_height - (title_height + 30)
         list_parent_frame_width: int = self.__window_width - (30 + list_scrollbar_width)
         list_parent_frame: tk.Frame = tk.Frame(list_canvas, bg=Color.test2_bg)
-        list_parent_frame.bind("<Configure>", lambda e: list_canvas.configure
-        (scrollregion=list_canvas.bbox("all")))
+
         inner_frame_height: int = 75
         inner_frame_separation: int = 20
         inner_frame_width: int = self.__window_width - (list_scrollbar_width + 60)
@@ -506,10 +509,46 @@ class GUI:
         if len(self.__optimization_history) > 4:
             list_parent_frame_height = len(self.__optimization_history)*(inner_frame_height + inner_frame_separation) + inner_frame_separation
 
-        # list_canvas.configure(scrollregion=list_canvas.bbox("all"))
-        # ! May not be necessary as 445 already does that # * Ensures the scroll encompasses all the elements in the canvas.
         list_canvas.create_window((0, 0), window=list_parent_frame, anchor="nw", width=list_parent_frame_width, height=list_parent_frame_height)
+        # list_canvas.configure(scrollregion=list_canvas.bbox("all"))
+        # list_canvas.focus_set()
+        # list_canvas.bind("<MouseWheel>", lambda event: list_canvas.yview_scroll(int(-1*(event.delta/120)), "units"))
+        # list_canvas.bind("Button-4", lambda event: list_canvas.yview_scroll(-1, "units"))
+        # list_canvas.bind("Button-5", lambda event: list_canvas.yview_scroll(1, "units"))
+        # ! No idea why the scroll is not working while the cursor is over the canvas. I have tried about everything, although a possibility could be that the canvas is not considering the window as its own, since bbox("all") is returning None.
 
+
+        arrow_back_path: str = "assets/arrow-back.png"
+        arrow_back_image: tk.PhotoImage = tk.PhotoImage(file=arrow_back_path).subsample(4)
+        arrow_back_path_active: str = "assets/arrow-back-active.png"
+        arrow_back_image_active: tk.PhotoImage = tk.PhotoImage(file=arrow_back_path_active).subsample(4)
+        back_button: tk.Button = tk.Button(GUI.__root, image=arrow_back_image, relief="flat", cursor="hand2", bg=Color.back_button_bg, activebackground=Color.back_button_abg, highlightthickness=0, borderwidth=0)
+
+        def back_button_on_enter(e, button: tk.Button) -> None:
+            button.config(image=arrow_back_image_active)
+
+        def back_button_on_leave(e, button: tk.Button) -> None:
+            button.config(image=arrow_back_image)
+        
+        def back_button_on_click(e, button: tk.Button) -> None:
+            button.config(activebackground=Color.back_button_cbg, activeforeground=Color.back_button_cfg, image=arrow_back_image_active)
+        
+        def back_button_on_release(e, button: tk.Button) -> None:
+            title.place_forget()
+            back_button.place_forget()
+            list_canvas.place_forget()
+            self.__display_main_menu()
+
+        # ! CONCERN: Apparently the name of buttons for Windows and Linux is different. Needs to be tested and corrected if necessary.
+
+        back_button.place(x=0, y=0, width=title_height, height=title_height)
+        back_button.bind("<Enter>", lambda event: back_button_on_enter(event, back_button))
+        back_button.bind("<Leave>", lambda event: back_button_on_leave(event, back_button))
+        back_button.bind("<Button-1>", lambda event: back_button_on_click(event, back_button))
+        back_button.bind("<ButtonRelease-1>", lambda event: back_button_on_release(event, back_button))
+        # * To avoid being deleted by Python's garbage collector
+        back_button.image = arrow_back_image
+        back_button.active_image = arrow_back_image_active
 
     def __initialize_root(self, width: int, height: int,
         title: str = "Particle Swarm Optimization (PSO)") -> None:
@@ -536,7 +575,6 @@ class GUI:
         GUI.__root.configure(bg=Color.window_bg)
 
     def run(self):
-        self.__initialize_root(width=250, height=250)
         self.__display_main_menu()
         GUI.__root.mainloop()
 

@@ -17,7 +17,7 @@ class Main:
         self.optimizations: list[Optimization] = []
         self.gui: GUI = GUI(program_version=self.get_version())
 
-    def get_last_xslx_file (self) -> str:
+    def get_last_xlsx_file (self) -> str:
         path: str = 'database'
         files: list[str] = os.listdir(path)
         last_session: int = 0
