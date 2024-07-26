@@ -120,10 +120,10 @@ class GUI:
         help_image: tk.PhotoImage = tk.PhotoImage(file="assets/help.png").subsample(3)
         help_active_image: tk.PhotoImage = tk.PhotoImage(file="assets/help-active.png").subsample(3)
         images_str: dict = {
-                "info_image": "pyimage5",
-                "info_active_image": "pyimage7",
-                "help_image": "pyimage9",
-                "help_active_image": "pyimage11"
+                "info_image": str(info_image),
+                "info_active_image": str(info_active_image),
+                "help_image": str(help_image),
+                "help_active_image": str(help_active_image)
             }
 
         # ! BUG: When switching from the select menu to the main menu (after pressing the back arrow button), the images in the info_frame are both appearing as question marks, and one cannot access the info nor the help frame. Might be because, after switching, the name of the images changes, so it is not entering any if statement in the buttom_on_release function. NEEDS TO BE FIXED.
