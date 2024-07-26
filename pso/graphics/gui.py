@@ -1,6 +1,8 @@
 
 # TODO: When select, create and delete menus are implemented, documentation must be added to the gui, fonts and colors modules.
 
+import os
+
 import numpy as np
 import tkinter as tk
 
@@ -47,7 +49,7 @@ class GUI:
         # * Will probably need to pass as a parameter the __optimizations attribute of Main.
         # * This would be done in order to be able to do the actions stated in the main menu.
         # ? Future versions could include thread management. Could be an interesting way to start learning about parallelism and concurrency.
-        self.__optimization_history: list[Optimization] = [Optimization(0), Optimization(1)]
+        self.__optimization_history: list[Optimization] = [Optimization(0), Optimization(1), Optimization(2), Optimization(3), Optimization(4), Optimization(5)]
         for optimization in self.__optimization_history:
             optimization.optimize()
         self.__version: str = program_version
@@ -125,8 +127,6 @@ class GUI:
                 "help_image": str(help_image),
                 "help_active_image": str(help_active_image)
             }
-
-        # ! BUG: When switching from the select menu to the main menu (after pressing the back arrow button), the images in the info_frame are both appearing as question marks, and one cannot access the info nor the help frame. Might be because, after switching, the name of the images changes, so it is not entering any if statement in the buttom_on_release function. NEEDS TO BE FIXED.
 
         def bottom_button_on_enter(e, button:tk.Button) -> None:
             if button.cget("image") == images_str["info_image"]:
@@ -445,9 +445,8 @@ class GUI:
         list_canvas.place(y=title_height + 15, x=15, width=self.__window_width - (30 + list_scrollbar_width), height=self.__window_height - (title_height + 30))
 
         list_scrollbar: tk.Scrollbar = tk.Scrollbar(GUI.__root, orient="vertical", command=list_canvas.yview)
-        # ! The scrollbar only scrolls with the wheel if the cursor is over it. Needs to be changed.
-        list_canvas.configure(yscrollcommand=list_scrollbar.set)
         list_scrollbar.place(x=self.__window_width - (15 + list_scrollbar_width), y=title_height + 15, height=self.__window_height - (title_height + 30), width=list_scrollbar_width)
+        list_canvas.configure(yscrollcommand=list_scrollbar.set)
 
         list_parent_frame_height: int = self.__window_height - (title_height + 30)
         list_parent_frame_width: int = self.__window_width - (30 + list_scrollbar_width)
@@ -510,13 +509,29 @@ class GUI:
             list_parent_frame_height = len(self.__optimization_history)*(inner_frame_height + inner_frame_separation) + inner_frame_separation
 
         list_canvas.create_window((0, 0), window=list_parent_frame, anchor="nw", width=list_parent_frame_width, height=list_parent_frame_height)
-        # list_canvas.configure(scrollregion=list_canvas.bbox("all"))
-        # list_canvas.focus_set()
-        # list_canvas.bind("<MouseWheel>", lambda event: list_canvas.yview_scroll(int(-1*(event.delta/120)), "units"))
-        # list_canvas.bind("Button-4", lambda event: list_canvas.yview_scroll(-1, "units"))
-        # list_canvas.bind("Button-5", lambda event: list_canvas.yview_scroll(1, "units"))
-        # ! No idea why the scroll is not working while the cursor is over the canvas. I have tried about everything, although a possibility could be that the canvas is not considering the window as its own, since bbox("all") is returning None.
+        # list_parent_frame.update_idletasks()
+        list_canvas.configure(scrollregion=list_canvas.bbox("all"))
+        print(list_canvas.bbox("all"), list_canvas.cget("scrollregion"))
 
+        def on_mouse_wheel(event):
+            if os.name == "nt":
+                list_canvas.yview_scroll(int(-1*(event.delta/120)), "units")
+            elif os.name == "posix":
+                if event.num == 4:
+                    list_canvas.yview_scroll(-1, "units")
+                elif event.num == 5:
+                    list_canvas.yview_scroll(1, "units")
+
+        inner_frames_children: list = []
+        for frame in list_inner_frames:
+            inner_frames_children += frame.winfo_children()
+        canvas_children = list_canvas.winfo_children() + list_inner_frames + inner_frames_children
+        for child in canvas_children:
+            child.bind("<MouseWheel>", on_mouse_wheel)
+            child.bind("<Button-4>", on_mouse_wheel)
+            child.bind("<Button-5>", on_mouse_wheel)
+        # * The problem had to do with which widgets were being bound: the canvas is under all of its children, so the event will never happen. Therefore, binding the list_parent_frame, the inner frames and the children (labels and buttons) of the inner frames was necessary.
+        # ! Now the problem is that the scrollbar is scrolling at a different rate than when the mouse is over the canvas.
 
         arrow_back_path: str = "assets/arrow-back.png"
         arrow_back_image: tk.PhotoImage = tk.PhotoImage(file=arrow_back_path).subsample(4)
@@ -539,7 +554,7 @@ class GUI:
             list_canvas.place_forget()
             self.__display_main_menu()
 
-        # ! CONCERN: Apparently the name of buttons for Windows and Linux is different. Needs to be tested and corrected if necessary.
+        # ! CONCERN: The names for button events are named differently in Windows and Linux. Needs to be tested and corrected if necessary (I am sure the enter event is different in Windows).
 
         back_button.place(x=0, y=0, width=title_height, height=title_height)
         back_button.bind("<Enter>", lambda event: back_button_on_enter(event, back_button))
