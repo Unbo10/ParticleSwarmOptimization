@@ -30,6 +30,7 @@ class Color:
     # * Select menu
     select_button: str = "#f0f0f0"
     select_label_optim_bg: str = "#d3d3d3"
+    select_label_no_optim_bg: str = "#d1d1d1"
     select_title_bg: str = "#d3d3d3"
     back_button_bg = select_title_bg
 
@@ -44,9 +45,10 @@ class Color:
 
     # * Select menu
     select_label_optim_fg: str = "#000000"
+    select_label_no_optim_fg: str = "#000000"
     select_title_fg: str = "#000000"
     
-    # * Active background (hovered)
+    # * Active background
     # * Main menu
     bottom_button_abg: str = "#225fd1"
     optim_button_abg: str = "#123f0a" # ! Consider changing optim (gets confused in select menu)
@@ -55,7 +57,7 @@ class Color:
     # * Select menu
     back_button_abg: str = "#f0f0f0"
 
-    # * Active foreground (hovered)
+    # * Active foreground
     # * Main menu
     bottom_button_afg: str = "#ffffff"
     optim_button_afg: str = "#ffffff"
@@ -66,11 +68,19 @@ class Color:
 
     # * Highlight background (focused)
     # * Main menu
-    bottom_button_hbg: str = bottom_button_abg
-    optim_button_hbg: str = "#000000"
+    bottom_button_hbg: str = bottom_button_bg
+    hide_button_hbg: str = "#a23d0a"
+    optim_button_hbg: str = optim_button_bg
 
     # * Select menu
     back_button_hbg: str = "#922929"
+
+    # * Highlight color (focused)
+    # * Main menu
+    bottom_button_hcolor: str = "#ffffff"
+    hide_button_hcolor: str = "#000000"
+    optim_button_hcolor: str = optim_button_abg
+
 
     # * Clicked background
     # * Main menu

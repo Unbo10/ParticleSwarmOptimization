@@ -5,9 +5,10 @@ import os
 
 import numpy as np
 import tkinter as tk
+from tkinter import font
 
 from pso.graphics.colors import Color
-from pso.graphics.fonts import Font
+from pso.graphics.fonts import FontName
 from pso.optimization import Optimization
 
 class GUI:
@@ -49,7 +50,7 @@ class GUI:
         # * Will probably need to pass as a parameter the __optimizations attribute of Main.
         # * This would be done in order to be able to do the actions stated in the main menu.
         # ? Future versions could include thread management. Could be an interesting way to start learning about parallelism and concurrency.
-        self.__optimization_history: list[Optimization] = [Optimization(0), Optimization(1), Optimization(2), Optimization(3), Optimization(4), Optimization(5)]
+        self.__optimization_history: list[Optimization] = [Optimization(i) for i in range(5)]
         for optimization in self.__optimization_history:
             optimization.optimize()
         self.__version: str = program_version
@@ -71,7 +72,7 @@ class GUI:
         goodbye_image: tk.PhotoImage = tk.PhotoImage(
             file="assets/goodbye.png").subsample(2)
         goodbye_label: tk.Label = tk.Label(goodbye_frame, image=goodbye_image, bg=Color.goodbye_label_bg, borderwidth=0, highlightthickness=0) 
-        goodby_text: tk.Text = tk.Text(goodbye_frame, bg=Color.goodbye_frame_bg, wrap="word", font=(Font.label, 25), fg=Color.goodbye_text_fg, background=Color.goodbye_text_bg, borderwidth=0, highlightthickness=0)
+        goodby_text: tk.Text = tk.Text(goodbye_frame, bg=Color.goodbye_frame_bg, wrap="word", font=font.Font(family=FontName.label, size=25), fg=Color.goodbye_text_fg, background=Color.goodbye_text_bg, borderwidth=0, highlightthickness=0)
         goodby_text.insert(index="end", chars="Goodbye!")
         goodby_text.tag_config(tagName="center", justify="center")
         goodby_text.tag_add("center", "1.0", "end")
@@ -89,7 +90,7 @@ class GUI:
     # * Setting title
         title_height: int = 40
         title: tk.Label = tk.Label(GUI.__root, text="PSO manager",
-            bg=Color.optim_label_bg, font=(Font.title, 15), wraplength=450,
+            bg=Color.optim_label_bg, font=font.Font(family=FontName.title, size=15), wraplength=450,
             anchor="center")
         title.place(x=0, y=0, width=self.__window_width,
             height=title_height)
@@ -110,8 +111,8 @@ class GUI:
             "relief": "flat",
             "activebackground": Color.bottom_button_abg,
             "highlightbackground": Color.bottom_button_hbg,
-            "highlightcolor": Color.bottom_button_hbg,
-            "highlightthickness": 0,
+            "highlightcolor": Color.bottom_button_hcolor,
+            "highlightthickness": 2,
             "borderwidth": 0,
             "cursor": "hand2"
             }
@@ -226,7 +227,7 @@ class GUI:
             text=f"V {self.__version}",
             bg=Color.bottom_button_bg,
             fg=Color.bottom_button_fg,
-            font=(Font.label, 10, "bold")
+            font=font.Font(family=FontName.label, size=10, weight="bold")
             )
         # * To avoid being deleted by Python's garbage collector
         info_button.image = info_image
@@ -251,10 +252,11 @@ class GUI:
             "fg": Color.hide_button_fg,
             "activebackground": Color.hide_button_abg,
             "activeforeground": Color.hide_button_afg,
-            "highlightthickness": 0,
-            "font": (Font.label, 10, "bold"),
+            "highlightbackground": Color.hide_button_hbg,
+            "highlightcolor": Color.hide_button_hcolor,
+            "highlightthickness": 2,
+            "font": font.Font(family=FontName.label, size=10, weight="bold"),
             "relief": "flat",
-            "borderwidth": 0,
             "cursor": "hand2",
             "text": "Hide"
             }
@@ -299,7 +301,7 @@ class GUI:
         text_parameters: dict = {
             "bg": Color.bottom_label_bg,
             "fg": Color.bottom_label_fg,
-            "font": (Font.label, 10),
+            "font": font.Font(family=FontName.label, size=10),
             "wrap": "word",
             "padx": 5,
             "pady": 5,  
@@ -358,13 +360,12 @@ class GUI:
             "bg": Color.optim_button_bg,
             "fg": Color.optim_button_fg,
             "relief": "flat",
-            "font": (Font.button, 10),
+            "font": font.Font(family=FontName.button, size=10),
             "activebackground": Color.optim_button_abg,
             "activeforeground": Color.optim_button_afg,
             "highlightbackground": Color.optim_button_hbg,
-            "highlightcolor": Color.optim_button_hbg,
-            "highlightthickness": 1,
-            "borderwidth": 1,
+            "highlightcolor": Color.optim_button_hcolor,
+            "highlightthickness": 2,
             "cursor": "hand2"
             }
 
@@ -394,6 +395,7 @@ class GUI:
             text="Create optimization",
             **optimization_button_parameters
             )
+        create_button.focus_set()
         create_button.bind("<Button-1>",
             lambda event: menu_button_on_click(event, create_button))
         create_button.bind("<ButtonRelease-1>",
@@ -436,102 +438,10 @@ class GUI:
 
     def __display_select_menu(self) -> None:
         self.__initialize_root(width=750, height=500, title="Select optimization - PSO")
-        title_height: int = 40
-        title: tk.Label = tk.Label(GUI.__root, text="Select a previous optimization", bg=Color.select_title_bg, fg=Color.select_title_fg, font=(Font.title, 15))
-        title.place(x=0, y=0, width=self.__window_width, height=title_height)
-
-        list_scrollbar_width: int = 20
-        list_canvas: tk.Canvas = tk.Canvas(GUI.__root, bg=Color.test1_bg)
-        list_canvas.place(y=title_height + 15, x=15, width=self.__window_width - (30 + list_scrollbar_width), height=self.__window_height - (title_height + 30))
-
-        list_scrollbar: tk.Scrollbar = tk.Scrollbar(GUI.__root, orient="vertical", command=list_canvas.yview)
-        list_scrollbar.place(x=self.__window_width - (15 + list_scrollbar_width), y=title_height + 15, height=self.__window_height - (title_height + 30), width=list_scrollbar_width)
-        list_canvas.configure(yscrollcommand=list_scrollbar.set)
-
-        list_parent_frame_height: int = self.__window_height - (title_height + 30)
-        list_parent_frame_width: int = self.__window_width - (30 + list_scrollbar_width)
-        list_parent_frame: tk.Frame = tk.Frame(list_canvas, bg=Color.test2_bg)
-
-        inner_frame_height: int = 75
-        inner_frame_separation: int = 20
-        inner_frame_width: int = self.__window_width - (list_scrollbar_width + 60)
-
-        def create_inner_frame(optimization: Optimization) -> tk.Frame:
-            """
-            This function initializes a frame for a single optimization.
-            It adds multiple labels, buttons and images that correspond to
-            the optimization in question. Finally, it returns them to be
-            stored somewhere else and displayed.
-            """
-            inner_frame = tk.Frame(list_parent_frame, width=inner_frame_width, height=inner_frame_height)
-            for col in range(5):
-                inner_frame.columnconfigure(col, weight=1)
-            inner_frame.rowconfigure(0, weight=1)
-            inner_frame.rowconfigure(1, weight=1)
-            inner_frame.rowconfigure(2, weight=1)
-            name_label: tk.Label = tk.Label(inner_frame, text=f"Optimization {optimization.get_index() + 1}", bg=Color.select_label_optim_bg, fg=Color.select_label_optim_fg, font=(Font.label, 12, "bold"))
-            name_label.grid(row=0, column=0, sticky="nsew")
-            function_label: tk.Label = tk.Label(inner_frame, text=f"Function: TO BE DECIDED", bg=Color.select_label_optim_bg, fg=Color.select_label_optim_fg, font=(Font.label, 10)) # ! Needs to be changed to the actual function
-            function_label.grid(row=1, column=0, sticky="nsew")
-            dimensions_label: tk.Label = tk.Label(inner_frame, text=f"Dimensions: {optimization.get_dimensions()}", bg=Color.select_label_optim_bg, fg=Color.select_label_optim_fg, font=(Font.label, 10))
-            dimensions_label.grid(row=2, column=0, sticky="nsew")
-            minima_indicator_label: tk.Label = tk.Label(inner_frame, text=f"Minima:", bg=Color.select_label_optim_bg, fg=Color.select_label_optim_fg, font=(Font.label, 10))
-            minima_indicator_label.grid(row=0, column=1, sticky="nsew")
-            minima_coordinates: np.ndarray = optimization.get_swarm().get_gbest().get_coordinates()
-            minima_coordinates = np.round(minima_coordinates, 3)
-            minima_value_label: tk.Label = tk.Label(inner_frame, text=f"{minima_coordinates}", bg=Color.select_label_optim_bg, fg=Color.select_label_optim_fg, font=(Font.label, 10))
-            minima_value_label.grid(row=0, column=2, sticky="nsew")
-            cognitive_coefficient_label:tk.Label = tk.Label(inner_frame, text=f"c1: {optimization.get_cognitive_coefficient()}", bg=Color.select_label_optim_bg, fg=Color.select_label_optim_fg, font=(Font.label, 10))
-            cognitive_coefficient_label.grid(row=1, column=1, sticky="nsew")
-            number_of_particles_label: tk.Label = tk.Label(inner_frame, text=f"Number of particles: {optimization.get_particle_amount()}", bg=Color.select_label_optim_bg, fg=Color.select_label_optim_fg, font=(Font.label, 10))
-            number_of_particles_label.grid(row=2, column=1, sticky="nsew")
-            social_coefficient_label: tk.Label = tk.Label(inner_frame, text=f"c2: {optimization.get_social_coefficient()}", bg=Color.select_label_optim_bg, fg=Color.select_label_optim_fg, font=(Font.label, 10))
-            social_coefficient_label.grid(row=1, column=2, sticky="nsew")
-            inertia_coefficient_label: tk.Label = tk.Label(inner_frame, text=f"Inertia: {optimization.get_inertia_coefficient()}", bg=Color.select_label_optim_bg, fg=Color.select_label_optim_fg, font=(Font.label, 10))
-            inertia_coefficient_label.grid(row=1, column=3, sticky="nsew")
-            iterations_label: tk.Label = tk.Label(inner_frame, text=f"Iterations: {optimization.get_iterations()}", bg=Color.select_label_optim_bg, fg=Color.select_label_optim_fg, font=(Font.label, 10))
-            iterations_label.grid(row=2, column=3, sticky="nsew")
-
-            # ? To the right of the minima label we could add a status label that shows if the optimization was completed or not (if incomplete optimizations were to be stored).
-
-            return inner_frame
-
-        list_inner_frames: list[tk.Frame] = [create_inner_frame(optimization) for optimization in self.__optimization_history]
-        list_parent_frame.columnconfigure(0, weight=0)
-        frame_index = 0
-        while frame_index < len(self.__optimization_history):
-            # * This cycle adds all of the inner (optimization) frames to the
-            # * parent frame contained inside the canvas.
-            list_parent_frame.rowconfigure(frame_index, weight=2)
-            list_inner_frames[frame_index].place(x=(list_parent_frame_width - inner_frame_width)/2, y=frame_index*(inner_frame_height + inner_frame_separation) + inner_frame_separation, width=inner_frame_width, height=inner_frame_height)
-            frame_index += 1
-        if len(self.__optimization_history) > 4:
-            list_parent_frame_height = len(self.__optimization_history)*(inner_frame_height + inner_frame_separation) + inner_frame_separation
-
-        list_canvas.create_window((0, 0), window=list_parent_frame, anchor="nw", width=list_parent_frame_width, height=list_parent_frame_height)
-        # list_parent_frame.update_idletasks()
-        list_canvas.configure(scrollregion=list_canvas.bbox("all"))
-        print(list_canvas.bbox("all"), list_canvas.cget("scrollregion"))
-
-        def on_mouse_wheel(event):
-            if os.name == "nt":
-                list_canvas.yview_scroll(int(-1*(event.delta/120)), "units")
-            elif os.name == "posix":
-                if event.num == 4:
-                    list_canvas.yview_scroll(-1, "units")
-                elif event.num == 5:
-                    list_canvas.yview_scroll(1, "units")
-
-        inner_frames_children: list = []
-        for frame in list_inner_frames:
-            inner_frames_children += frame.winfo_children()
-        canvas_children = list_canvas.winfo_children() + list_inner_frames + inner_frames_children
-        for child in canvas_children:
-            child.bind("<MouseWheel>", on_mouse_wheel)
-            child.bind("<Button-4>", on_mouse_wheel)
-            child.bind("<Button-5>", on_mouse_wheel)
-        # * The problem had to do with which widgets were being bound: the canvas is under all of its children, so the event will never happen. Therefore, binding the list_parent_frame, the inner frames and the children (labels and buttons) of the inner frames was necessary.
-        # ! Now the problem is that the scrollbar is scrolling at a different rate than when the mouse is over the canvas.
+        title_height: int = 2 # * Text units, not pixels. It doesn't correspond exactly to the size of the font. Default is 17, Ubuntu size 15 is 15 + 9 = 24 px.
+        title: tk.Label = tk.Label(GUI.__root, text="Select a previous optimization", height=title_height, bg=Color.select_title_bg, fg=Color.select_title_fg, font=font.Font(family=FontName.title, size=15))
+        title.pack(fill="x", anchor="e")
+        print(font.Font(family=FontName.title, size=15).metrics("linespace"))
 
         arrow_back_path: str = "assets/arrow-back.png"
         arrow_back_image: tk.PhotoImage = tk.PhotoImage(file=arrow_back_path).subsample(4)
@@ -540,23 +450,17 @@ class GUI:
         back_button: tk.Button = tk.Button(GUI.__root, image=arrow_back_image, relief="flat", cursor="hand2", bg=Color.back_button_bg, activebackground=Color.back_button_abg, highlightthickness=0, borderwidth=0)
 
         def back_button_on_enter(e, button: tk.Button) -> None:
-            button.config(image=arrow_back_image_active)
+            button.config(image=arrow_back_image_active, bg=Color.back_button_abg)
 
         def back_button_on_leave(e, button: tk.Button) -> None:
-            button.config(image=arrow_back_image)
+            button.config(image=arrow_back_image, bg=Color.back_button_bg)
         
         def back_button_on_click(e, button: tk.Button) -> None:
             button.config(activebackground=Color.back_button_cbg, activeforeground=Color.back_button_cfg, image=arrow_back_image_active)
-        
-        def back_button_on_release(e, button: tk.Button) -> None:
-            title.place_forget()
-            back_button.place_forget()
-            list_canvas.place_forget()
-            self.__display_main_menu()
 
         # ! CONCERN: The names for button events are named differently in Windows and Linux. Needs to be tested and corrected if necessary (I am sure the enter event is different in Windows).
 
-        back_button.place(x=0, y=0, width=title_height, height=title_height)
+        back_button.place(x=0, y=0, height=title_height * 25, width=title_height * 25)
         back_button.bind("<Enter>", lambda event: back_button_on_enter(event, back_button))
         back_button.bind("<Leave>", lambda event: back_button_on_leave(event, back_button))
         back_button.bind("<Button-1>", lambda event: back_button_on_click(event, back_button))
@@ -564,6 +468,115 @@ class GUI:
         # * To avoid being deleted by Python's garbage collector
         back_button.image = arrow_back_image
         back_button.active_image = arrow_back_image_active
+
+        if len(self.__optimization_history) == 0:
+            print("len 0")
+            no_optimizations_label: tk.Label = tk.Label(GUI.__root, height=2, text="No optimizations have been made yet.", bg=Color.select_label_no_optim_bg, fg=Color.select_label_no_optim_fg, font=font.Font(family=FontName.label, size=12))
+            no_optimizations_label.pack(fill="both", anchor="center", pady=(20, 0), padx=self.__window_width//2 - 250)
+            create_optimization: tk.Button = tk.Button(GUI.__root, text="Create optimization", height=3, bg=Color.optim_button_bg, fg=Color.optim_button_fg, font=font.Font(family=FontName.button, size=15), relief="flat", cursor="hand2", activebackground=Color.optim_button_abg, activeforeground=Color.optim_button_afg, highlightbackground= Color.optim_button_hbg, highlightcolor=Color.optim_button_hcolor, highlightthickness=1)
+            create_optimization.pack(fill="x", anchor="center", padx=self.__window_width//2 - 250) # * Could be improved with inheritance
+
+        else: 
+            list_scrollbar_width: int = 20
+            title_height *= 25 # * Compensating for difference between pixels and text units
+            list_canvas: tk.Canvas = tk.Canvas(GUI.__root, bg=Color.test1_bg)
+            list_canvas.place(y=(title_height) + 15, x=15, width=self.__window_width - (30 + list_scrollbar_width), height=self.__window_height - (title_height + 30))
+
+            list_scrollbar: tk.Scrollbar = tk.Scrollbar(GUI.__root, orient="vertical", command=list_canvas.yview)
+            list_scrollbar.place(x=self.__window_width - (15 + list_scrollbar_width), y=title_height + 15, height=self.__window_height - (title_height + 30), width=list_scrollbar_width)
+            list_canvas.configure(yscrollcommand=list_scrollbar.set)
+
+            list_parent_frame_height: int = self.__window_height - (title_height + 30)
+            list_parent_frame_width: int = self.__window_width - (30 + list_scrollbar_width)
+            list_parent_frame: tk.Frame = tk.Frame(list_canvas, bg=Color.test2_bg)
+
+            inner_frame_height: int = 75
+            inner_frame_separation: int = 20
+            inner_frame_width: int = self.__window_width - (list_scrollbar_width + 60)
+
+            def create_inner_frame(optimization: Optimization) -> tk.Frame:
+                """
+                This function initializes a frame for a single optimization.
+                It adds multiple labels, buttons and images that correspond to
+                the optimization in question. Finally, it returns them to be
+                stored somewhere else and displayed.
+                """
+                inner_frame = tk.Frame(list_parent_frame, width=inner_frame_width, height=inner_frame_height)
+                for col in range(5):
+                    inner_frame.columnconfigure(col, weight=1)
+                inner_frame.rowconfigure(0, weight=1)
+                inner_frame.rowconfigure(1, weight=1)
+                inner_frame.rowconfigure(2, weight=1)
+                name_label: tk.Label = tk.Label(inner_frame, text=f"Optimization {optimization.get_index() + 1}", bg=Color.select_label_optim_bg, fg=Color.select_label_optim_fg, font=font.Font(family=FontName.label, size=12, weight="bold"))
+                name_label.grid(row=0, column=0, sticky="nsew")
+                function_label: tk.Label = tk.Label(inner_frame, text=f"Function: TO BE DECIDED", bg=Color.select_label_optim_bg, fg=Color.select_label_optim_fg, font=font.Font(family=FontName.label, size=10)) # ! Needs to be changed to the actual function
+                function_label.grid(row=1, column=0, sticky="nsew")
+                dimensions_label: tk.Label = tk.Label(inner_frame, text=f"Dimensions: {optimization.get_dimensions()}", bg=Color.select_label_optim_bg, fg=Color.select_label_optim_fg, font=font.Font(family=FontName.label, size=10))
+                dimensions_label.grid(row=2, column=0, sticky="nsew")
+                minima_indicator_label: tk.Label = tk.Label(inner_frame, text=f"Minima:", bg=Color.select_label_optim_bg, fg=Color.select_label_optim_fg, font=font.Font(family=FontName.label, size=10))
+                minima_indicator_label.grid(row=0, column=1, sticky="nsew")
+                minima_coordinates: np.ndarray = optimization.get_swarm().get_gbest().get_coordinates()
+                minima_coordinates = np.round(minima_coordinates, 3)
+                minima_value_label: tk.Label = tk.Label(inner_frame, text=f"{minima_coordinates}", bg=Color.select_label_optim_bg, fg=Color.select_label_optim_fg, font=font.Font(family=FontName.label, size=10))
+                minima_value_label.grid(row=0, column=2, sticky="nsew")
+                cognitive_coefficient_label:tk.Label = tk.Label(inner_frame, text=f"c1: {optimization.get_cognitive_coefficient()}", bg=Color.select_label_optim_bg, fg=Color.select_label_optim_fg, font=font.Font(family=FontName.label, size=10))
+                cognitive_coefficient_label.grid(row=1, column=1, sticky="nsew")
+                number_of_particles_label: tk.Label = tk.Label(inner_frame, text=f"Number of particles: {optimization.get_particle_amount()}", bg=Color.select_label_optim_bg, fg=Color.select_label_optim_fg, font=font.Font(family=FontName.label, size=10))
+                number_of_particles_label.grid(row=2, column=1, sticky="nsew")
+                social_coefficient_label: tk.Label = tk.Label(inner_frame, text=f"c2: {optimization.get_social_coefficient()}", bg=Color.select_label_optim_bg, fg=Color.select_label_optim_fg, font=font.Font(family=FontName.label, size=10))
+                social_coefficient_label.grid(row=1, column=2, sticky="nsew")
+                inertia_coefficient_label: tk.Label = tk.Label(inner_frame, text=f"Inertia: {optimization.get_inertia_coefficient()}", bg=Color.select_label_optim_bg, fg=Color.select_label_optim_fg, font=font.Font(family=FontName.label, size=10))
+                inertia_coefficient_label.grid(row=1, column=3, sticky="nsew")
+                iterations_label: tk.Label = tk.Label(inner_frame, text=f"Iterations: {optimization.get_iterations()}", bg=Color.select_label_optim_bg, fg=Color.select_label_optim_fg, font=font.Font(family=FontName.label, size=10))
+                iterations_label.grid(row=2, column=3, sticky="nsew")
+
+                # ? To the right of the minima label we could add a status label that shows if the optimization was completed or not (if incomplete optimizations were to be stored).
+
+                return inner_frame
+
+            list_inner_frames: list[tk.Frame] = [create_inner_frame(optimization) for optimization in self.__optimization_history]
+            list_parent_frame.columnconfigure(0, weight=0)
+            frame_index = 0
+            while frame_index < len(self.__optimization_history):
+                # * This cycle adds all of the inner (optimization) frames to the
+                # * parent frame contained inside the canvas.
+                list_parent_frame.rowconfigure(frame_index, weight=2)
+                list_inner_frames[frame_index].place(x=(list_parent_frame_width - inner_frame_width)/2, y=frame_index*(inner_frame_height + inner_frame_separation) + inner_frame_separation, width=inner_frame_width, height=inner_frame_height)
+                frame_index += 1
+            if len(self.__optimization_history) > 4:
+                list_parent_frame_height = len(self.__optimization_history)*(inner_frame_height + inner_frame_separation) + inner_frame_separation
+
+            list_canvas.create_window((0, 0), window=list_parent_frame, anchor="nw", width=list_parent_frame_width, height=list_parent_frame_height)
+            list_canvas.configure(scrollregion=list_canvas.bbox("all"))
+
+            def on_mouse_wheel(event):
+                if os.name == "nt":
+                    list_canvas.yview_scroll(int(-1*(event.delta/120)), "units")
+                elif os.name == "posix":
+                    if event.num == 4:
+                        list_canvas.yview_scroll(-1, "units")
+                    elif event.num == 5:
+                        list_canvas.yview_scroll(1, "units")
+
+            inner_frames_children: list = []
+            for frame in list_inner_frames:
+                inner_frames_children += frame.winfo_children()
+            canvas_children = list_canvas.winfo_children() + list_inner_frames + inner_frames_children
+            for child in canvas_children:
+                child.bind("<MouseWheel>", on_mouse_wheel)
+                child.bind("<Button-4>", on_mouse_wheel)
+                child.bind("<Button-5>", on_mouse_wheel)
+            # ! Now the problem is that the scrollbar is scrolling at a different rate than when the mouse is over the canvas. It is not that big of a problem though, but should be fixed (same happens in the info and help frames).
+        
+        def back_button_on_release(e, button: tk.Button) -> None:
+            back_button.place_forget()
+            title.pack_forget()
+            if len(self.__optimization_history) != 0:
+                list_canvas.place_forget()
+            else:
+                no_optimizations_label.pack_forget()
+                create_optimization.pack_forget()
+            self.__display_main_menu()
 
     def __initialize_root(self, width: int, height: int,
         title: str = "Particle Swarm Optimization (PSO)") -> None:
