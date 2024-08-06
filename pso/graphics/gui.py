@@ -112,7 +112,7 @@ class GUI:
             "activebackground": Color.bottom_button_abg,
             "highlightbackground": Color.bottom_button_hbg,
             "highlightcolor": Color.bottom_button_hcolor,
-            "highlightthickness": 2,
+            "highlightthickness": 1,
             "borderwidth": 0,
             "cursor": "hand2"
             }
@@ -128,35 +128,43 @@ class GUI:
                 "help_image": str(help_image),
                 "help_active_image": str(help_active_image)
             }
+        print(images_str)
 
         def bottom_button_on_enter(e, button:tk.Button) -> None:
-            if button.cget("image") == images_str["info_image"]:
+            if (button.cget("image") == images_str["info_image"]) or (button.cget("image") == images_str["info_active_image"]):
                 button.config(image=info_active_image)
-            else:
+            elif button.cget("image") == images_str["help_image"]:
                 button.config(image=help_active_image)
+            else:
+                raise ValueError("Invalid button pressed. Image associated:", str(button.cget("image")))
 
         def bottom_button_on_leave(e, button:tk.Button) -> None:
             if button.cget("image") == images_str["info_active_image"]:
                 button.config(image=info_image)
-            else:
+            elif button.cget("image") == images_str["help_active_image"]:
                 button.config(image=help_image)
+            else:
+                raise ValueError("Invalid button pressed. Image associated:", str(button.cget("image")))
 
         def bottom_button_on_click(e, button: tk.Button) -> None:
+            button.focus_set()
             if button.cget("image") == images_str["info_active_image"]:
                 button.config(
                     image=info_image,
                     activebackground=Color.bottom_button_cbg,
                     activeforeground=Color.bottom_button_cfg
                     )
-            else:
+            elif button.cget("image") == images_str["help_active_image"]:
                 button.config(
                     image=help_image,
                     activebackground=Color.bottom_button_cbg,
                     activeforeground=Color.bottom_button_cfg
                     )
+            else:
+                raise ValueError("Invalid button pressed. Image associated:", str(button.cget("image")))
 
         def bottom_button_on_release(e, button: tk.Button) -> None:
-            if button.cget("image") == images_str["info_image"]:
+            if (button.cget("image") == images_str["info_image"]) or (button.cget("image") == images_str["info_active_image"]):
                 button.config(
                     image=info_active_image,
                     activebackground=Color.bottom_button_abg,
@@ -195,7 +203,7 @@ class GUI:
                     info_frame_state["visible"] = False
             
             else:
-                raise ValueError("Invalid button pressed.")
+                raise ValueError("Invalid button pressed. Image associated: ", str(button.cget("image")))
 
 
         info_button: tk.Button = tk.Button(
@@ -207,7 +215,12 @@ class GUI:
         info_button.bind("<Enter>", lambda event: bottom_button_on_enter(event, info_button))
         info_button.bind("<Leave>", lambda event: bottom_button_on_leave(event, info_button))
         info_button.bind("<Button-1>", lambda event: bottom_button_on_click(event, info_button))
+        # info_button.bind("<Return>", lambda event: bottom_button_on_click(event, info_button))
         info_button.bind("<ButtonRelease-1>", lambda event: bottom_button_on_release(event, info_button))
+        info_button.bind("<KeyRelease-Return>", lambda event: bottom_button_on_release(event, info_button))
+        
+        # * The issue was solved and seems to work fine testing only using the keyboard, only the mouse, and both.
+        # ! However, further testing should be done to ensure it can work for the other buttons, which will be something to implement in another version.
 
         help_button: tk.Button = tk.Button(
             bottom_frame,
@@ -254,7 +267,7 @@ class GUI:
             "activeforeground": Color.hide_button_afg,
             "highlightbackground": Color.hide_button_hbg,
             "highlightcolor": Color.hide_button_hcolor,
-            "highlightthickness": 2,
+            "highlightthickness": 1,
             "font": font.Font(family=FontName.label, size=10, weight="bold"),
             "relief": "flat",
             "cursor": "hand2",
@@ -265,6 +278,7 @@ class GUI:
                                                 **hide_button_parameters)
 
         def hide_button_on_click(e, button: tk.Button) -> None:
+            button.focus_set()
             button.config(activebackground=Color.hide_button_cbg,
                 activeforeground=Color.hide_button_cfg)
 
@@ -275,10 +289,12 @@ class GUI:
                 info_frame.place_forget()
                 help_frame.place_forget()
                 button_frame.place(x=0, y=title_height, width=self.__window_width, height=self.__window_height - (title_height + bottom_frame_height))
+                info_button.focus_set()
             elif help_frame_state["visible"] == True:
                 help_frame.place_forget()
                 info_frame.place_forget()
                 button_frame.place(x=0, y=title_height, width=self.__window_width, height=self.__window_height - (title_height + bottom_frame_height))
+                help_button.focus_set()
             info_frame_state["visible"] = False
             help_frame_state["visible"] = False
 
@@ -365,11 +381,12 @@ class GUI:
             "activeforeground": Color.optim_button_afg,
             "highlightbackground": Color.optim_button_hbg,
             "highlightcolor": Color.optim_button_hcolor,
-            "highlightthickness": 2,
+            "highlightthickness": 1,
             "cursor": "hand2"
             }
 
         def menu_button_on_click(e, button: tk.Button) -> None:
+            button.focus_set()
             button.config(activebackground=Color.optim_button_cbg, activeforeground=Color.optim_button_cfg)
 
         def menu_button_on_release(self, e, button: tk.Button) -> None:
