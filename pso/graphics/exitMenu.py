@@ -5,10 +5,10 @@ from pso.graphics.colors import Color
 from pso.graphics.fonts import FontName
 
 class ExitMenu():
-    def __init__(self, root_frame: tk.Frame, initializa_window: callable):
+    def __init__(self, root_frame: tk.Frame, initialize_window: callable):
         self.root: tk.Frame = tk.Frame(root_frame,
             bg=Color.goodbye_frame_bg)
-        self.__initialize_window: callable = initializa_window
+        self.__initialize_window: callable = initialize_window
         self.__image: tk.PhotoImage = tk.PhotoImage(
             file="assets/goodbye.png").subsample(2)
         self.__label: tk.Label = tk.Label(self.root, image=self.__image, bg=Color.goodbye_label_bg, borderwidth=0, highlightthickness=0) 

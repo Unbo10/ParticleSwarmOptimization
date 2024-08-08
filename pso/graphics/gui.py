@@ -22,7 +22,7 @@ class GUI:
         # ? Future versions could include thread management. Could be an interesting way to start learning about parallelism and concurrency.
         self._root_frame: tk.Frame = tk.Frame(GUI.__root, bg=Color.test2_bg)
         self.__exit_menu: ExitMenu = ExitMenu(self._root_frame, self._initialize_root)
-        self.__main_menu: MainMenu = MainMenu(self._root_frame)
+        self.__main_menu: MainMenu = MainMenu(self._root_frame, self._initialize_root)
         self.__select_menu: SelectMenu = SelectMenu(self._root_frame)
         self.__menus: dict = {"exit": self.__exit_menu, "main": self.__main_menu, "select": self.__select_menu}
         self.__optimization_history: list[Optimization] = optimization_history
@@ -607,7 +607,7 @@ class GUI:
 
     def run(self):
         self._root_frame.place(x=0, y=0, width=250, height=250)
-        self.change_menu("exit")
+        self.change_menu("main")
         GUI.__root.mainloop()
 
 if __name__ == "__main__":
