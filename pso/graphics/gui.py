@@ -17,20 +17,22 @@ from pso.optimization import Optimization
 class GUI:
     __root: tk.Tk = tk.Tk()
     def __init__(self, optimization_history: list[Optimization], program_version: str = "Error") -> None:
-        # * Will probably need to pass as a parameter the __optimizations attribute of Main.
-        # * This would be done in order to be able to do the actions stated in the main menu.
         # ? Future versions could include thread management. Could be an interesting way to start learning about parallelism and concurrency.
         self._root_frame: tk.Frame = tk.Frame(GUI.__root, bg=Color.test2_bg)
-        self.__exit_menu: ExitMenu = ExitMenu(self._root_frame, self._initialize_root)
-        self.__main_menu: MainMenu = MainMenu(self._root_frame, self._initialize_root)
-        self.__select_menu: SelectMenu = SelectMenu(self._root_frame)
-        self.__menus: dict = {"exit": self.__exit_menu, "main": self.__main_menu, "select": self.__select_menu}
         self.__optimization_history: list[Optimization] = optimization_history
         self.__version: str = program_version
         self._window_height: int = 0
         self._window_width: int = 0
+        print(1)
+        self.__exit_menu: ExitMenu = ExitMenu(self._root_frame, self._initialize_root)
+        print(2)
+        self.__main_menu: MainMenu = MainMenu(self._root_frame, self._initialize_root, self._change_menu, program_version)
+        print(3)
+        self.__select_menu: SelectMenu = SelectMenu(self._root_frame)
+        print(4)
+        self.__menus: dict = {"exit": self.__exit_menu, "main": self.__main_menu, "select": self.__select_menu}
 
-    def change_menu(self, menu_name="") -> None:
+    def _change_menu(self, menu_name="") -> None:
         if menu_name in self.__menus:
             for menu in self.__menus.values():
                 menu.root.forget()
@@ -85,7 +87,7 @@ class GUI:
 
     # ! In future versions the bottom, help and info frames could be instance attributes to allow object clients to modify them to their requirements.
     # * Setting bottom frame
-        bottom_frame: tk.Frame = tk.Frame( GUI.__root,
+        bottom_frame: tk.Frame = tk.Frame(GUI.__root,
             bg=Color.bottom_button_abg)
         bottom_frame.rowconfigure(0, weight=1)
         bottom_frame.columnconfigure(0, weight=1)
@@ -607,7 +609,7 @@ class GUI:
 
     def run(self):
         self._root_frame.place(x=0, y=0, width=250, height=250)
-        self.change_menu("main")
+        self._change_menu("main")
         GUI.__root.mainloop()
 
 if __name__ == "__main__":

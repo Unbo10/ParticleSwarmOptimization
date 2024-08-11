@@ -1,4 +1,9 @@
 class Color:
+
+    # * TESTS
+    test1_bg: str = "#ff0000"
+    test2_bg: str = "#00ff00"
+    test3_bg: str = "#0000ff"
     # ? Would it be better to do it with a dictionary?
     # * WINDOWS AND FRAMES
 
@@ -93,7 +98,6 @@ class Color:
 
     # * Clicked foreground
     # * Main menu
-    bottom_button_cfg: str = bottom_button_afg
     optim_button_cfg: str = optim_button_afg
     hide_button_cfg: str = hide_button_fg
 
@@ -102,11 +106,8 @@ class Color:
 
     # * SCROLLBAR
     # * Main menu
-    info_scrollbar_bg: str = "#2b2a2a"
-    info_scrollbar_trough: str = bottom_label_bg
-    info_scrollbar_abg: str = "#0f0f0f"
-
-    # * TESTS
-    test1_bg: str = "#ff0000"
-    test2_bg: str = "#00ff00"
-    test3_bg: str = "#0000ff"
+    bottom_scrollbar_bg: str = "#2b2a2a"
+    bottom_scrollbar_trough: str = bottom_label_bg
+    bottom_scrollbar_abg: str = "#0f0f0f"
+    bottom_scrollbar_hbg: str = bottom_label_bg
+    bottom_scrollbar_hcolor: str = "#000000"
