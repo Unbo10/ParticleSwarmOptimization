@@ -22,6 +22,7 @@ class Data:
     
     def append_optimization(self, optimization_df: pd.DataFrame) -> None:
         # TODO: Test the whole class with multiple sessions and files. Also, update and add documentation and the class diagram.
+        # ? We may want to implement this using with
         
         if self.__xlsx_name not in os.listdir():
             self.create_spreadsheet()

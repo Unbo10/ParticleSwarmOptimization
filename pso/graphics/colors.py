@@ -38,6 +38,7 @@ class Color:
     select_label_no_optim_bg: str = "#d1d1d1"
     select_title_bg: str = "#d3d3d3"
     back_button_bg = select_title_bg
+    preview_button_bg: str = select_label_optim_bg
 
     # * Foreground (font color)
     # * Main menu
@@ -61,6 +62,7 @@ class Color:
 
     # * Select menu
     back_button_abg: str = "#f0f0f0"
+    preview_button_abg: str = "#f7f7f7"
 
     # * Active foreground
     # * Main menu
@@ -79,12 +81,16 @@ class Color:
 
     # * Select menu
     back_button_hbg: str = "#922929"
+    preview_button_hbg: str = preview_button_abg
 
     # * Highlight color (focused)
     # * Main menu
     bottom_button_hcolor: str = "#ffffff"
     hide_button_hcolor: str = "#000000"
     optim_button_hcolor: str = optim_button_abg
+
+    # * Select menu
+    preview_button_hcolor: str = preview_button_abg
 
 
     # * Clicked background
@@ -95,6 +101,7 @@ class Color:
 
     # * Select menu
     back_button_cbg: str = back_button_bg
+    preview_button_cbg: str = "#e0e0e0"
 
     # * Clicked foreground
     # * Main menu
