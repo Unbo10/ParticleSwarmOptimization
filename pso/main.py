@@ -17,19 +17,20 @@ class Main:
         self.optimizations: list[Optimization] = []
         self.gui: GUI = GUI(program_version=self.get_version())
 
-    def get_last_xslx_file (self) -> str:
+    def get_last_xlsx_file (self) -> str:
         path: str = 'database'
         files: list[str] = os.listdir(path)
         last_session: int = 0
         # * Refers to the number of the session to be looked at in the
         # * for cycle
         current_session: int = 0
-        xlsx_files: list[str] = [f for f in files if f.endswith('.xlsx')]
+        xlsx_files: list[str] = [f for f in files if f.startswith("session")]
         if len(xlsx_files) == 0:
-            return "session1_results"
+            last_session = 1
         else:
             for i in range(len(xlsx_files)):
                 current_session = int(re.findall(r'\d+', xlsx_files[i])[0])
+                # * Current session will be the first (and only) sequence of numbers found in the i-th xlsx file name.
                 if current_session > last_session:
                     last_session = current_session
             return f'session{last_session}_results'
@@ -45,8 +46,7 @@ class Main:
 if __name__ == "__main__":
     try:
         main = Main()
-        print(main.get_version())
-        main.user_interface()
+        main.gui.run()
     except KeyboardInterrupt:
         print("Exiting the program.")
         exit()

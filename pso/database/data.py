@@ -13,14 +13,16 @@ class Data:
         self.__gbest_history: list[list[int]] = []
         self.__number_of_optimizations: int = 0
         self.__xlsx_name: str = excel_file_name # * Without the extension and directory
-        self.__xlsx_path: str = f"database/{self.__xlsx_name}.xlsx" # * It is determined if it exists in Main
-
+        self.__xlsx_path: str = f"../database/{self.__xlsx_name}.xlsx" # * It is determined if it exists in Main
+        # * The two dots are needed if the GUI is directly executed.
+        # ! For now, the execution will continue to be done in the gui.py file, but the final version MUST CHANGE the paths to execute everything from the main.py file.
     def append_gbest_indexes(self, optimization_gbest_indexes: list[int]) -> None:
         self.__gbest_history.append(optimization_gbest_indexes)
         self.__number_of_optimizations += 1
     
     def append_optimization(self, optimization_df: pd.DataFrame) -> None:
         # TODO: Test the whole class with multiple sessions and files. Also, update and add documentation and the class diagram.
+        # ? We may want to implement this using with
         
         if self.__xlsx_name not in os.listdir():
             self.create_spreadsheet()
@@ -104,13 +106,13 @@ class Data:
         # * Couting the AMOUNT OF PARTICLES
         # ? It could be passed as a parameter of the class's constructor
         number_of_particles: int = 0
-        while optimization_records[number_of_particles][0] is not np.NaN:
+        while optimization_records[number_of_particles][0] is not np.nan:
             number_of_particles += 1
         particle_index: int = 1
         # * Setting the particle indexes in the "C" column and styling them
         for row in range(optimization_df.shape[0]):
             cell = sheet.cell(row=row + 4, column=3)
-            if optimization_records[row][0] is not np.NaN:
+            if optimization_records[row][0] is not np.nan:
                 cell.value = particle_index
                 cell.alignment = px_styles.Alignment(horizontal="center",
                     vertical="center")

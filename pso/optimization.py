@@ -83,10 +83,13 @@ class Optimization:
     - get_swarm() -> ParticleSwarm
         Returns the particle swarm used in the optimization process.
     """
-    def __init__(self, data: Data, cognitive_coefficient: float = 2.05, inertia_coefficient: float = 0.7, social_coefficient: float = 2.05, particle_amount: int = 10, dimensions: int = 3, iterations: int = 20) -> None:
+    def __init__(self, index: int, data: Data = Data("test"), cognitive_coefficient: float = 2.05, inertia_coefficient: float = 0.7, social_coefficient: float = 2.05, particle_amount: int = 10, dimensions: int = 3, iterations: int = 20) -> None:
         self.__data: Data = data
         self.__cognitive_coefficient: float = cognitive_coefficient
         self.__dimensions: int = dimensions
+        # ? Might need to make a heuristic function class or at least a
+        # ? heuristic function attribute to display it in the select menu of the GUI.
+        self.__index: int = index # ! Left to add in docs
         self.__inertia_coefficient: float = inertia_coefficient
         self.__iterations: int = iterations
         self.__particle_amount: int = particle_amount
@@ -130,7 +133,7 @@ class Optimization:
         swarm_gbest_index: list[int] = []
         optimization_df: pd.DataFrame = pd.DataFrame(columns = ["Heuristic",
                                             "Position", "Velocity", "Pbest"])
-        nan_df = pd.DataFrame(([np.NaN] * 4), index = ["Heuristic", "Position",
+        nan_df = pd.DataFrame(([np.nan] * 4), index = ["Heuristic", "Position",
                                                        "Velocity", "Pbest"]).T
 
         for iteration_num in range(self.__iterations + 1):
@@ -182,6 +185,9 @@ class Optimization:
 
     def get_dimensions(self) -> int:
         return self.__dimensions
+    
+    def get_index(self) -> int:
+        return self.__index
 
     def get_inertia_coefficient(self) -> float:
         return self.__inertia_coefficient
@@ -203,6 +209,6 @@ def run():
 
 if __name__ == "__main__":
     data = Data(excel_file_name="session1_results")
-    main = Optimization(data=data, cognitive_coefficient=2.05, inertia_coefficient=0.7, social_coefficient=2.05, particle_amount=13, dimensions=2, iterations=7) # ! CHECK: Minimum dimension
+    main = Optimization(0, data=data, cognitive_coefficient=2.05, inertia_coefficient=0.7, social_coefficient=2.05, particle_amount=13, dimensions=2, iterations=7) # ! CHECK: Minimum dimension
     main.optimize()
     # print(main.get_swarm().get_gbest())
