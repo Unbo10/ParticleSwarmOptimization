@@ -15,7 +15,6 @@ class MainMenu():
             bg=Color.optim_label_bg, font=font.Font(family=FontName.title, size=15), wraplength=450,
             anchor="center")
         self._window_width: int = window_width
-        print(self._window_width)
         self._window_height: int = window_height
         self._title_height: int = 40
         self._bottom_frame_height: int = 30

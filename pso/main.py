@@ -13,9 +13,9 @@ from pso.graphics.gui import GUI
 from pso.optimization import Optimization
 class Main:
     def __init__(self) -> None:
-        self.history: Data = Data(excel_file_name=self.get_last_xslx_file())
-        self.optimizations: list[Optimization] = []
         self.gui: GUI = GUI(program_version=self.get_version())
+        self.database: Data = Data(excel_file_name=self.get_last_xslx_file())
+        self.optimization_history: list[Optimization] = []
 
     def get_last_xlsx_file (self) -> str:
         path: str = 'database'

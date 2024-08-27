@@ -33,11 +33,14 @@ class OptimizationFrame:
         self.__social_coefficient_label: tk.Label = tk.Label(self.frame, text=f"c2: {optimization.get_social_coefficient()}", **self.__widget_parameters)
         self.__preview_image: tk.PhotoImage = tk.PhotoImage(file="assets/preview.png").subsample(4)
         self.__preview_active_image: tk.PhotoImage = tk.PhotoImage(file="assets/preview-active.png").subsample(4)
+
+        # TODO: Check the naming of immages across files
+
         self.__preview_button: tk.Button = tk.Button(self.frame, image=self.__preview_image, **self.__widget_parameters)
         self.__inertia_coefficient_label: tk.Label = tk.Label(self.frame, text=f"Inertia: {optimization.get_inertia_coefficient()}", **self.__widget_parameters)
         self.__iterations_label: tk.Label = tk.Label(self.frame, text=f"N. iterations: {optimization.get_iterations()}")
 
-    def display(self, parent_width: int, parent_height: int) -> None:
+    def display(self, parent_width: int) -> None:
         # labels_list: list[tk.Label] = [attr for attr in dir(self) if attr[-5:] == "label"]
         # * There could be a better way of doing it using a list
         for col in range(0, 5):

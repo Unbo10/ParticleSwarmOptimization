@@ -16,7 +16,7 @@ class OptionsFrame():
         self.__title_height: int = title_height
         self.__bottom_frame_height: int = bottom_frame_height
 
-        self.__optimization_button_parameters: dict = {
+        self.__button_parameters: dict = {
             "bg": Color.optim_button_bg,
             "fg": Color.optim_button_fg,
             "relief": "flat",
@@ -29,22 +29,22 @@ class OptionsFrame():
         self.__create_button: tk.Button = tk.Button(
             self.root,
             text="Create optimization",
-            **self.__optimization_button_parameters
+            **self.__button_parameters
             )
         self.__select_button: tk.Button = tk.Button(
             self.root,
             text="Select optimization",
-            **self.__optimization_button_parameters
+            **self.__button_parameters
             )
         self.__delete_button: tk.Button = tk.Button(
             self.root,
             text="Delete optimization",
-            **self.__optimization_button_parameters
+            **self.__button_parameters
             )
         self.__exit_button: tk.Button = tk.Button(
             self.root,
             text="Exit",
-            **self.__optimization_button_parameters
+            **self.__button_parameters
             )
         self.__buttons = [self.__create_button, self.__select_button, self.__delete_button, self.__exit_button]
 

@@ -45,8 +45,6 @@ class Vector:
     - initialize_randomly(bound: float = 10)
         Initialize the coordinates of a vector randomly within 
         the interval [-bound, bound].
-    - _update()
-        Abstract method.
     
     Getters and setters
     - get_color() -> dict

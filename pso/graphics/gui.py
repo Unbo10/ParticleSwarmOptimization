@@ -11,7 +11,6 @@ from pso.graphics.colors import Color
 from pso.graphics.exitMenu import ExitMenu
 from pso.graphics.mainMenu import MainMenu
 from pso.graphics.selectMenu import SelectMenu
-from pso.graphics.fonts import FontName
 from pso.optimization import Optimization
 
 class GUI:
@@ -42,14 +41,7 @@ class GUI:
         else:
             raise Exception(f"Menu {menu_name} not found.")
 
-    def __display_create_menu(self) -> None:
-        print("c")
-
-    def __display_delete_menu(self) -> None:
-        print("d")
-
-    def _initialize_root(self, width: int, height: int,
-        title: str = "Particle Swarm Optimization (PSO)") -> None:
+    def _initialize_root(self, width: int, height: int, title: str = "Particle Swarm Optimization (PSO)") -> None:
         GUI.__root.title(title)
 
         # * Setting initial geometry (dimensions)
@@ -73,8 +65,8 @@ class GUI:
         # * Setting background color
         GUI.__root.configure(bg=Color.window_bg)
 
-    def run(self):
-        self._change_menu("select")
+    def run(self) -> None:
+        self._change_menu("main")
         GUI.__root.mainloop()
 
 if __name__ == "__main__":

@@ -21,10 +21,10 @@ class SelectMenu():
         print(font.Font(family=FontName.title, size=15).metrics("linespace"))
 
         # ! tk.Buttons could actually be overriden to get the best out of inheritance, especially in MainMenu
-        self.__arrow_back_path: str = "assets/arrow-back.png"
-        self.__arrow_back_image: tk.PhotoImage = tk.PhotoImage(file=self.__arrow_back_path).subsample(4)
-        self.__arrow_back_path_active: str = "assets/arrow-back-active.png"
-        self.__arrow_back_image_active: tk.PhotoImage = tk.PhotoImage(file=self.__arrow_back_path_active).subsample(4)
+        arrow_back_path: str = "assets/arrow-back.png"
+        self.__arrow_back_image: tk.PhotoImage = tk.PhotoImage(file=arrow_back_path).subsample(4)
+        arrow_back_path_active: str = "assets/arrow-back-active.png"
+        self.__arrow_back_image_active: tk.PhotoImage = tk.PhotoImage(file=arrow_back_path_active).subsample(4)
         self.__back_button: tk.Button = tk.Button(self.root, image=self.__arrow_back_image, relief="flat", cursor="hand2", bg=Color.back_button_bg, activebackground=Color.back_button_abg, highlightthickness=0, borderwidth=0)
         self.__no_optimizations_label: tk.Label = tk.Label(self.root, height=2, text="Nop optimizations have been made yet.", bg=Color.select_label_no_optim_bg, fg=Color.select_label_no_optim_fg) # ? Should it be conditioned to the length of the optimization list being 0 or is it good like this?
         self.__create_optimization_button: tk.Button = tk.Button(self.root, text="Create optimization", height=3, bg=Color.optim_button_bg, fg=Color.optim_button_fg) # ! This could be a good use of composition. Therefore, the buttons in the main menu should be defined as classes of another class that will inherit from tk.Button
@@ -32,10 +32,9 @@ class SelectMenu():
         self.__scrollbar_width: int = 20
         self.__canvas: tk.Canvas = tk.Canvas(self.root, bg=Color.test1_bg)
         self.__scrollbar: tk.Scrollbar = tk.Scrollbar(self.root, orient="vertical", command=self.__canvas.yview)
-        self.__parent_frame_y_padding: int = 30
-        self.__parent_frame_height: int = self.__window_height - (self.__title_height + self.__parent_frame_y_padding)
-        self.__parent_frame_width: int = self.__window_width - self.__parent_frame_y_padding
-        print("a", self.__parent_frame_width)
+        parent_frame_y_padding: int = 30
+        self.__parent_frame_height: int = self.__window_height - (self.__title_height + parent_frame_y_padding)
+        self.__parent_frame_width: int = self.__window_width - parent_frame_y_padding
         self.__parent_frame: tk.Frame = tk.Frame(self.__canvas, bg=Color.test3_bg) # * Will be the basis for the canvas of optimization frames and the scrollbar
         self.__optimization_frames: list[OptimizationFrame] = []
 
@@ -82,7 +81,7 @@ class SelectMenu():
             self.__scrollbar.place(x=self.__window_width - (15 + self.__scrollbar_width), y=self.__title_height + 15, height=self.__window_height - (self.__title_height + 30), width=self.__scrollbar_width)
             self.__canvas.configure(yscrollcommand=self.__scrollbar.set)
             for frame in self.__optimization_frames:
-                frame.display(self.__parent_frame_width, self.__parent_frame_height)
+                frame.display(self.__parent_frame_width)
             self.__canvas.create_window((0, 0), window=self.__parent_frame, anchor="nw", width=self.__parent_frame_width, height=self.__parent_frame_height) # ? What does this one do exactly? Like in terms of documentation, why is it different to a frame for ex.
             self.__canvas.configure(scrollregion=self.__canvas.bbox("all"))
             self.root.place(x=0, y=0, width=self.__window_width, height=self.__window_height)

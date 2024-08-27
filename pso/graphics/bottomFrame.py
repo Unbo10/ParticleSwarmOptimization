@@ -6,7 +6,8 @@ from pso.graphics.colors import Color
 from pso.graphics.fonts import FontName
 
 class BottomFrame():
-    def __init__(self, root_frame: tk.Frame, window_width: int, window_height, title_height: int, bottom_frame_height: tk.Frame, program_version: str):
+    def __init__(self, root_frame: tk.Frame, window_width: int, window_height, title_height: int, bottom_frame_height: int, program_version: str):
+        # ! Pop-up frame must be another class
         self.root: tk.Frame = tk.Frame(root_frame, bg=Color.test1_bg)
         self.__window_width: int = window_width
         self.__window_height: int = window_height
