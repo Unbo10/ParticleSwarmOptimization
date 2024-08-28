@@ -1,7 +1,41 @@
 
 # ! An image class could also be made! There could really be all tk's widgets' classes!
 # * This could make a future implementation with ttk or any other module much easier
+"""
+This module defines the OptimizationFrame class, which represents a frame displaying the optimization details.
 
+## Classes
+- OptimizationFrame: Represents a frame displaying optimization details.
+
+### Attributes
+- frame: tk.Frame - The main frame for the optimization details.
+- __width: int - The width of the frame.
+- __height: int - The height of the frame.
+- __scrollbar_width: int - The width of the scrollbar.
+- __separation: int - The separation between frames.
+- __index: int - The index of the frame.
+- __widget_parameters: dict - Parameters for the widgets.
+- __name_label: tk.Label - Label displaying the name of the optimization.
+- __function_label: tk.Label - Label displaying the function of the optimization.
+- __dimensions_label: tk.Label - Label displaying the dimensions of the optimization.
+- __minima_indicator_label: tk.Label - Label indicating the minima.
+- __minima_value_label: tk.Label - Label displaying the minima coordinates.
+- __cognitive_coefficient_label: tk.Label - Label displaying the cognitive coefficient.
+- __num_particles_label: tk.Label - Label displaying the number of particles.
+- __social_coefficient_label: tk.Label - Label displaying the social coefficient.
+- __preview_image: tk.PhotoImage - Image for the preview button.
+- __preview_active_image: tk.PhotoImage - Active image for the preview button.
+- __preview_button: tk.Button - Button for previewing the optimization.
+- __inertia_coefficient_label: tk.Label - Label displaying the inertia coefficient.
+- __iterations_label: tk.Label - Label displaying the number of iterations.
+
+### Methods
+- display(parent_width: int) -> None: Displays the optimization frame and configures the labels and buttons.
+- __enter_preview_button(e): Changes the background and image of the preview button when the cursor enters.
+- __leave_preview_button(e): Restores the background and image of the preview button when the cursor leaves.
+- __click_preview_button(e): Changes the background and image of the preview button when clicked.
+- __release_preview_button(e): Placeholder for actions when the preview button is released.
+"""
 import numpy as np
 import tkinter as tk
 from tkinter import font

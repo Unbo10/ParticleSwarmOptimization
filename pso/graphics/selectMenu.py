@@ -1,3 +1,40 @@
+"""
+This module defines the SelectMenu class, which displays a list of previous optimizations and allow the user to select one of them to show the results of the optimizations.
+
+## Classes
+- SelectMenu: Represents the selection menu in a graphical user interface.
+
+### Attributes
+- __change_menu: callable - A callable to change the menu.
+- __optimization_history: list[Optimization] - A list of previous optimizations.
+- __window_width: int - The width of the window.
+- __window_height: int - The height of the window.
+- root: tk.Frame - The main frame for the selection menu.
+- __initialize_window: callable - A callable to initialize the window.
+- __title_height: int - The height of the title.
+- __title: tk.Label - Label displaying the title of the selection menu.
+- __arrow_back_image: tk.PhotoImage - Image for the back button.
+- __arrow_back_image_active: tk.PhotoImage - Active image for the back button.
+- __back_button: tk.Button - Button to go back to the main menu.
+- __no_optimizations_label: tk.Label - Label indicating no optimizations have been made.
+- __create_optimization_button: tk.Button - Button to create a new optimization.
+- __scrollbar_width: int - The width of the scrollbar.
+- __canvas: tk.Canvas - Canvas for displaying optimization frames.
+- __scrollbar: tk.Scrollbar - Scrollbar for the canvas.
+- __parent_frame_height: int - The height of the parent frame.
+- __parent_frame_width: int - The width of the parent frame.
+- __parent_frame: tk.Frame - The parent frame for the canvas.
+- __optimization_frames: list[OptimizationFrame] - List of optimization frames.
+
+### Methods
+- __enter__back_button(e): Changes the background and image of the back button when the cursor enters.
+- __leave_back_button(e): Restores the background and image of the back button when the cursor leaves.
+- __click_back_button(e): Changes the background and image of the back button when clicked.
+- __release_back_button(e): Changes the menu to the main menu when the back button is released.
+- display(): Displays the selection menu and configures the title, back button, and optimization frames.
+- __scroll_mouse_wheel(event): Handles the mouse wheel scroll event for the canvas.
+"""
+
 import os
 
 import tkinter as tk

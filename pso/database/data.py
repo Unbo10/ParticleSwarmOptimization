@@ -1,3 +1,23 @@
+"""
+This module defines the Data class, which handles the storage and manipulation of optimization data using pandas and openpyxl.
+
+## Classes
+- Data: Manages optimization data and stores it in an Excel file.
+
+### Attributes
+- __particle_history: list[pd.DataFrame] - A list of DataFrames containing particle history.
+- __gbest_history: list[list[int]] - A list of lists containing global best indexes.
+- __number_of_optimizations: int - The number of optimizations performed.
+- __xlsx_name: str - The name of the Excel file (without extension and directory).
+- __xlsx_path: str - The path to the Excel file.
+
+### Methods
+- append_gbest_indexes(optimization_gbest_indexes: list[int]) -> None: Appends global best indexes to the history.
+- append_optimization(optimization_df: pd.DataFrame) -> None: Appends an optimization DataFrame to the history and updates the Excel file.
+- create_spreadsheet() -> None: Creates a new Excel file for storing optimization data.
+- print_optimization(optimization_index: int) -> None: Prints the optimization data at the given index.
+- get_particle_history() -> list[pd.DataFrame]: Returns the particle history.
+"""
 
 import os
 

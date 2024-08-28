@@ -1,6 +1,26 @@
 
-# TODO: When select, create and delete menus are implemented, documentation must be added to the gui, fonts and colors modules.
+"""
+This module defines the GUI class, which represents the graphical user interface for the Particle Swarm Optimization (PSO) application, unifying the different menus and functionalities.
 
+## Classes
+- GUI: Represents the main graphical user interface for the PSO application.
+
+### Attributes
+- __root: tk.Tk - The root window for the GUI.
+- _root_frame: tk.Frame - The main frame within the root window.
+- __optimization_history: list[Optimization] - A list to store the optimization history.
+- _window_height: int - The height of the window.
+- _window_width: int - The width of the window.
+- __exit_menu: ExitMenu - The exit menu of the application.
+- __main_menu: MainMenu - The main menu of the application.
+- __select_menu: SelectMenu - The select menu of the application.
+- __menus: dict - A dictionary to store the different menus of the application.
+
+### Methods
+- _change_menu(menu_name="") -> None: Changes the current menu to the specified menu.
+- _initialize_root(width: int, height: int, title: str = "Particle Swarm Optimization (PSO)") -> None: Initializes the root window with the given parameters.
+- run() -> None: Runs the main loop of the GUI.
+"""
 import os
 
 import numpy as np
