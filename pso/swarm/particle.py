@@ -78,11 +78,11 @@ class Particle:
         self.__cognitive_coefficient: float = cognitive_coefficient
         self.__index: int = index
         self.__inertia_coefficient: float = inertia_coefficient
+        self.__social_coefficient: float = social_coefficient
         self.__position: Position = Position(dimensions-1)
         self.__pbest: Position = Position(dimensions-1)
         self.__heuristic: Heuristic = Heuristic(dimensions, heuristic)
         self.__heuristic._update(self.get_pbest())
-        self.__social_coefficient: float = social_coefficient
         self.__velocity: Velocity = Velocity(dimensions-1)
         self.color : dict = {"r": 0, "g": 0, "b": 0}
         self.has_gbest = has_gbest
@@ -137,9 +137,6 @@ class Particle:
         heuristic_f = self.__heuristic.get_heuristic_f()
         if heuristic_f(self.__position) < heuristic_f(self.__pbest):
             self.__pbest.set_coordinates(self.__position.get_coordinates().copy())
-
-    def update_velocity() -> None:
-        pass
     
     # * Getters and setters
 

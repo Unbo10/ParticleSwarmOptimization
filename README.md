@@ -13,11 +13,10 @@
         + get_version() str
     }
 
-    %% ? Should inherited composition (or any) relations be stated
-
-    Main "1" --o "*" Optimization
-    Main "1" --* "1" Data
+    %% ? Should inherited composition (or any) relations be stated    Main "1" --* "1" Data
     Main "1" --* "1" GUI
+    Main "1" --* "1" Data
+    Main "1" --* "*" Optimization
 
     class GUI {
         - C tk.Tk() root
@@ -40,8 +39,6 @@
     GUI "1" --* "1" ExitMenu
     GUI "1" --* "1" MainMenu
     GUI "1" --* "1" SelectMenu
-    GUI "1" --o "*" Optimization
-
     class Color {
         + C str test1_bg
         + C str test2_bg
@@ -194,11 +191,9 @@
     }
 
     SelectMenu --> Color : "uses(?)"
-    SelectMenu --> FontName : "uses(?)"
-    SelectMenu "1" --o "*" Optimization
-    SelectMenu "1" --o "*" OptimizationFrame
-
-    class OptimzationFrame {
+    SelectMenu --> FontName : "uses(?)
+    Select Menu *-- OptimizationFrame
+    class OptimizationFrame {
         %% - __init__(tk.Frame root, Optimization optimization, int width, int height, int separation, int scrollbar_width, int frame_index)
         - tk.Frame frame
         - int width
@@ -224,23 +219,17 @@
         +display(int parent_width)
     }
     
-    %% ! Check if there are attributes defined in methods only used there and delete  the self before them
-
     class Optimization{
         - I Data data
-        - float cognitive_coefficient
-        - float inertia_coefficient
-        - float social_coefficient
-        - int dimensions
         - int iterations
-        - int particle_amount
         - ParticleSwarm swarm
 
         - heuristic(Position position, int selection)
         - optimize()
-    }
-    Optimization --o ParticleSwarm
+    }     
+    
     Optimization --* Data
+    Optimization --* ParticleSwarm
 
     class Data {
         - __init__(str excel_file_name)
@@ -268,7 +257,7 @@
 
         - __repr__() : str
         # initialize_particles_randomly(int bound)
-        + update_gbest(): None
+        + update_gbest()
 
         + get_cognitive_coefficient(): float
         + get_inertia(): float
@@ -282,28 +271,36 @@
 
     class Particle{
         <!-- ? Are r_1 and r_2 chosen for every iteration or at each iteration? -->
-        + dict color
-        - Heuristic heuristic
+        - float cognitive_coefficient
+        - int index
+        - float inertia_coefficient
+        - float social_coefficient
         - Position pbest
         - Position position
+        - Heuristic heuristic
+        + dict color
         - Velocity velocity
 
-        # update_pbest(position)
-        # update_velocity(Position gbest)
+        # update_pbest()
+        # update_velocity()
         + initialize_randomly(int bound)
         
+        + get_heuristic() : Heuristic
+        + get_index() : int
         + get_pbest()
         + get_position()
         + get_velocity()
 
-        + set_pbest()
-        + set_position()
-        + set_velocity()
+        + set_heuristic(Heuristic heuristic)
+        + set_index(int index)
+        + set_pbest(Position pbest)
+        + set_position(Position position)
+        + set_velocity(Velocity velocity)
     }
+
     Particle o-- Heuristic
     Particle o-- Position
     Particle o-- Velocity
-
 
     class Vector {
         # np.ndarray coordinates
@@ -336,7 +333,7 @@
     Position --|> Vector
 
     class Velocity {
-        # update_velocity(velocity, gbest, cognitive_coefficient, social_coefficient, inertia, pbest, position, r_1, r_2) 
+        - __init__(int dimensions)
     }
     Velocity --|> Vector
 
