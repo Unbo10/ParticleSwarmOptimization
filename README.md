@@ -198,7 +198,7 @@
     SelectMenu "1" --o "*" Optimization
     SelectMenu "1" --o "*" OptimizationFrame
 
-    class OptimzationFrame {
+    class OptimizationFrame {
         %% - __init__(tk.Frame root, Optimization optimization, int width, int height, int separation, int scrollbar_width, int frame_index)
         - tk.Frame frame
         - int width
@@ -222,6 +222,10 @@
         - tk.Label iterations_label
 
         +display(int parent_width)
+        + enter_preview_button(e)
+        + click_preview_button(e)
+        + leave_preview_button(e)
+        + release_preview_button(e)    
     }
     
     %% ! Check if there are attributes defined in methods only used there and delete  the self before them
@@ -283,10 +287,15 @@
     class Particle{
         <!-- ? Are r_1 and r_2 chosen for every iteration or at each iteration? -->
         + dict color
+        - float cognitive_coefficient
+        - float inertia_coefficient
+        - float social_coefficient
         - Heuristic heuristic
         - Position pbest
         - Position position
         - Velocity velocity
+        - int index
+        - bool has_gbest
 
         # update_pbest(position)
         # update_velocity(Position gbest)
@@ -295,10 +304,13 @@
         + get_pbest()
         + get_position()
         + get_velocity()
+        + get_heuristic()
+        + get_index()
 
-        + set_pbest()
-        + set_position()
-        + set_velocity()
+        + set_pbest(Position position)
+        + set_position(Position position)
+        + set_velocity(Velocity velocity)
+        + set_heuristic(Heuristic vector)
     }
     Particle o-- Heuristic
     Particle o-- Position
@@ -313,10 +325,8 @@
         + initialize_randomly(float)
         # update()
         
-        + get_color() : dict
         + get_coordinates() : np.ndarray
         + get_dimensions() : int
-        + set_color(red: int, green: int, blue: int, alpha: int = 255)
         + set_coordinates(coordinates: np.ndarray)
         + set_dimensions(dimensions: int)  
     }
@@ -336,7 +346,7 @@
     Position --|> Vector
 
     class Velocity {
-        # update_velocity(velocity, gbest, cognitive_coefficient, social_coefficient, inertia, pbest, position, r_1, r_2) 
+        
     }
     Velocity --|> Vector
 
