@@ -77,7 +77,7 @@ class GUI:
         self._root_frame.place(x=0, y=0, width=width, height=height)
 
         # * Setting icon for the application switcher, the dock and the taskbar (Windows)
-        small_logo_path: str = "assets/small-logo.png"
+        small_logo_path: str = "assets/ubuntu-logo.png"
         large_logo_path: str = small_logo_path
         small_logo: tk.PhotoImage = tk.PhotoImage(file=small_logo_path).subsample(10)
         large_logo: tk.PhotoImage = tk.PhotoImage(file=large_logo_path)

@@ -29,60 +29,6 @@ from pso.vector.position import Position
 from pso.database.data import Data
 
 class Optimization:
-    """Main class to run the Particle Swarm Optimization (PSO) algorithm.
-    
-    ## Parameters
-    - cognitive_coefficient : float, optional
-        The cognitive coefficient used in the PSO algorithm. Default is 2.
-    - inertia_coefficient : float, optional
-        The inertia coefficient used in the PSO algorithm. Default is 1.
-    - social_coefficient : float, optional
-        The social coefficient used in the PSO algorithm. Default is 2.
-    - particle_amount : int, optional
-        The number of particles in the swarm. Default is 10.
-    - dimensions : int, optional
-        The number of dimensions in the search space. Default is 3.
-    - iterations : int, optional
-        The number of iterations to run the algorithm. Default is 20.
-    
-    ## Attributes
-    - __cognitive_coefficient : float
-        The cognitive coefficient used in the PSO algorithm.
-    - __dimensions : int
-        The number of dimensions in the search space.
-    - __inertia_coefficient : float
-        The inertia coefficient used in the PSO algorithm.
-    - __iterations : int
-        The number of iterations to run the algorithm.
-    - __particle_amount : int
-        The number of particles in the swarm.
-    - __social_coefficient : float
-        The social coefficient used in the PSO algorithm.
-    - __swarm : ParticleSwarm
-        The particle swarm used in the optimization process.
-    
-    ## Methods
-    - heuristic(position: Position) -> float
-        Heuristic function to be optimized.
-    - optimize() -> None
-        Optimizes the heuristic function using the PSO algorithm.
-
-    ### Getters
-    - get_cognitive_coefficient() -> float
-        Returns the cognitive coefficient.
-    - get_dimensions() -> int
-        Returns the number of dimensions.
-    - get_inertia_coefficient() -> float
-        Returns the inertia coefficient.
-    - get_iterations() -> int
-        Returns the number of iterations.
-    - get_particle_amount() -> int
-        Returns the number of particles.
-    - get_social_coefficient() -> float
-        Returns the social coefficient.
-    - get_swarm() -> ParticleSwarm
-        Returns the particle swarm used in the optimization process.
-    """
     def __init__(self, index: int, data: Data = Data("test"), cognitive_coefficient: float = 2.05, inertia_coefficient: float = 0.7, social_coefficient: float = 2.05, particle_amount: int = 10, dimensions: int = 3, iterations: int = 20) -> None:
         self.__data: Data = data
         # ? Might need to make a heuristic function class or at least a
@@ -91,6 +37,7 @@ class Optimization:
         # * So it doesn't create two particle swarms with different dimensions
         self.__swarm: ParticleSwarm = ParticleSwarm(inertia_coefficient, cognitive_coefficient, social_coefficient, dimensions, particle_amount, self.heuristic)
         self.__index: int = index
+        self._dimensions: int = dimensions
     
     def heuristic(self, position: Position, selection: str = "1") -> float:
         """Heuristic function to be optimized."""
@@ -168,10 +115,19 @@ class Optimization:
         # * database and create a spreadsheet with the optimization results.
         self.__data.append_gbest_indexes(swarm_gbest_index)
         self.__data.append_optimization(optimization_df)
-        # self.__data.print_optimization(0)
-            
+        # self.__data.print_optimization(0)   
+    
+    def get_dimensions(self) -> int:
+        return self._dimensions
+    
     def get_index(self) -> int:
         return self.__index
+    
+    def get_iterations(self) -> int:
+        return self.__iterations
+
+    def get_swarm(self) -> ParticleSwarm:
+        return self.__swarm
 
 if __name__ == "__main__":
     data = Data(excel_file_name="session1_results")

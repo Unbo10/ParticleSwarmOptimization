@@ -62,16 +62,16 @@ class OptimizationFrame:
         self.__minima_indicator_label: tk.Label = tk.Label(self.frame, text=f"Minima: ", **self.__widget_parameters)
         minima_coordinates: np.ndarray = np.round(optimization.get_swarm().get_gbest().get_coordinates(), 3)
         self.__minima_value_label: tk.Label = tk.Label(self.frame, text=minima_coordinates, **self.__widget_parameters)
-        self.__cognitive_coefficient_label: tk.Label = tk.Label(self.frame, text=f"c1: {optimization.get_cognitive_coefficient()}", **self.__widget_parameters)
+        self.__cognitive_coefficient_label: tk.Label = tk.Label(self.frame, text=f"c1: {optimization.get_swarm().get_cognitive_coefficient()}", **self.__widget_parameters)
         self.__num_particles_label: tk.Label = tk.Label(self.frame, text=f"N. of particles: {optimization.get_swarm().get_particle_amount()}", **self.__widget_parameters)
-        self.__social_coefficient_label: tk.Label = tk.Label(self.frame, text=f"c2: {optimization.get_social_coefficient()}", **self.__widget_parameters)
+        self.__social_coefficient_label: tk.Label = tk.Label(self.frame, text=f"c2: {optimization.get_swarm().get_social_coefficient()}", **self.__widget_parameters)
         self.__preview_image: tk.PhotoImage = tk.PhotoImage(file="assets/preview.png").subsample(4)
         self.__preview_active_image: tk.PhotoImage = tk.PhotoImage(file="assets/preview-active.png").subsample(4)
 
         # TODO: Check the naming of immages across files
 
         self.__preview_button: tk.Button = tk.Button(self.frame, image=self.__preview_image, **self.__widget_parameters)
-        self.__inertia_coefficient_label: tk.Label = tk.Label(self.frame, text=f"Inertia: {optimization.get_inertia_coefficient()}", **self.__widget_parameters)
+        self.__inertia_coefficient_label: tk.Label = tk.Label(self.frame, text=f"Inertia: {optimization.get_swarm().get_inertia_coefficient()}", **self.__widget_parameters)
         self.__iterations_label: tk.Label = tk.Label(self.frame, text=f"N. iterations: {optimization.get_iterations()}")
 
     def display(self, parent_width: int) -> None:

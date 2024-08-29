@@ -239,6 +239,11 @@
 
         - heuristic(Position position, int selection)
         - optimize()
+
+        + get_dimensions(): int
+        + get_index(): int
+        + get_iterations(): int
+        + get_swarm(): ParticleSwarm
     }
     Optimization "1" --o "1" ParticleSwarm
     Optimization "*" --* "1" Data
