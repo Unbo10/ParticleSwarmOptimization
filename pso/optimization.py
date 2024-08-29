@@ -98,7 +98,7 @@ class Optimization:
         self.__swarm: ParticleSwarm = ParticleSwarm(inertia_coefficient, cognitive_coefficient, social_coefficient, dimensions, particle_amount, self.heuristic)
         self.__data = data
     
-    def heuristic(self, position: Position, selection: str = "3") -> float:
+    def heuristic(self, position: Position, selection: str = "1") -> float:
         """Heuristic function to be optimized."""
         # TODO: Make a better implementation of choosing the desired function, at the moment it's done manually, by modifying the variable selection through the parameters
         # TODO: Implement the second function to the dimension that the user selects. It is set to two dimensions. ? A dimension parameter in the heuristic ? 
@@ -209,6 +209,6 @@ def run():
 
 if __name__ == "__main__":
     data = Data(excel_file_name="session1_results")
-    main = Optimization(0, data=data, cognitive_coefficient=2.05, inertia_coefficient=0.8, social_coefficient=2.05, particle_amount=20, dimensions=3, iterations=50) # ! CHECK: Minimum dimension
+    main = Optimization(0, data=data, cognitive_coefficient=2.8, inertia_coefficient=0.8, social_coefficient=2.5, particle_amount=20, dimensions=2, iterations=50) # ! CHECK: Minimum dimension
     main.optimize()
     # print(main.get_swarm().get_gbest())

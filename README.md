@@ -37,10 +37,10 @@
     }
 
     GUI "1" --> "1" Color : uses (?)
-    GUI "1" --* "1" ExitMenu
+    GUI "1" --o "*" Optimization
     GUI "1" --* "1" MainMenu
     GUI "1" --* "1" SelectMenu
-    GUI "1" --o "*" Optimization
+    GUI "1" --* "1" ExitMenu
 
     class Color {
         + C str test1_bg
