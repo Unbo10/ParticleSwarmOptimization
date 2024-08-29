@@ -1,4 +1,33 @@
+"""
+This module defines the OptionsFrame class, which sets the buttons on the frame, to open their respectives menus.
 
+## Classes
+- OptionsFrame: Represents the options frame in a graphical user interface.
+
+### Attributes
+- __root_frame: tk.Frame - The root frame for the options frame.
+- root: tk.Frame - The main frame for the options frame.
+- __change_menu: callable - A callable to change the menu.
+- __title: tk.Label - Label displaying the title of the options frame.
+- __window_width: int - The width of the window.
+- __window_height: int - The height of the window.
+- __title_height: int - The height of the title.
+- __bottom_frame_height: int - The height of the bottom frame.
+- __button_parameters: dict - Parameters for the buttons.
+- __create_button: tk.Button - Button to create an optimization.
+- __select_button: tk.Button - Button to select an optimization.
+- __delete_button: tk.Button - Button to delete an optimization.
+- __exit_button: tk.Button - Button to exit the application.
+- __buttons: list - List of buttons in the options frame.
+- __bottom_frame: tk.Frame - The bottom frame of the options frame.
+
+### Methods
+# - display(bottom_frame: tk.Frame): Displays the options frame and configures the buttons.
+- __enter_button(e, button: tk.Button): Changes the background and foreground of the button when the cursor enters.
+- __leave_button(e, button: tk.Button): Restores the background and foreground of the button when the cursor leaves.
+- __click_button(e, button: tk.Button): Changes the background and foreground of the button when clicked.
+- __release_button(e, button: tk.Button) -> None: Handles the button release event and changes the menu based on the button text.
+"""
 import tkinter as tk
 from tkinter import font
 
@@ -16,7 +45,7 @@ class OptionsFrame():
         self.__title_height: int = title_height
         self.__bottom_frame_height: int = bottom_frame_height
 
-        self.__optimization_button_parameters: dict = {
+        self.__button_parameters: dict = {
             "bg": Color.optim_button_bg,
             "fg": Color.optim_button_fg,
             "relief": "flat",
@@ -29,22 +58,22 @@ class OptionsFrame():
         self.__create_button: tk.Button = tk.Button(
             self.root,
             text="Create optimization",
-            **self.__optimization_button_parameters
+            **self.__button_parameters
             )
         self.__select_button: tk.Button = tk.Button(
             self.root,
             text="Select optimization",
-            **self.__optimization_button_parameters
+            **self.__button_parameters
             )
         self.__delete_button: tk.Button = tk.Button(
             self.root,
             text="Delete optimization",
-            **self.__optimization_button_parameters
+            **self.__button_parameters
             )
         self.__exit_button: tk.Button = tk.Button(
             self.root,
             text="Exit",
-            **self.__optimization_button_parameters
+            **self.__button_parameters
             )
         self.__buttons = [self.__create_button, self.__select_button, self.__delete_button, self.__exit_button]
 

@@ -105,6 +105,7 @@ class Particle:
 
     def _update_velocity(self, gbest: Position) -> None:
         # ! There must be something wrong with this method: the operation is not being performed correctly.
+        # * It may be correct, just the parameters not the ideal ones.
         """
         Updates the velocity vector based on the particle swarm optimization
         formula:

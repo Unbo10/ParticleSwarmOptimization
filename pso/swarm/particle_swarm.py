@@ -1,5 +1,32 @@
 """
-# TODO: Add doc to this module
+This module defines the ParticleSwarm class, which represents multiple Particle objects in a swarm in the context of the Particle Swarm Optimization (PSO) algorithm.
+
+## Classes
+- ParticleSwarm: Represents a particle swarm optimization algorithm.
+
+### Attributes
+- __inertia_coefficient: float - The inertia coefficient used in the particle update equation.
+- __cognitive_coefficient: float - The cognitive coefficient used in the particle update equation.
+- __social_coefficient: float - The social coefficient used in the particle update equation.
+- __particle_amount: int - The number of particles in the swarm.
+- __particles: list[Particle] - The list of particles in the swarm.
+- __gbest: Position - The global best position found by the swarm.
+- _heuristic_f: callable - The heuristic function to be optimized.
+
+### Methods
+- __init__(inertia_coefficient: float = 1, cognitive_coefficient: float = 2, social_coefficient: float = 2, dimensions: int = 3, particle_amount: int = 10, heuristic: callable = default_heuristic) -> None: Initializes the particle swarm with the given parameters.
+- __repr__() -> str: Returns a string representation of the particle swarm.
+- _initialize_particles_randomly(bound: float = 10) -> None: Initializes the positions and velocities of particles randomly.
+- update_gbest() -> None: Updates the global best position found by the swarm.
+
+### Getters
+- get_inertia_coefficient() -> float: Returns the inertia coefficient.
+- get_cognitive_coefficient() -> float: Returns the cognitive coefficient.
+- get_social_coefficient() -> float: Returns the social coefficient.
+- get_particle_amount() -> int: Returns the number of particles in the swarm.
+- get_particles() -> list[Particle]: Returns the list of particles in the swarm.
+- get_gbest() -> Position: Returns the global best position found by the swarm.
+- get_heuristic() -> callable: Returns the heuristic function to be optimized.
 """
 
 from pso.vector.heuristic import default_heuristic

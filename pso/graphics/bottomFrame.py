@@ -1,4 +1,54 @@
+"""
+This module defines the BottomFrame class, which represents the bottom part of the main menu. It has twoo buttons, info and help.
+The info button shows a frame with information about the program, while the help button shows a frame with instructions on how to use the program. (To be implemented)
+Additionally, it displays the version of the program.
 
+## Classes
+- BottomFrame: Represents a bottom frame in a graphical user interface.
+
+### Attributes
+- root: tk.Frame - The root frame for the bottom frame.
+- __window_width: int - The width of the window.
+- __window_height: int - The height of the window.
+- __title_height: int - The height of the title.
+- root_height: int - The height of the bottom frame.
+- __POP_UP_FRAME_HEIGHT: int - The height of the pop-up frame.
+- __button_parameters: dict - Parameters for the buttons.
+- __info_image: tk.PhotoImage - Image for the info button.
+- __info_active_image: tk.PhotoImage - Active image for the info button.
+- __help_image: tk.PhotoImage - Image for the help button.
+- __help_active_image: tk.PhotoImage - Active image for the help button.
+- __info_button: tk.Button - The info button.
+- __help_button: tk.Button - The help button.
+- __version_label: tk.Label - Label displaying the program version.
+- __frames_visibility: dict - Dictionary to track the visibility of frames.
+- __info_frame: tk.Frame - Frame for the info section.
+- __help_frame: tk.Frame - Frame for the help section.
+- __hide_button_parameters: dict - Parameters for the hide buttons.
+- __info_hide_button: tk.Button - Hide button for the info frame.
+- __help_hide_button: tk.Button - Hide button for the help frame.
+- __scrollbar_parameters: dict - Parameters for the scrollbars.
+- __info_scrollbar: tk.Scrollbar - Scrollbar for the info frame.
+- __help_scrollbar: tk.Scrollbar - Scrollbar for the help frame.
+- __text_parameters: dict - Parameters for the text widgets.
+- __info_text: tk.Text - Text widget for the info frame.
+- __help_text: tk.Text - Text widget for the help frame.
+
+### Methods
+- display(options_frame: tk.Frame): Displays the bottom frame and configures the buttons and labels.
+- __enter_info_button(e): Changes the image and background of the info button when the cursor enters.
+- __enter_help_button(e): Changes the image and background of the help button when the cursor enters.
+- __enter_hide_button(e, button: tk.Button): Changes the background and foreground of the hide button when the cursor enters.
+- __leave_info_button(e): Restores the image and background of the info button when the cursor leaves.
+- __leave_help_button(e): Restores the image and background of the help button when the cursor leaves.
+- __leave_hide_button(e, button: tk.Button): Restores the background and foreground of the hide button when the cursor leaves.
+- __click_info_button(e): Changes the image and active background of the info button when clicked.
+- __click_help_button(e): Changes the image and active background of the help button when clicked.
+- __click_hide_button(e, button: tk.Button): Changes the background and foreground of the hide button when clicked.
+- __release_info_button(e): Shows or hides the info frame when the info button is released.
+- __release_help_button(e): Shows or hides the help frame when the help button is released.
+- __release_hide_button(e): Hides the info and help frames and shows the options frame when the hide button is released.
+"""
 import tkinter as tk
 from tkinter import font
 
@@ -6,7 +56,8 @@ from pso.graphics.colors import Color
 from pso.graphics.fonts import FontName
 
 class BottomFrame():
-    def __init__(self, root_frame: tk.Frame, window_width: int, window_height, title_height: int, bottom_frame_height: tk.Frame, program_version: str):
+    def __init__(self, root_frame: tk.Frame, window_width: int, window_height, title_height: int, bottom_frame_height: int, program_version: str):
+        # ! Pop-up frame must be another class
         self.root: tk.Frame = tk.Frame(root_frame, bg=Color.test1_bg)
         self.__window_width: int = window_width
         self.__window_height: int = window_height
