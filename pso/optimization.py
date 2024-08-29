@@ -85,18 +85,12 @@ class Optimization:
     """
     def __init__(self, index: int, data: Data = Data("test"), cognitive_coefficient: float = 2.05, inertia_coefficient: float = 0.7, social_coefficient: float = 2.05, particle_amount: int = 10, dimensions: int = 3, iterations: int = 20) -> None:
         self.__data: Data = data
-        self.__cognitive_coefficient: float = cognitive_coefficient
-        self.__dimensions: int = dimensions
         # ? Might need to make a heuristic function class or at least a
         # ? heuristic function attribute to display it in the select menu of the GUI.
-        self.__index: int = index # ! Left to add in docs
-        self.__inertia_coefficient: float = inertia_coefficient
         self.__iterations: int = iterations
-        self.__particle_amount: int = particle_amount
-        self.__social_coefficient: float = social_coefficient
         # * So it doesn't create two particle swarms with different dimensions
         self.__swarm: ParticleSwarm = ParticleSwarm(inertia_coefficient, cognitive_coefficient, social_coefficient, dimensions, particle_amount, self.heuristic)
-        self.__data = data
+        self.__index: int = index
     
     def heuristic(self, position: Position, selection: str = "1") -> float:
         """Heuristic function to be optimized."""
@@ -125,8 +119,6 @@ class Optimization:
         
     def optimize(self) -> None:
         """Optimizes the heuristic function using the PSO algorithm."""
-        # ! CHECK: Optimization not working properly. Might have to do with
-        # ! how the data is being passed.
         swarm = self.__swarm
         swarm._initialize_particles_randomly()
         swarm.update_gbest()
@@ -178,8 +170,8 @@ class Optimization:
         self.__data.append_optimization(optimization_df)
         # self.__data.print_optimization(0)
             
-def run():
-    pass
+    def get_index(self) -> int:
+        return self.__index
 
 if __name__ == "__main__":
     data = Data(excel_file_name="session1_results")

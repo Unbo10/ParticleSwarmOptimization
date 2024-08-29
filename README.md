@@ -194,10 +194,8 @@
     }
 
     SelectMenu --> Color : "uses(?)"
-    SelectMenu --> FontName : "uses(?)"
-    SelectMenu "1" --o "*" Optimization
-    SelectMenu "1" --o "*" OptimizationFrame
-
+    SelectMenu --> FontName : "uses(?)
+    Select Menu *-- OptimizationFrame
     class OptimizationFrame {
         %% - __init__(tk.Frame root, Optimization optimization, int width, int height, int separation, int scrollbar_width, int frame_index)
         - tk.Frame frame
@@ -307,10 +305,11 @@
         + get_heuristic()
         + get_index()
 
-        + set_pbest(Position position)
+        + set_heuristic(Heuristic heuristic)
+        + set_index(int index)
+        + set_pbest(Position pbest)
         + set_position(Position position)
         + set_velocity(Velocity velocity)
-        + set_heuristic(Heuristic vector)
     }
     Particle o-- Heuristic
     Particle o-- Position
@@ -347,6 +346,7 @@
 
     class Velocity {
         
+        - __init__(int dimensions)
     }
     Velocity --|> Vector
 
