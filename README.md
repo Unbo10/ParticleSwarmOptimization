@@ -1,16 +1,31 @@
 # LaHerencia
 
+
 ``` mermaid
     classDiagram
     direction TB
 
-    class Main{
+    class Main {
+        - <Optimization> optimizations
+        - <Data> history
+    }
+
+    Main --o Optimization
+    Main --* Data
+
+    class Data {
+
+    }
+
+    class Optimization{
+
+        - Data data
         - float cognitive_coefficient
-        - int dimensions
         - float inertia_coefficient
+        - float social_coefficient
+        - int dimensions
         - int iterations
         - int particle_amount
-        - float social_coefficient
         - ParticleSwarm swarm
 
         - graph_heuristic(heuristic)
@@ -26,7 +41,15 @@
         - get_particle_amount()
         - get_swarm()
     }
-    Main --o ParticleSwarm
+    Optimization --o ParticleSwarm
+    Optimization --* Data
+
+    class Data {
+        - ~~~float/str~~~ history
+        <!-- * Contains three pd.DataFrame, corresponding to the last three attempts -->
+        <!-- ? Should it be the last three attempts or the last n-attempts? -->
+        <!-- ! Before creating any .xslx file it should check for existent ones and change the file's name if that happens. -->
+    }
 
     class ParticleSwarm{
         - float cognitive_coefficient
@@ -53,6 +76,7 @@
 
     class Particle{
         <!-- ? Are r_1 and r_2 chosen for every iteration or at each iteration? -->
+        + dict color
         - Heuristic heuristic
         - Position pbest
         - Position position
@@ -75,7 +99,6 @@
 
 
     class Vector {
-        # dict color
         # np.ndarray coordinates
         # int dimensions
 
@@ -106,9 +129,6 @@
     Position --|> Vector
 
     class Velocity {
-        # dict color
-        # np.ndarray coordinates
-        # int dimensions
         # update_velocity(velocity, gbest, cognitive_coefficient, social_coefficient, inertia, pbest, position, r_1, r_2) 
     }
     Velocity --|> Vector

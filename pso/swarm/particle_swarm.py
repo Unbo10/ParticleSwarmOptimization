@@ -65,21 +65,29 @@ class ParticleSwarm:
     - get_heuristic() -> callable
         Returns the heuristic function to be optimized.
     """
-    
+
+    # ? ARE THE PSO COEFFICIENTS REALLY NEEDED HERE?
     def __init__(self, inertia_coefficient: float = 1, cognitive_coefficient: float = 2, social_coefficient: float = 2, dimensions: int = 3, particle_amount: int = 10, heuristic: callable = default_heuristic) -> None:
         self.__inertia_coefficient: float = inertia_coefficient
         self.__cognitive_coefficient: float = cognitive_coefficient
         self.__social_coefficient: float = social_coefficient
         try:
-            self.__particle_amount: int = particle_amount
+            self.__particle_amount: int = int(particle_amount)
             if self.__particle_amount < 1:
                 raise ValueError("The amount of particles must be greater than zero.") # ! Maybe include a TypeError to deal with floats
         except ValueError as e:
             print(e)
             print("Amount defaulted to 10.")
             self.__particle_amount = 10
+        # TODO: Except TypeError (double)
         # ? Should the following line be inside a finally block?
-        self.__particles: list[Particle] = [Particle(dimensions, heuristic) for _ in range(self.__particle_amount)]
+        self.__particles: list[Particle] = [
+            Particle(index=p, has_gbest=False, cognitive_coefficient=cognitive_coefficient,
+            dimensions=dimensions, heuristic=heuristic, 
+            inertia_coefficient=inertia_coefficient, 
+            social_coefficient=social_coefficient) 
+            for p in range(self.__particle_amount)
+            ] # ! Test change of Particle's constructor
         self.__gbest: Position = Position(dimensions - 1)
         self._heuristic_f: callable = heuristic
     
@@ -97,17 +105,20 @@ class ParticleSwarm:
         for particle in self.__particles:
             particle.initialize_randomly(bound)
         self.__gbest.set_coordinates(self.__particles[0].get_position().get_coordinates().copy())
-        print("BBBB", self.__gbest.get_coordinates())
+        # print("BBBB", self.__gbest.get_coordinates())
         self.update_gbest()
 
     # ? Should gbest be an instance of another class for it to have its own update method?
     def update_gbest(self) -> None:
         """Compares each particles' position (accessed through get_position()) 
         with the global best position (__gbest)"""
+        dimensions: int = self.__particles[0].get_position().get_dimensions() # ? Might be a better way to do it
+        gbest_index: int = 0
         for particle in self.__particles:
-            dimensions: int = particle.get_position().get_dimensions() # ? Might be a better way to do it
-            if particle.get_heuristic().get_coordinates()[dimensions] < self._heuristic_f(self.__gbest):
+            if particle.get_heuristic().get_coordinates()[dimensions] < self._heuristic_f(self.__gbest, 0):
                 self.__gbest.set_coordinates(particle.get_position().get_coordinates().copy())
+                gbest_index = particle.get_index()
+        self.__particles[gbest_index].has_gbest = True
 
     # * Getters (setters not necessary for now)
 
