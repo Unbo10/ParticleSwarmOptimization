@@ -1,4 +1,3 @@
-
 import os
 
 import numpy as np
@@ -14,7 +13,8 @@ class Data:
         self.__number_of_optimizations: int = 0
         self.__xlsx_name: str = excel_file_name # * Without the extension and directory
         self.__xlsx_path: str = f"database/optimization_results/{self.__xlsx_name}.xlsx" # * It is determined if it exists in Main
-
+        # * The two dots are needed if the GUI is directly executed.
+        # ! For now, the execution will continue to be done in the gui.py file, but the final version MUST CHANGE the paths to execute everything from the main.py file.
     def append_gbest_indexes(self, optimization_gbest_indexes: list[int]) -> None:
         self.__gbest_history.append(optimization_gbest_indexes)
         self.__number_of_optimizations += 1
@@ -24,6 +24,9 @@ class Data:
         
         if "optimization_results" not in os.listdir("database"):
             os.mkdir("database/optimization_results")
+            
+        # ? We may want to implement this using with
+        
         if self.__xlsx_name not in os.listdir():
             self.create_spreadsheet()
         
@@ -184,8 +187,6 @@ class Data:
         pd.set_option("max_colwidth", None)
         pd.set_option("display.max_rows", None)
         print(self.__particle_history[optimization_index])
-
-    # * Getters
-
+        
     def get_particle_history(self) -> list[pd.DataFrame]:
         return self.__particle_history

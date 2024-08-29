@@ -83,19 +83,16 @@ class Optimization:
     - get_swarm() -> ParticleSwarm
         Returns the particle swarm used in the optimization process.
     """
-    def __init__(self, data: Data, cognitive_coefficient: float = 2.05, inertia_coefficient: float = 0.7, social_coefficient: float = 2.05, particle_amount: int = 10, dimensions: int = 3, iterations: int = 20) -> None:
+    def __init__(self, index: int, data: Data = Data("test"), cognitive_coefficient: float = 2.05, inertia_coefficient: float = 0.7, social_coefficient: float = 2.05, particle_amount: int = 10, dimensions: int = 3, iterations: int = 20) -> None:
         self.__data: Data = data
-        self.__cognitive_coefficient: float = cognitive_coefficient
-        self.__dimensions: int = dimensions
-        self.__inertia_coefficient: float = inertia_coefficient
+        # ? Might need to make a heuristic function class or at least a
+        # ? heuristic function attribute to display it in the select menu of the GUI.
         self.__iterations: int = iterations
-        self.__particle_amount: int = particle_amount
-        self.__social_coefficient: float = social_coefficient
         # * So it doesn't create two particle swarms with different dimensions
         self.__swarm: ParticleSwarm = ParticleSwarm(inertia_coefficient, cognitive_coefficient, social_coefficient, dimensions, particle_amount, self.heuristic)
-        self.__data = data
+        self.__index: int = index
     
-    def heuristic(self, position: Position, selection: int = 1) -> float:
+    def heuristic(self, position: Position, selection: str = "1") -> float:
         """Heuristic function to be optimized."""
         # TODO: Make a better implementation of choosing the desired function, at the moment it's done manually, by modifying the variable selection through the parameters
         # TODO: Implement the second function to the dimension that the user selects. It is set to two dimensions. ? A dimension parameter in the heuristic ? 
@@ -122,14 +119,13 @@ class Optimization:
         
     def optimize(self) -> None:
         """Optimizes the heuristic function using the PSO algorithm."""
-        # ! CHECK: Optimization not working properly. Might have to do with
-        # ! how the data is being passed.
         swarm = self.__swarm
         swarm._initialize_particles_randomly()
         swarm.update_gbest()
         swarm_gbest_index: list[int] = []
         optimization_df: pd.DataFrame = pd.DataFrame(columns = ["Heuristic",
                                             "Position", "Velocity", "Pbest"])
+        # * A df of nan's is created to separate optimizations more evidently when passing them to the database and when showing them in the GUI
         nan_df = pd.DataFrame(([np.nan] * 4), index = ["Heuristic", "Position",
                                                        "Velocity", "Pbest"]).T
 
@@ -138,6 +134,7 @@ class Optimization:
                                     "Velocity": [], "Pbest": []}
             for particle in swarm.get_particles():
                 if iteration_num > 0: 
+                    # * To record the initial states of the particles before optimizing them
                     particle._update_velocity(swarm.get_gbest())
                     particle.get_position()._update(particle.get_velocity())
                     # ! Gbest is not actually gbest
@@ -148,7 +145,7 @@ class Optimization:
                 # * to a temporary dictionary
                 # ? Should the np.ndarrays be copies?
                 iteration_data["Heuristic"].append(np.round(particle.
-                    get_heuristic( ).get_coordinates().copy(), 2))
+                    get_heuristic().get_coordinates().copy(), 2))
                 iteration_data["Position"].append(np.round(particle.
                     get_position().get_coordinates().copy(), 2))
                 iteration_data["Velocity"].append(np.round(particle.
@@ -156,14 +153,13 @@ class Optimization:
                 iteration_data["Pbest"].append(np.round(particle.
                     get_pbest().get_coordinates().copy(), 2))
 
-                # print(particle, end="")
-
             # * Append the last iteration's data and the index of the particle
             # * with the best heuristic to the database.
             swarm.update_gbest()
-            print(swarm.get_gbest())
+            # print(swarm.get_gbest())
             optimization_df = pd.concat([optimization_df, pd.DataFrame(iteration_data)])
-            # TODO: Check the logic behind the if
+            # TODO: Check the logic behind the if.
+            # * Seems to be working fine
             if iteration_num != self.__iterations:
                 optimization_df = pd.concat([optimization_df, nan_df])
             print(f"Global best: {swarm.get_gbest()}\n")
@@ -174,35 +170,11 @@ class Optimization:
         self.__data.append_optimization(optimization_df)
         # self.__data.print_optimization(0)
             
-
-    # * Getters
-    # ! -they might not be needed though
-    def get_cognitive_coefficient(self) -> float:
-        return self.__cognitive_coefficient
-
-    def get_dimensions(self) -> int:
-        return self.__dimensions
-
-    def get_inertia_coefficient(self) -> float:
-        return self.__inertia_coefficient
-
-    def get_iterations(self) -> int:
-        return self.__iterations
-
-    def get_particle_amount(self) -> int:
-        return self.__particle_amount
-
-    def get_social_coefficient(self) -> float:
-        return self.__social_coefficient
-
-    def get_swarm(self) -> ParticleSwarm:
-        return self.__swarm
-
-def run():
-    pass
+    def get_index(self) -> int:
+        return self.__index
 
 if __name__ == "__main__":
     data = Data(excel_file_name="session1_results")
-    main = Optimization(data=data, cognitive_coefficient=2.05, inertia_coefficient=0.7, social_coefficient=2.05, particle_amount=13, dimensions=2, iterations=7) # ! CHECK: Minimum dimension
+    main = Optimization(0, data=data, cognitive_coefficient=2.8, inertia_coefficient=0.8, social_coefficient=2.5, particle_amount=20, dimensions=2, iterations=50) # ! CHECK: Minimum dimension
     main.optimize()
     # print(main.get_swarm().get_gbest())

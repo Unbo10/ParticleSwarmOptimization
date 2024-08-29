@@ -67,7 +67,7 @@ class Heuristic(Vector):
         position : Position
             The position object used to update the vector.
         """
-        heuristic_value = self._heuristic_f(position, 1) # TODO: Static type to be defined
+        heuristic_value = self._heuristic_f(position) # TODO: Static type to be defined
         new_coordinates: np.ndarray = self.get_coordinates().copy()
         for i in range(self.get_dimensions() - 1):
             new_coordinates[i] = position.get_coordinates().copy()[i]

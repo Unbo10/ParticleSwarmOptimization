@@ -23,36 +23,6 @@ import numpy as np
 from pso.vector.base_vector import Vector
 
 class Velocity(Vector):
-    """
-    Represents the velocity vector in a particle swarm optimization
-    algorithm.
-
-    This class inherits from the Vector class and provides additional
-    methods for updating the velocity based on the particle's best
-    position (pbest) and the global best position (gbest).
-
-    ## Parameters
-    - dimensions : int, optional
-        The number of dimensions of the velocity vector. Default is 3.
-
-    ## Attributes
-    - _coordinates : numpy.ndarray
-        The coordinates of the velocity vector (inherited but redefined).
-    - _color : dict
-        The color of the velocity vector (inherited).
-    - _dimensions : int
-        The number of dimensions of the velocity vector (inherited).
-
-    ## Methods
-    - __repr__() -> str
-        Overwrites the __repr__ method to return a string with the
-        coordinates of the vector (inherited).
-    - initialize_randomly(bound: float = 10)
-        Initialize the coordinates of a vector randomly within 
-        the interval [-bound, bound] (inherited).
-    - Other getters and setters inherited.
-    """
-
     def __init__(self, dimensions: int = 3) -> None:
         super().__init__(dimensions)
     
