@@ -15,8 +15,8 @@
 
     %% ? Should inherited composition (or any) relations be stated
 
-    Main "1" --o "*" Optimization
     Main "1" --* "1" Data
+    Main "1" --o "*" Optimization
     Main "1" --* "1" GUI
 
     class GUI {
@@ -83,8 +83,8 @@
         + display()
     }
 
-    MainMenu --* BottomFrame
-    MainMenu --* OptionsFrame
+    MainMenu "1" --* "1" OptionsFrame
+    MainMenu "1" --* "1" BottomFrame
     MainMenu --> Color : "uses(?)"
     MainMenu --> FontName : "uses(?)"
 
@@ -195,7 +195,7 @@
 
     SelectMenu --> Color : "uses(?)"
     SelectMenu --> FontName : "uses(?)
-    Select Menu *-- OptimizationFrame
+    SelectMenu "1" *-- "*" OptimizationFrame
     class OptimizationFrame {
         %% - __init__(tk.Frame root, Optimization optimization, int width, int height, int separation, int scrollbar_width, int frame_index)
         - tk.Frame frame
@@ -225,8 +225,6 @@
         + leave_preview_button(e)
         + release_preview_button(e)    
     }
-    
-    %% ! Check if there are attributes defined in methods only used there and delete  the self before them
 
     class Optimization{
         - I Data data
@@ -241,8 +239,8 @@
         - heuristic(Position position, int selection)
         - optimize()
     }
-    Optimization --o ParticleSwarm
-    Optimization --* Data
+    Optimization "1" --o "1" ParticleSwarm
+    Optimization "*" --* "1" Data
 
     class Data {
         - __init__(str excel_file_name)
@@ -280,7 +278,7 @@
         + get_particles(): ~Particle~
         + get_heuristic(): callable
     }
-    ParticleSwarm o-- Particle
+    ParticleSwarm "1" o--"*" Particle
 
     class Particle{
         <!-- ? Are r_1 and r_2 chosen for every iteration or at each iteration? -->
@@ -311,9 +309,9 @@
         + set_position(Position position)
         + set_velocity(Velocity velocity)
     }
-    Particle o-- Heuristic
-    Particle o-- Position
-    Particle o-- Velocity
+    Particle "1" o-- "1" Heuristic
+    Particle "1" o-- "2" Position
+    Particle "1" o-- "1" Velocity
 
 
     class Vector {
@@ -337,17 +335,17 @@
         # update()
         + get_heuristic_f()
     }
-    Heuristic --|> Vector
+    Heuristic "1" --|> "1" Vector
 
     class Position{
         # update(Velocity: velocity)
     }
-    Position --|> Vector
+    Position "1" --|> "1" Vector
 
     class Velocity {
         
         - __init__(int dimensions)
     }
-    Velocity --|> Vector
+    Velocity "1" --|> "1" Vector
 
     ```
