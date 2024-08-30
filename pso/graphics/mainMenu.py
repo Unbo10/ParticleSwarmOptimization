@@ -1,25 +1,3 @@
-"""
-This module defines the MainMenu class, which represents the main menu.
-
-## Classes
-- MainMenu: Represents the main menu in a graphical user interface.
-
-### Attributes
-- _root_frame: tk.Frame - The root frame for the main menu.
-- root: tk.Frame - The main frame for the main menu.
-- __initialize_window: callable - A callable to initialize the window.
-- _title: tk.Label - Label displaying the title of the main menu.
-- _window_width: int - The width of the window.
-- _window_height: int - The height of the window.
-- _title_height: int - The height of the title.
-- _bottom_frame_height: int - The height of the bottom frame.
-- __bottom_frame: BottomFrame - The bottom frame of the main menu.
-- __options_frame: OptionsFrame - The options frame of the main menu.
-
-### Methods
-- display(): Displays the main menu and configures the title, bottom frame, and options frame.
-"""
-
 import tkinter as tk
 from tkinter import font
 
@@ -49,11 +27,15 @@ class MainMenu():
         """
         """
         self.__initialize_window(width=250, height=250)
-        # * Setting title
         self._title.place(x=0, y=0, width=self._window_width,
             height=self._title_height)
         self.__bottom_frame.display(self.__options_frame.root)
         self.__options_frame.display(self.__bottom_frame.root)
         self.root.place(x=0, y=0, width=250, height=250)
+
+    def forget(self):
+        self.root.place_forget()
+        self.__bottom_frame.root.place_forget()
+        self.__options_frame.root.place_forget()
         
     

@@ -1,26 +1,3 @@
-
-"""
-This module defines the GUI class, which represents the graphical user interface for the Particle Swarm Optimization (PSO) application, unifying the different menus and functionalities.
-
-## Classes
-- GUI: Represents the main graphical user interface for the PSO application.
-
-### Attributes
-- __root: tk.Tk - The root window for the GUI.
-- _root_frame: tk.Frame - The main frame within the root window.
-- __optimization_history: list[Optimization] - A list to store the optimization history.
-- _window_height: int - The height of the window.
-- _window_width: int - The width of the window.
-- __exit_menu: ExitMenu - The exit menu of the application.
-- __main_menu: MainMenu - The main menu of the application.
-- __select_menu: SelectMenu - The select menu of the application.
-- __menus: dict - A dictionary to store the different menus of the application.
-
-### Methods
-- _change_menu(menu_name="") -> None: Changes the current menu to the specified menu.
-- _initialize_root(width: int, height: int, title: str = "Particle Swarm Optimization (PSO)") -> None: Initializes the root window with the given parameters.
-- run() -> None: Runs the main loop of the GUI.
-"""
 import os
 
 import numpy as np
@@ -41,24 +18,20 @@ class GUI:
         # TODO2: Solve the issue described in select menu: after releasing the back button and then clicking and releasing the select button in the main menu the SelectFrame object is not being displayed. Might have something to do with what is being forgotten in the change_menu function (it may need to forget the canvas or something else instead)
         # ? Future versions could include thread management. Could be an interesting way to start learning about parallelism and concurrency.
         self._root_frame: tk.Frame = tk.Frame(GUI.__root, bg=Color.test2_bg)
-        self.__optimization_history: list[Optimization] = [Optimization(1, Data("as"), 1, 1), Optimization(2)]
+        self.__optimization_history: list[Optimization] = [Optimization(1, Data("f"), 90), Optimization(2)]
         self._window_height: int = 0
         self._window_width: int = 0
-        print(1)
         self.__exit_menu: ExitMenu = ExitMenu(self._root_frame, self._initialize_root)
-        print(2)
         self.__main_menu: MainMenu = MainMenu(self._root_frame, self._initialize_root, self._change_menu, program_version)
-        print(3)
         self.__select_menu: SelectMenu = SelectMenu(self._root_frame, self._initialize_root, self._change_menu, self.__optimization_history, window_width=750, window_height=500)
-        print(4)
         self.__menus: dict = {"exit": self.__exit_menu, "main": self.__main_menu, "select": self.__select_menu}
 
     def _change_menu(self, menu_name="") -> None:
         if menu_name in self.__menus:
             for menu in self.__menus.values():
-                menu.root.forget()
+                menu.forget()
             self.__menus[menu_name].display()
-            self.__menus[menu_name].root.tkraise()
+            print(menu_name)
         else:
             raise Exception(f"Menu {menu_name} not found.")
 
@@ -87,7 +60,7 @@ class GUI:
         GUI.__root.configure(bg=Color.window_bg)
 
     def run(self):
-        self._change_menu("main")
+        self._change_menu("select")
         GUI.__root.mainloop()
 
 if __name__ == "__main__":
