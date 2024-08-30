@@ -5,9 +5,9 @@ from pso.graphics.colors import Color
 from pso.graphics.fonts import FontName
 
 class BottomFrame():
-    def __init__(self, root_frame: tk.Frame, window_width: int, window_height, title_height: int, bottom_frame_height: int, program_version: str):
+    def __init__(self, parent_frame: tk.Frame, window_width: int, window_height, title_height: int, bottom_frame_height: int, program_version: str):
         # ! Pop-up frame must be another class
-        self.root: tk.Frame = tk.Frame(root_frame, bg=Color.test1_bg)
+        self.root: tk.Frame = tk.Frame(parent_frame, bg=Color.test1_bg)
         self.__window_width: int = window_width
         self.__window_height: int = window_height
         self.__title_height: int = title_height
@@ -48,8 +48,8 @@ class BottomFrame():
             )
 
         self.__frames_visibility: dict = {"info": False, "help": False}
-        self.__info_frame: tk.Frame = tk.Frame(root_frame)
-        self.__help_frame: tk.Frame = tk.Frame(root_frame)
+        self.__info_frame: tk.Frame = tk.Frame(parent_frame)
+        self.__help_frame: tk.Frame = tk.Frame(parent_frame)
         self.__hide_button_parameters: dict = {
             "bg": Color.hide_button_bg,
             "fg": Color.hide_button_fg,

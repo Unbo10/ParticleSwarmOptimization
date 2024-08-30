@@ -69,8 +69,8 @@
     ExitMenu --> FontName : "uses(?)"
 
     class MainMenu {
-        %% - __init__(tk.Frame root_frame, callable initialize_window, callable change_menu, str program_version, int window_width, int window_height)
-        # tk.Frame root_frame
+        %% - __init__(tk.Frame parent_frame, callable initialize_window, callable change_menu, str program_version, int window_width, int window_height)
+        # tk.Frame parent_frame
         + tk.Frame root
         - callable initialize_window
         # tk.Label title
@@ -90,7 +90,7 @@
     MainMenu --> FontName : "uses(?)"
 
     class BottomFrame {
-        %%- __init__(tk.Frame root_frame, int window_width, int window_height, int title_height, int bottom_frame_height, str program_version)
+        %%- __init__(tk.Frame parent_frame, int window_width, int window_height, int title_height, int bottom_frame_height, str program_version)
         + tk.Frame root
         - int window_width
         - int window_height
@@ -138,33 +138,46 @@
     BottomFrame --> FontName : "uses(?)"
 
     class OptionsFrame {
-        - tk.Frame root_frame
+        - tk.Frame parent_frame
         + tk.Frame root
         - callable change_menu
         - tk.Label title
-        - int windo_width
+        - int window_width
         - int window_height
         - int title_height
         - int bottom_frame_height
         - dict button_parameters
-        - tk.Button create_button
-        - tk.Button select_button
-        - tk.Button delete_button
-        - tk.Button exit_button
+        - OptionsButton create_button
+        - OptionsButton select_button
+        - OptionsButton exit_button
         - dict buttons
 
-        +display(tk.Frame bottom_frame)
-        - enter_button(event e, tk.Button button)
-        - leave_button(event e, tk.Button button)
-        - click_button(event e, tk.Button button)
-        - release_button(event e, tk.Button button)
+        +display()
     }
 
+    OptionsFrame "1" --* "3" OptionsButton
     OptionsFrame --> Color : "uses(?)"
     OptionsFrame --> FontName : "uses(?)"
 
+    class OptionsButton{
+        - tk.Frame parent_frame
+        - callable callable
+        - dict callable_args
+        - tuple padx
+        - tuple pady
+
+        - enter(event e)
+        - leave(event e)
+        - click(event e)
+        - release(event event)
+        - display(int row, int column, str sticky)
+    }
+
+    OptionsButton --> Color : "uses(?)"
+    OptionsButton "1" --|> "1" tkButton
+
     class SelectMenu {
-        %% - __init__(tk.Frame root_frame, callable initialize_window, callable change_menu, ~Optimization~ optimization_history, int window_width, int window_height)
+        %% - __init__(tk.Frame parent_frame, callable initialize_window, callable change_menu, ~Optimization~ optimization_history, int window_width, int window_height)
         - callable change_menu
         - ~Optimization~ optimization_history
         - int window_width
@@ -181,9 +194,9 @@
         - int scrollbar_width
         - tk.Canvas canvas
         - tk.Scrollbar scrollbar
-        - int parent_frame_height
-        - int parent_frame_width
-        - tk.Frame parent_frame
+        - int container_frame_height
+        - int container_frame_width
+        - tk.Frame container_frame
         - ~OptimizationFrame~ optimization_frames
 
         + display()

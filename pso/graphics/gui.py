@@ -60,7 +60,7 @@ class GUI:
         GUI.__root.configure(bg=Color.window_bg)
 
     def run(self):
-        self._change_menu("select")
+        self._change_menu("main")
         GUI.__root.mainloop()
 
 if __name__ == "__main__":

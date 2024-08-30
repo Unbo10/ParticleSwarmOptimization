@@ -5,8 +5,9 @@ from pso.graphics.colors import Color
 from pso.graphics.fonts import FontName
 
 class ExitMenu():
-    def __init__(self, root_frame: tk.Frame, initialize_window: callable):
-        self.root: tk.Frame = tk.Frame(root_frame,
+    def __init__(self, parent_frame: tk.Frame, initialize_window: callable):
+        self.__parent_frame: tk.Frame = parent_frame
+        self.root: tk.Frame = tk.Frame(parent_frame,
             bg=Color.goodbye_frame_bg)
         self.__initialize_window: callable = initialize_window
         self.__image: tk.PhotoImage = tk.PhotoImage(
@@ -28,6 +29,7 @@ class ExitMenu():
         # ? A more rigurous way of centering the label and the text could be implemented.
         self.__label.image = self.__image
         self.root.place(x=0, y=0, width=250, height=250)
+        self.__parent_frame.after(500, self.__parent_frame.quit)
 
     def forget(self):
         pass
