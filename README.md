@@ -170,7 +170,8 @@
         - leave(event e)
         - click(event e)
         - release(event event)
-        - display(int row, int column, str sticky)
+        + grid_display(int row, int column, str sticky)
+        + pack_display(str fill, str anchor)
     }
 
     OptionsButton --> Color : "uses(?)"
@@ -190,7 +191,7 @@
         - tk.PhotoImage arrow_back_image_active
         - tk.Button back_button
         - tk.Label no_optimizations_label
-        - tk.Button create_optimization_button
+        - OptionsButton create_optimization_button
         - int scrollbar_width
         - tk.Canvas canvas
         - tk.Scrollbar scrollbar
@@ -210,6 +211,8 @@
     SelectMenu --> Color : "uses(?)"
     SelectMenu --> FontName : "uses(?)
     SelectMenu "1" *-- "*" OptimizationFrame
+    SelectMenu "1" --* "1" OptionsButton
+
     class OptimizationFrame {
         %% - __init__(tk.Frame root, Optimization optimization, int width, int height, int separation, int scrollbar_width, int frame_index)
         - tk.Frame frame

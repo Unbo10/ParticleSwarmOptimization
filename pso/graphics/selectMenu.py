@@ -35,7 +35,7 @@ class SelectMenu():
         self.__arrow_back_image_active: tk.PhotoImage = tk.PhotoImage(file=arrow_back_path_active).subsample(4)
         self.__back_button: tk.Button = tk.Button(self.root, image=self.__arrow_back_image, relief="flat", cursor="hand2", bg=Color.back_button_bg, activebackground=Color.back_button_abg, highlightthickness=0, borderwidth=0)
         self.__no_optimizations_label: tk.Label = tk.Label(self.root, height=2, text="Nop optimizations have been made yet.", bg=Color.select_label_no_optim_bg, fg=Color.select_label_no_optim_fg) # ? Should it be conditioned to the length of the optimization list being 0 or is it good like this?
-        # self.__create_optimization_button: OptionsButton = OptionsButton(self.root, text="Create optimization", callable=change_menu, callable_args={"menu_name": "create"}, padx=(50, 50), pady=)
+        self.__create_optimization_button: OptionsButton = OptionsButton(self.root, text="Create optimization", callable=change_menu, callable_args={"menu_name": "create"}, padx=(self.__window_width//2 - 250,)*2, pady=(0,0))
         self.__optimization_frames: list[OptimizationFrame] = []
 
     def __enter__back_button(self, e):
@@ -62,7 +62,7 @@ class SelectMenu():
         if len(self.__optimization_history) == 0:
             print("len 0")
             self.__no_optimizations_label.pack(fill="both", anchor="center", pady=(20, 0), padx=(self.__window_width//2) - 250)
-            self.__create_optimization_button.pack(fill="x", anchor="center", padx=self.__window_width//2 - 250)
+            self.__create_optimization_button.pack_display(fill="x", anchor="center")
 
         else:
             index = 0

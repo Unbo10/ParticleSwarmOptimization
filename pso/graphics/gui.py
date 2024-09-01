@@ -14,11 +14,9 @@ from pso.database.data import Data
 class GUI:
     __root: tk.Tk = tk.Tk()
     def __init__(self, optimization_history: list[Optimization], program_version: str = "Error") -> None:
-        # TODO1: UPDATE THE CLASS DIAGRAM
-        # TODO2: Solve the issue described in select menu: after releasing the back button and then clicking and releasing the select button in the main menu the SelectFrame object is not being displayed. Might have something to do with what is being forgotten in the change_menu function (it may need to forget the canvas or something else instead)
         # ? Future versions could include thread management. Could be an interesting way to start learning about parallelism and concurrency.
         self._root_frame: tk.Frame = tk.Frame(GUI.__root, bg=Color.test2_bg)
-        self.__optimization_history: list[Optimization] = [Optimization(1, Data("f"), 90), Optimization(2)]
+        self.__optimization_history: list[Optimization] = []
         self._window_height: int = 0
         self._window_width: int = 0
         self.__exit_menu: ExitMenu = ExitMenu(self._root_frame, self._initialize_root)
