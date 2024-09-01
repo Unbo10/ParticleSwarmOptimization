@@ -15,6 +15,7 @@ class OptionsButton(tk.Button):
     "highlightthickness": 1,
     "cursor": "hand2",
     }) -> None:
+        # TODO: Make the color-related arguments attribute arguments so that it does depend in the initialization in case the default values are different (and for the mere purpose of keeping the code consistent and good)
         if button_font == None:
             args.update({"font": font.Font(family=FontName.button, size=10)})
         super().__init__(parent_frame, text=text, **args)

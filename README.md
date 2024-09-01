@@ -102,40 +102,44 @@
         - tk.PhotoImage info_active_image
         - tk.PhotoImage help_image
         - tk.PhotoImage help_active_image
-        - tk.Button info_button
-        - tk.Button help_button
+        - BottomButton info_button
+        - BottomButton help_button
         - tk.Label version_label
-        - dict frames_visibility
-        - tk.Frame info_frame
-        - tk.Frame help_frame
-        - dict hide_button_parameters
-        - tk.Button info_hide_button
-        - tk.Button help_hide_button
-        - dict scrollbar_parameters
-        - tk.Scrollbar info_scrollbar
-        - tk.Scrollbar help_scrollbar
-        - dict text_parameters
-        - tk.Text info_text
-        - tk.Text help_text
-        %% POP UP FRAME COULD BE ANOTHER CLASS!
+        # dict pop_up_frames
 
-        + display(OptionsFrame options_frame)
-        - enter_info_button(event e)
-        - enter_help_button(event e)
-        - enter_hide_button(event e, tk.Button button)
-        - leave_info_button(event e)
-        - leave_help_button(event e)
-        - leave_hide_button(event e, tk.Button button)
-        - click_info_button(event e)
-        - click_help_button(event e)
-        - click_hide_button(event e, tk.Button button)
-        - release_info_button(event e)
-        - release_help_button(event e)
-        - release_hide_button(event e)
+        + display()
     }
     
     BottomFrame --> Color : "uses(?)"
     BottomFrame --> FontName : "uses(?)"
+    BottomFrame "1" --* "2" BottomButton
+
+    class BottomButton {
+        - tk.PhotoImage image
+        - tk.PhotoImage active_image
+        - tk.PopUpFrame pop_up_frame
+        # dict pop_up_frames
+
+        - enter(event e)
+        - leave(event e)
+        - click(event e)
+        - release(event event)
+        + display(int row, int column, str sticky)
+    }
+
+    BottomButton --> Color : "uses(?)"
+    BottomButton "1" --* "1" PopUpFrame
+    BottomButton "1" --|> "1" tkButton
+
+    class PopUpFrame {
+        - tk.Text text
+        - tk.Button hide_button 
+        %% Is it necessary another class for this one or is it unnecessary inheritance?
+        - tk.Scrollbar scrollbar
+        + bool visible
+
+        + display()
+    }
 
     class OptionsFrame {
         - tk.Frame parent_frame

@@ -3,6 +3,7 @@ from tkinter import font
 
 from pso.graphics.colors import Color
 from pso.graphics.fonts import FontName
+from pso.graphics.bottomButton import BottomButton
 
 class BottomFrame():
     def __init__(self, parent_frame: tk.Frame, window_width: int, window_height, title_height: int, bottom_frame_height: int, program_version: str):
@@ -24,21 +25,14 @@ class BottomFrame():
             "borderwidth": 0,
             "cursor": "hand2"
             }
-        self.__info_image: tk.PhotoImage = tk.PhotoImage(file="assets/info.png").subsample(3)
-        self.__info_active_image: tk.PhotoImage = tk.PhotoImage(file="assets/info-active.png").subsample(3)
-        self.__help_image: tk.PhotoImage = tk.PhotoImage(file="assets/help.png").subsample(3)
-        self.__help_active_image: tk.PhotoImage = tk.PhotoImage(file="assets/help-active.png").subsample(3)
-        self.__info_button: tk.Button = tk.Button(
-            self.root,
-            image=self.__info_image,
-            **self.__button_parameters
-            )
+        info_image: tk.PhotoImage = tk.PhotoImage(file="assets/info.png").subsample(3)
+        info_active_image: tk.PhotoImage = tk.PhotoImage(file="assets/info-active.png").subsample(3)
+        self.__info_button: BottomButton = BottomButton(self.root, image=info_image, active_image=info_active_image, pop_up_text="AAAAAAAAAAA")
+        help_image: tk.PhotoImage = tk.PhotoImage(file="assets/help.png").subsample(3)
+        help_active_image: tk.PhotoImage = tk.PhotoImage(file="assets/help-active.png").subsample(3)
+        self.__help_button: BottomButton = BottomButton(self.root, image=help_image, active_image=help_active_image, pop_up_text="BBBBBBBB")
+        self.__pop_up_frames: dict = {"info": self.__info_button.pop_up_frame, "help": self.__help_button.pop_up_frame}
         
-        self.__help_button: tk.Button = tk.Button(
-            self.root,
-            image=self.__help_image,
-            **self.__button_parameters
-            )
         self.__version_label: tk.Label = tk.Label(
             self.root,
             text=f"V {program_version}",
@@ -47,7 +41,6 @@ class BottomFrame():
             font=font.Font(family=FontName.label, size=10, weight="bold")
             )
 
-        self.__frames_visibility: dict = {"info": False, "help": False}
         self.__info_frame: tk.Frame = tk.Frame(parent_frame)
         self.__help_frame: tk.Frame = tk.Frame(parent_frame)
         self.__hide_button_parameters: dict = {
