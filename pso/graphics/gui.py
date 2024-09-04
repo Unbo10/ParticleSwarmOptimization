@@ -15,13 +15,13 @@ class GUI:
     __root: tk.Tk = tk.Tk()
     def __init__(self, optimization_history: list[Optimization], program_version: str = "Error") -> None:
         # ? Future versions could include thread management. Could be an interesting way to start learning about parallelism and concurrency.
-        self._root_frame: tk.Frame = tk.Frame(GUI.__root, bg=Color.test2_bg)
+        self._master_frame: tk.Frame = tk.Frame(GUI.__root, bg=Color.test2_bg)
         self.__optimization_history: list[Optimization] = []
         self._window_height: int = 0
         self._window_width: int = 0
-        self.__exit_menu: ExitMenu = ExitMenu(self._root_frame, self._initialize_root)
-        self.__main_menu: MainMenu = MainMenu(self._root_frame, self._initialize_root, self._change_menu, program_version)
-        self.__select_menu: SelectMenu = SelectMenu(self._root_frame, self._initialize_root, self._change_menu, self.__optimization_history, window_width=750, window_height=500)
+        self.__exit_menu: ExitMenu = ExitMenu(self._master_frame, self._initialize_root)
+        self.__main_menu: MainMenu = MainMenu(self._master_frame, self._initialize_root, self._change_menu, program_version)
+        self.__select_menu: SelectMenu = SelectMenu(self._master_frame, self._initialize_root, self._change_menu, self.__optimization_history, window_width=750, window_height=500)
         self.__menus: dict = {"exit": self.__exit_menu, "main": self.__main_menu, "select": self.__select_menu}
 
     def _change_menu(self, menu_name="") -> None:
@@ -45,7 +45,7 @@ class GUI:
         top_left_x: int = (screen_width // 2) - (self.__window_width // 2)
         top_left_y: int = (screen_height // 2) - (self.__window_height // 2)
         GUI.__root.geometry(f"{self.__window_width}x{self.__window_height}+{top_left_x}+{top_left_y}")
-        self._root_frame.place(x=0, y=0, width=width, height=height)
+        self._master_frame.place(x=0, y=0, width=width, height=height)
 
         # * Setting icon for the application switcher, the dock and the taskbar (Windows)
         small_logo_path: str = "assets/ubuntu-logo.png"

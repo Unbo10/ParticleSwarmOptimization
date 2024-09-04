@@ -11,6 +11,7 @@ from pso.graphics.optionsButton import OptionsButton
 
 class SelectMenu():
     def __init__(self, parent_frame: tk.Frame, initialize_window: callable, change_menu: callable, optimization_history: list[Optimization], window_width: int, window_height: int):
+        # ! Add highlight color to the back button as well as KeyRelease-Return binding support
         self.__change_menu: callable = change_menu
         self.__optimization_history: list[Optimization] = optimization_history
         self.__window_width: int = window_width
