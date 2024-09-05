@@ -3,11 +3,12 @@ import os
 import tkinter as tk
 from tkinter import font
 
+from pso.graphics.backButton import BackButton
 from pso.graphics.colors import Color
 from pso.graphics.fonts import FontName
 from pso.optimization import Optimization
-from pso.graphics.optimizationFrame import OptimizationFrame
 from pso.graphics.optionsButton import OptionsButton
+from pso.graphics.optimizationFrame import OptimizationFrame
 
 class SelectMenu():
     def __init__(self, parent_frame: tk.Frame, initialize_window: callable, change_menu: callable, optimization_history: list[Optimization], window_width: int, window_height: int):
@@ -30,38 +31,17 @@ class SelectMenu():
         self.__scrollbar_width: int = 20
         self.__scrollbar: tk.Scrollbar = tk.Scrollbar(self.root, orient="vertical", command=self.__canvas.yview)
         # ! tk.Buttons could actually be overriden to get the best out of inheritance, especially in MainMenu
-        arrow_back_path: str = "assets/arrow-back.png"
-        self.__arrow_back_image: tk.PhotoImage = tk.PhotoImage(file=arrow_back_path).subsample(4)
-        arrow_back_path_active: str = "assets/arrow-back-active.png"
-        self.__arrow_back_image_active: tk.PhotoImage = tk.PhotoImage(file=arrow_back_path_active).subsample(4)
-        self.__back_button: tk.Button = tk.Button(self.root, image=self.__arrow_back_image, relief="flat", cursor="hand2", bg=Color.back_button_bg, activebackground=Color.back_button_abg, highlightthickness=0, borderwidth=0)
-        self.__no_optimizations_label: tk.Label = tk.Label(self.root, height=2, text="Nop optimizations have been made yet.", bg=Color.select_label_no_optim_bg, fg=Color.select_label_no_optim_fg) # ? Should it be conditioned to the length of the optimization list being 0 or is it good like this?
+        self.__back_button: BackButton = BackButton(self.root, image_path="assets/arrow-back.png", active_image_path="assets/arrow-back-active.png", width=self.__title_height*25, height=self.__title_height*25, change_menu=change_menu)
+        self.__no_optimizations_label: tk.Label = tk.Label(self.root, height=2, text="No optimizations have been made yet.", bg=Color.select_label_no_optim_bg, fg=Color.select_label_no_optim_fg)
         self.__create_optimization_button: OptionsButton = OptionsButton(self.root, text="Create optimization", callable=change_menu, callable_args={"menu_name": "create"}, padx=(self.__window_width//2 - 250,)*2, pady=(0,0))
         self.__optimization_frames: list[OptimizationFrame] = []
-
-    def __enter__back_button(self, e):
-        self.__back_button.config(image=self.__arrow_back_image_active, bg=Color.back_button_abg)    
-    def __leave_back_button(self, e):
-        self.__back_button.config(image=self.__arrow_back_image, bg=Color.back_button_bg)
-
-    def __click_back_button(self, e):
-        self.__back_button.config(activebackground=Color.back_button_cbg, bg=Color.back_button_cbg, image=self.__arrow_back_image)
-    
-    def __release_back_button(self, event: tk.Event):
-        self.__change_menu("main")
-
-    def __bind_back_button_to_events(self) -> None:
-        self.__back_button.bind("<Enter>", self.__enter__back_button)
-        self.__back_button.bind("<Leave>", self.__leave_back_button)
-        self.__back_button.bind("<Button-1>", self.__click_back_button)
-        self.__back_button.bind("<ButtonRelease-1>", self.__release_back_button)
 
     def display(self):
         self.__title_height = 2 # * To avoid recording the value from the previous display call
         self.__initialize_window(width=self.__window_width, height=self.__window_height, title="Select optimization - PSO")
         self.__title.pack(fill="x", anchor="e")
-        self.__bind_back_button_to_events()
-        self.__back_button.place(x=0, y=0, height=self.__title_height * 25, width=self.__title_height * 25)
+        self.__back_button.display(x=0, y=0)
+        self.__back_button.focus_set()
 
         if len(self.__optimization_history) == 0:
             print("len 0")

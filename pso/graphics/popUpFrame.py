@@ -6,8 +6,8 @@ from pso.graphics.colors import Color
 from pso.graphics.fonts import FontName
 
 class PopUpFrame(tk.Frame):
-    def __init__(self, main_frame: tk.Frame, name: str, height: int, width: int, y: int, text: str):
-        super().__init__(main_frame)
+    def __init__(self, menu_frame: tk.Frame, name: str, height: int, width: int, y: int, text: str):
+        super().__init__(menu_frame)
         self.name: str = name # ! Change to private when debugging is done
         self.__text_to_insert: str = text
         text_parameters: dict =  {
@@ -15,7 +15,7 @@ class PopUpFrame(tk.Frame):
             "fg": Color.bottom_label_fg,
             "font": font.Font(family=FontName.label, size=10),
             "wrap": "word",
-            "padx": 5,
+            "padx": 10,
             "pady": 5,  
             "borderwidth": 0,
             "highlightthickness": 0

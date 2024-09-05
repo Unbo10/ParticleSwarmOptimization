@@ -5,7 +5,7 @@ from pso.graphics.colors import Color
 from pso.graphics.popUpFrame import PopUpFrame
 
 class BottomButton(tk.Button):
-    def __init__(self, main_frame: tk.Frame, parent_frame: tk.Frame, image: tk.PhotoImage, active_image: tk.PhotoImage, pop_up_text: str, name: str, pop_up_frame_height: int, pop_up_frame_width: int, pop_up_frame_y: int, abg: str = Color.bottom_button_abg, cbg: str = Color.bottom_button_cbg, args: dict = {
+    def __init__(self, menu_frame: tk.Frame, parent_frame: tk.Frame, image: tk.PhotoImage, active_image: tk.PhotoImage, pop_up_text: str, name: str, pop_up_frame_height: int, pop_up_frame_width: int, pop_up_frame_y: int, abg: str = Color.bottom_button_abg, cbg: str = Color.bottom_button_cbg, args: dict = {
         "relief": "flat",
         "bg": Color.bottom_button_bg,
         "highlightbackground": Color.bottom_button_hbg,
@@ -20,7 +20,7 @@ class BottomButton(tk.Button):
         self.__bg: str = args["bg"]
         self.__abg: str = abg
         self.__cbg: str = cbg
-        self.pop_up_frame: PopUpFrame = PopUpFrame(main_frame, name=name, height=pop_up_frame_height, width=pop_up_frame_width, y=pop_up_frame_y, text=pop_up_text)
+        self.pop_up_frame: PopUpFrame = PopUpFrame(menu_frame, name=name, height=pop_up_frame_height, width=pop_up_frame_width, y=pop_up_frame_y, text=pop_up_text)
 
     def __enter(self, e):
         self.config(bg=self.__abg, activebackground=self.__abg, image=self.__active_image)
@@ -42,9 +42,7 @@ class BottomButton(tk.Button):
                 bg=self.__bg
             )
             # ! Could be improved: If we were to manage more than three 
-            print([frame.name for frame in other_frames])
         if self.pop_up_frame.visible == False:
-            print("C")
             for frame in other_frames:
                 frame.visible = False
                 frame.place_forget()
@@ -52,7 +50,6 @@ class BottomButton(tk.Button):
             self.pop_up_frame.display(other_frames[0])
         
         elif self.pop_up_frame.visible == True:
-            print("B")
             self.pop_up_frame.place_forget()
             self.pop_up_frame.visible = False
             for frame in other_frames:
@@ -60,7 +57,6 @@ class BottomButton(tk.Button):
                 frame.place_forget()
 
         else:
-            print("A")
             raise NotImplementedError("Frame not implemented in release method")
 
     def bind_to_events(self, pop_up_frames: dict):

@@ -19,7 +19,7 @@ class MainMenu():
         self._title_height: int = 40
         self._bottom_frame_height: int = 30
         self.__bottom_frame: BottomFrame = BottomFrame(master_frame, self.root, self._window_width, self._window_height, self._title_height, self._bottom_frame_height, program_version)
-        self.__options_frame: OptionsFrame = OptionsFrame(self.root, self._title, change_menu, self._window_width, self._window_height, self._title_height, self._bottom_frame_height)
+        self.__options_frame: OptionsFrame = OptionsFrame(self.root, change_menu, self._window_width, self._window_height, self._title_height, self._bottom_frame_height)
 
     # * The baseMenu idea was discarded to avoid a circular import with GUI.
             
@@ -35,7 +35,8 @@ class MainMenu():
 
     def forget(self):
         self.root.place_forget()
-        self.__bottom_frame.root.place_forget()
-        self.__options_frame.root.place_forget()
+        self.__bottom_frame.place_forget()
+        self.__options_frame.place_forget()
+        # TODO: Add padding to popUpframe
         
     

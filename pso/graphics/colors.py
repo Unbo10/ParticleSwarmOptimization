@@ -90,6 +90,7 @@ class Color:
     optim_button_hcolor: str = optim_button_abg
 
     # * Select menu
+    back_button_hcolor: str = "#000000"
     preview_button_hcolor: str = preview_button_abg
 
 

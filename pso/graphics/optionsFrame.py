@@ -5,28 +5,25 @@ from pso.graphics.optionsButton import OptionsButton
 from pso.graphics.colors import Color
 from pso.graphics.fonts import FontName
 
-class OptionsFrame():
-    def __init__(self, parent_frame: tk.Frame, title: tk.Label, change_menu: callable,  window_width: int, window_height: int, title_height, bottom_frame_height: int):
-        self.__parent_frame: tk.Frame = parent_frame
-        self.root: tk.Frame = tk.Frame(parent_frame, bg=Color.window_bg)
-        self.__change_menu: callable = change_menu
-        self.__title: tk.Label = title
+class OptionsFrame(tk.Frame):
+    def __init__(self, parent_frame: tk.Frame, change_menu: callable,  window_width: int, window_height: int, title_height, bottom_frame_height: int):
+        super().__init__(parent_frame, bg=Color.window_bg)
         self.__window_width: int = window_width
         self.__window_height: int = window_height
         self.__title_height: int = title_height
         self.__bottom_frame_height: int = bottom_frame_height
 
         BUTTON_PADDING: int = 6
-        self.__create_button: OptionsButton = OptionsButton(self.root, text="Create optimization", callable=change_menu, callable_args={"menu_name": "create"}, padx=BUTTON_PADDING*4, pady=(BUTTON_PADDING*2, BUTTON_PADDING))
-        self.__select_button: OptionsButton = OptionsButton(self.root, text="Select optimization", callable=change_menu, callable_args={"menu_name": "select"}, padx=BUTTON_PADDING*4, pady=BUTTON_PADDING)
-        self.__exit_button: OptionsButton = OptionsButton(self.root, text="Exit optimization", callable=change_menu, callable_args={"menu_name": "exit"}, padx=BUTTON_PADDING*4, pady=(BUTTON_PADDING, BUTTON_PADDING*2))
+        self.__create_button: OptionsButton = OptionsButton(self, text="Create optimization", callable=change_menu, callable_args={"menu_name": "create"}, padx=BUTTON_PADDING*4, pady=(BUTTON_PADDING*2, BUTTON_PADDING))
+        self.__select_button: OptionsButton = OptionsButton(self, text="Select optimization", callable=change_menu, callable_args={"menu_name": "select"}, padx=BUTTON_PADDING*4, pady=BUTTON_PADDING)
+        self.__exit_button: OptionsButton = OptionsButton(self, text="Exit optimization", callable=change_menu, callable_args={"menu_name": "exit"}, padx=BUTTON_PADDING*4, pady=(BUTTON_PADDING, BUTTON_PADDING*2))
         self.__buttons = [self.__create_button, self.__select_button, self.__exit_button]
 
     def display(self):
-        self.root.rowconfigure(0, weight=1)
-        self.root.rowconfigure(1, weight=1)
-        self.root.rowconfigure(2, weight=1)
-        self.root.columnconfigure(0, weight=1)
+        self.rowconfigure(0, weight=1)
+        self.rowconfigure(1, weight=1)
+        self.rowconfigure(2, weight=1)
+        self.columnconfigure(0, weight=1)
         self.__create_button.focus_set()
         button_row = 0
         for button in self.__buttons:
@@ -35,5 +32,5 @@ class OptionsFrame():
         # ! CHECK: Functionality of the binding in Windows
         frame_width = self.__window_width
         frame_height = self.__window_height - (self.__title_height + self.__bottom_frame_height)
-        self.root.place(x=0, y=self.__title_height, width=frame_width, height=frame_height)
+        self.place(x=0, y=self.__title_height, width=frame_width, height=frame_height)
 
