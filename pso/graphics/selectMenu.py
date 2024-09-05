@@ -50,14 +50,17 @@ class SelectMenu():
     def __release_back_button(self, event: tk.Event):
         self.__change_menu("main")
 
-    def display(self):
-        self.__title_height = 2 # * To avoid recording the value from the previous display call
-        self.__initialize_window(width=self.__window_width, height=self.__window_height, title="Select optimization - PSO")
-        self.__title.pack(fill="x", anchor="e")
+    def __bind_back_button_to_events(self) -> None:
         self.__back_button.bind("<Enter>", self.__enter__back_button)
         self.__back_button.bind("<Leave>", self.__leave_back_button)
         self.__back_button.bind("<Button-1>", self.__click_back_button)
         self.__back_button.bind("<ButtonRelease-1>", self.__release_back_button)
+
+    def display(self):
+        self.__title_height = 2 # * To avoid recording the value from the previous display call
+        self.__initialize_window(width=self.__window_width, height=self.__window_height, title="Select optimization - PSO")
+        self.__title.pack(fill="x", anchor="e")
+        self.__bind_back_button_to_events()
         self.__back_button.place(x=0, y=0, height=self.__title_height * 25, width=self.__title_height * 25)
 
         if len(self.__optimization_history) == 0:
@@ -80,6 +83,7 @@ class SelectMenu():
             self.__container_frame.bind("<Button-5>", self.__scroll_mouse_wheel)
             self.__title_height *= 25 # * To compensate for the difference between pixels and font size
             self.__canvas.place(y=(self.__title_height) + 15, x=15, width=self.__window_width - (30 + self.__scrollbar_width), height=self.__window_height - (self.__title_height + 30))
+            self.__canvas.yview_moveto(0) # * So that every time the menu is displayed it is showing the top optimizations and not the ones the user was seeing before they went back to the main menu.
             self.__scrollbar.place(x=self.__window_width - (15 + self.__scrollbar_width), y=self.__title_height + 15, height=self.__window_height - (self.__title_height + 30), width=self.__scrollbar_width)
             self.__canvas.configure(yscrollcommand=self.__scrollbar.set)
             for frame in self.__optimization_frames:

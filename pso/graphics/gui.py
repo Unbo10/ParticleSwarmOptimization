@@ -16,7 +16,7 @@ class GUI:
     def __init__(self, optimization_history: list[Optimization], program_version: str = "Error") -> None:
         # ? Future versions could include thread management. Could be an interesting way to start learning about parallelism and concurrency.
         self._master_frame: tk.Frame = tk.Frame(GUI.__root, bg=Color.test2_bg)
-        self.__optimization_history: list[Optimization] = []
+        self.__optimization_history: list[Optimization] = [Optimization(0), Optimization(1), Optimization(2), Optimization(3), Optimization(4)]
         self._window_height: int = 0
         self._window_width: int = 0
         self.__exit_menu: ExitMenu = ExitMenu(self._master_frame, self._initialize_root)

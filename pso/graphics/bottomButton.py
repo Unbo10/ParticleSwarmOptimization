@@ -43,30 +43,25 @@ class BottomButton(tk.Button):
             )
             # ! Could be improved: If we were to manage more than three 
             print([frame.name for frame in other_frames])
-        self.pop_up_frame.display(other_frames[0])
-        # if self.pop_up_frame.visible == False:
-        #     print("C")
-        #     for frame in other_frames:
-        #         frame.visible = False
-        #         frame.place_forget()
-        #     self.pop_up_frame.visible = True
-        #     self.pop_up_frame.display(other_frames[0])
+        if self.pop_up_frame.visible == False:
+            print("C")
+            for frame in other_frames:
+                frame.visible = False
+                frame.place_forget()
+            self.pop_up_frame.visible = True
+            self.pop_up_frame.display(other_frames[0])
         
-        # elif self.pop_up_frame.visible == True:
-        #     print("B")
-        #     self.place_forget()
-        #     self.pop_up_frame.visible = False
-        #     for frame in other_frames:
-        #         frame.visible = False
-        #         frame.place_forget()
-        #     # other_frames[0].visible = True
-        #     # other_frames[0].display(self)
-        #     print("A")
+        elif self.pop_up_frame.visible == True:
+            print("B")
+            self.pop_up_frame.place_forget()
+            self.pop_up_frame.visible = False
+            for frame in other_frames:
+                frame.visible = False
+                frame.place_forget()
 
-        # else:
-        #     raise NotImplementedError("Frame not implemented in release method")
-        # TODO after: Configure the release method so that it correctly opens and closes different frames depending on their visibility
-        # TODO: add a bind_to_event methods to all classes that require it. Remember, a method represents a single behavior just as a function represents a single action.
+        else:
+            print("A")
+            raise NotImplementedError("Frame not implemented in release method")
 
     def bind_to_events(self, pop_up_frames: dict):
         self.bind("<Enter>", self.__enter)

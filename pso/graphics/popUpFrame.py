@@ -34,6 +34,11 @@ class PopUpFrame(tk.Frame):
             "cursor": "hand2",
             "text": "Hide"
         }
+        self.__text.config(state="normal") # ! Check if this line is necessary
+        self.__text.insert(index="end", chars=self.__text_to_insert)
+        self.__text.tag_config(tagName="center", justify="center")
+        self.__text.tag_add("center", "1.0", "end") # ! Check which parameters do this args are being assigned to
+        self.__text.config(state="disabled")
         self.__hide_button: tk.Button = tk.Button(self, **button_parameters)
         scrollbar_parameters: dict = {
             "bg": Color.bottom_scrollbar_bg,
@@ -43,7 +48,7 @@ class PopUpFrame(tk.Frame):
             "highlightcolor": Color.bottom_scrollbar_hcolor,
             "highlightthickness": 1,
             "borderwidth": 0,
-            "elementborderwidth": 0,
+            "elementborderwidth": 1,
             "width": 10,
         }
         self.__scrollbar: tk.Scrollbar = tk.Scrollbar(self, scrollbar_parameters)
@@ -81,17 +86,12 @@ class PopUpFrame(tk.Frame):
         self.rowconfigure(0, weight=0)
         self.rowconfigure(1, weight=1)
         self.__hide_button.grid(row=0, column=0, columnspan=2, sticky="nsew")
-        self.__text.config(state="normal") # ! Check if this line is necessary
-        self.__text.insert(index="end", chars=self.__text_to_insert)
-        self.__text.tag_config(tagName="center", justify="center")
-        self.__text.tag_add("center", "1.0", "end") # ! Check which parameters do this args are being assigned to
         self.__text.config(yscrollcommand=self.__scrollbar.set)
-        self.__text.config(state="disabled")
-        self.__text.grid(row=1, column=0, sticky="ew")
         self.__scrollbar.config(command=self.__text.yview)
+        self.__text.grid(row=1, column=0, sticky="ew")
+        self.__text.yview_moveto(0) # * Reset the visible area of the text.
         self.__scrollbar.grid(row=1, column=1, sticky="ns")
         self.place(x=0, y=self.__y, width=self.__width, height=self.__height)
-
 
     def get_name(self) -> str:
         return self.name
