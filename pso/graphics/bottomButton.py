@@ -69,4 +69,3 @@ class BottomButton(tk.Button):
     def display(self, pop_up_frames: list[PopUpFrame], row: int, column: int, sticky: str):
         self.bind_to_events(pop_up_frames)
         self.grid(row=row, column=column, sticky=sticky)
-

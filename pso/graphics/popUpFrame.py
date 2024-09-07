@@ -8,7 +8,7 @@ from pso.graphics.fonts import FontName
 class PopUpFrame(tk.Frame):
     def __init__(self, menu_frame: tk.Frame, name: str, height: int, width: int, y: int, text: str):
         super().__init__(menu_frame)
-        self.name: str = name # ! Change to private when debugging is done
+        self.__name: str = name
         self.__text_to_insert: str = text
         text_parameters: dict =  {
             "bg": Color.bottom_label_bg,
@@ -34,10 +34,10 @@ class PopUpFrame(tk.Frame):
             "cursor": "hand2",
             "text": "Hide"
         }
-        self.__text.config(state="normal") # ! Check if this line is necessary
+        # self.__text.config(state="normal") # * Not necessary because "normal" is the default behavior of a tk.Text
         self.__text.insert(index="end", chars=self.__text_to_insert)
         self.__text.tag_config(tagName="center", justify="center")
-        self.__text.tag_add("center", "1.0", "end") # ! Check which parameters do this args are being assigned to
+        self.__text.tag_add("center", "1.0", "end") # * Apply center tag to all the characters
         self.__text.config(state="disabled")
         self.__hide_button: tk.Button = tk.Button(self, **button_parameters)
         scrollbar_parameters: dict = {
@@ -94,4 +94,4 @@ class PopUpFrame(tk.Frame):
         self.place(x=0, y=self.__y, width=self.__width, height=self.__height)
 
     def get_name(self) -> str:
-        return self.name
+        return self.__name

@@ -13,28 +13,34 @@ from pso.graphics.optimizationFrame import OptimizationFrame
 class SelectMenu():
     def __init__(self, parent_frame: tk.Frame, initialize_window: callable, change_menu: callable, optimization_history: list[Optimization], window_width: int, window_height: int):
         # ! Add highlight color to the back button as well as KeyRelease-Return binding support
-        self.__change_menu: callable = change_menu
         self.__optimization_history: list[Optimization] = optimization_history
         self.__window_width: int = window_width
         self.__window_height: int = window_height
-        self.__initialize_window: callable = initialize_window
         self.__title_height: int = 2 # * Text units, not pixels. It doesn't correspond exactly to the size of the font. Default is 17, Ubuntu size 15 is 15 + 9 = 24 px.
+        self.__initialize_window: callable = initialize_window
         self.root: tk.Frame = tk.Frame(parent_frame, bg=Color.test1_bg)
 
         self.__title: tk.Label = tk.Label(self.root, text="Select a previous optimization", height=self.__title_height, bg=Color.select_title_bg, fg=Color.select_title_fg, font=font.Font(family=FontName.title, size=15))
-        # print(font.Font(family=FontName.title, size=15).metrics("linespace"))
         self.__canvas: tk.Canvas = tk.Canvas(self.root, bg=Color.test1_bg)
         container_frame_y_padding: int = 30
         self.__container_frame_height: int = self.__window_height - (self.__title_height + container_frame_y_padding)
         self.__container_frame_width: int = self.__window_width - container_frame_y_padding
-        self.__container_frame: tk.Frame = tk.Frame(self.__canvas, bg=Color.test3_bg) # * Will be the basis for the canvas of optimization frames and the scrollbar
+        self.__container_frame: tk.Frame = tk.Frame(self.__canvas, bg=Color.test3_bg) # * Will be the basis for or the root of the canvas containing optimization frames and the scrollbar
         self.__scrollbar_width: int = 20
         self.__scrollbar: tk.Scrollbar = tk.Scrollbar(self.root, orient="vertical", command=self.__canvas.yview)
-        # ! tk.Buttons could actually be overriden to get the best out of inheritance, especially in MainMenu
         self.__back_button: BackButton = BackButton(self.root, image_path="assets/arrow-back.png", active_image_path="assets/arrow-back-active.png", width=self.__title_height*25, height=self.__title_height*25, change_menu=change_menu)
         self.__no_optimizations_label: tk.Label = tk.Label(self.root, height=2, text="No optimizations have been made yet.", bg=Color.select_label_no_optim_bg, fg=Color.select_label_no_optim_fg)
         self.__create_optimization_button: OptionsButton = OptionsButton(self.root, text="Create optimization", callable=change_menu, callable_args={"menu_name": "create"}, padx=(self.__window_width//2 - 250,)*2, pady=(0,0))
         self.__optimization_frames: list[OptimizationFrame] = []
+
+    def __scroll_mouse_wheel(self, event: tk.Event):
+        if os.name == "nt":
+            self.__canvas.yview_scroll(int(-1*(event.delta/120)), "units")
+        elif os.name == "posix":
+            if event.num == 4:
+                self.__canvas.yview_scroll(-1, "units")
+            elif event.num == 5:
+                self.__canvas.yview_scroll(1, "units")
 
     def display(self):
         self.__title_height = 2 # * To avoid recording the value from the previous display call
@@ -73,16 +79,6 @@ class SelectMenu():
         self.root.place(x=0, y=0, width=self.__window_width, height=self.__window_height)
         # print(self.__window_width, self.__window_height)
 
-    def __scroll_mouse_wheel(self, event):
-            if os.name == "nt":
-                self.__canvas.yview_scroll(int(-1*(event.delta/120)), "units")
-            elif os.name == "posix":
-                if event.num == 4:
-                    self.__canvas.yview_scroll(-1, "units")
-                elif event.num == 5:
-                    self.__canvas.yview_scroll(1, "units")
-
     def forget(self):
         self.root.place_forget()
         self.__canvas.place_forget()
-
