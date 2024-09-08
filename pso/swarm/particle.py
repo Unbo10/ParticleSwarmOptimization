@@ -127,7 +127,8 @@ class Particle:
         c1: float = self.__cognitive_coefficient
         c2: float = self.__social_coefficient
         final_velocity: np.ndarray = (w * initial_velocity) + (c1 * r1 * (pbest - x_i)) + (c2 * r2 * (gbest.get_coordinates() - x_i))
-        self.__velocity.set_coordinates(final_velocity)
+        final = np.clip(final_velocity, -5, 5)
+        self.__velocity.set_coordinates(final)
 
     def _update_pbest(self) -> None:
         """Updates the best position of the particle (__pbest) comparing the heuristic

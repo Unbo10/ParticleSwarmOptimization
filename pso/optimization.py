@@ -39,7 +39,7 @@ class Optimization:
         self.__index: int = index
         self._dimensions: int = dimensions
     
-    def heuristic(self, position: Position, selection: str = "4") -> float:
+    def heuristic(self, position: Position, selection: str = "3") -> float:
         """Heuristic function to be optimized."""
         # TODO: Make a better implementation of choosing the desired function, at the moment it's done manually, by modifying the variable selection through the parameters
         # TODO: Implement the second function to the dimension that the user selects. It is set to two dimensions. ? A dimension parameter in the heuristic ? 
@@ -84,9 +84,10 @@ class Optimization:
                     # * To record the initial states of the particles before optimizing them
                     particle._update_velocity(swarm.get_gbest())
                     particle.get_position()._update(particle.get_velocity())
+                    particle.get_velocity().set_coordinates(np.clip(particle.get_position().get_coordinates(), -5, 5))
                     
                     new_position = particle.get_position().get_coordinates()
-                    #new_position = np.clip(new_position, -3, 3)
+                    new_position = np.clip(new_position, -10, 10)
                     particle.get_position().set_coordinates(new_position) 
                     
                     # ! Gbest is not actually gbest
