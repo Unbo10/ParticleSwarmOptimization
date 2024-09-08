@@ -39,7 +39,7 @@ class Optimization:
         self.__index: int = index
         self._dimensions: int = dimensions
     
-    def heuristic(self, position: Position, selection: str = "3") -> float:
+    def heuristic(self, position: Position, selection: str = "4") -> float:
         """Heuristic function to be optimized."""
         # TODO: Make a better implementation of choosing the desired function, at the moment it's done manually, by modifying the variable selection through the parameters
         # TODO: Implement the second function to the dimension that the user selects. It is set to two dimensions. ? A dimension parameter in the heuristic ? 
@@ -49,14 +49,19 @@ class Optimization:
             return np.sum(np.square(position.get_coordinates()))
         
         elif selection == "2":
-            return 20 + np.sum(np.square(position.get_coordinates()) - 10*math.cos(2 * math.pi *position.get_coordinates()))
+            #return 20 + np.sum(np.square(position.get_coordinates()) - 10*math.cos(2 * math.pi *position.get_coordinates()[0]))
+            # Don't know why self._dimensions doesn't work, have to put manually the number of dimensions
+            sum = 10 * 2
+            for i in range (2):
+                sum += position.get_coordinates()[i]**2 - 10*math.cos(2 * math.pi *position.get_coordinates()[i])
+            return sum 
         
-        elif selection == "3":
+        elif selection == "3": #(0,-1)
             x = position.get_coordinates()[0]
             y = position.get_coordinates()[1]
             return((1 + (x+y+1)**2 * (19 - 14 * x + 3 * x**2 - 14 * y + 6*x*y + 3*y**2)) * (30 + (2*x - 3*y)**2 * (18 - 32 * x + 12 * x**2 + 48 * y - 36*x*y + 27 * y**2)))
         
-        elif selection == "4":
+        elif selection == "4": #(1,3)
             x = position.get_coordinates()[0]
             y = position.get_coordinates()[1]
             return (x + 2*y - 7)**2 + (2*x + y - 5)**2
@@ -115,7 +120,7 @@ class Optimization:
             # * Seems to be working fine
             if iteration_num != self.__iterations:
                 optimization_df = pd.concat([optimization_df, nan_df])
-            print(f"Global best: {swarm.get_gbest()}, {swarm.get_heuristic()(swarm.get_gbest())}\n")
+            print(f"Global best: {swarm.get_gbest()}, Heuristic value:{swarm.get_heuristic()(swarm.get_gbest())}\n")
 
         # * Append the indexes of the particles with the best heuristic to the
         # * database and create a spreadsheet with the optimization results.
@@ -137,6 +142,6 @@ class Optimization:
 
 if __name__ == "__main__":
     data = Data(excel_file_name="session1_results")
-    main = Optimization(0, data=data, cognitive_coefficient=2.8, inertia_coefficient=0.8, social_coefficient=2.5, particle_amount=20, dimensions=3, iterations=50) # ! CHECK: Minimum dimension
+    main = Optimization(0, data=data, cognitive_coefficient=2.8, inertia_coefficient=0.8, social_coefficient=2.5, particle_amount=10, dimensions=3, iterations=200) # ! CHECK: Minimum dimension
     main.optimize()
     print(main.get_swarm().get_gbest())
