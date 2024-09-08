@@ -39,7 +39,7 @@ class Optimization:
         self.__index: int = index
         self._dimensions: int = dimensions
     
-    def heuristic(self, position: Position, selection: str = "4") -> float:
+    def heuristic(self, position: Position, selection: str = "2") -> float:
         """Heuristic function to be optimized."""
         # TODO: Make a better implementation of choosing the desired function, at the moment it's done manually, by modifying the variable selection through the parameters
         # TODO: Implement the second function to the dimension that the user selects. It is set to two dimensions. ? A dimension parameter in the heuristic ? 
@@ -142,6 +142,6 @@ class Optimization:
 
 if __name__ == "__main__":
     data = Data(excel_file_name="session1_results")
-    main = Optimization(0, data=data, cognitive_coefficient=2.8, inertia_coefficient=0.8, social_coefficient=2.5, particle_amount=10, dimensions=3, iterations=200) # ! CHECK: Minimum dimension
+    main = Optimization(0, data=data, cognitive_coefficient=1.5, inertia_coefficient=0.4, social_coefficient=1.5, particle_amount=20, dimensions=3, iterations=100) # ! CHECK: Minimum dimension
     main.optimize()
     print(main.get_swarm().get_gbest())
