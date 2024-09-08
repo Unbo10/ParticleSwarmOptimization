@@ -20,6 +20,7 @@ vector.
 
 from pso.vector.base_vector import Vector
 from pso.vector.velocity import Velocity 
+import numpy as np
 
 # ! Is a position vector really needed? Could  it be only a Heuristic?
 class Position(Vector):

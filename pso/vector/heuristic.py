@@ -19,12 +19,12 @@ Other getters inherited from the Vector class of the base_vector module.
 """
 
 import numpy as np
-
+import math
 from pso.vector.base_vector import Vector
 
 def default_heuristic(position: Vector, choice: int) -> float:
+    #return 20 + np.sum(np.square(position.get_coordinates()) - 10*math.cos(2 * math.pi *position.get_coordinates()))
     return np.sum(np.square(position.get_coordinates()))
-
 class Heuristic(Vector):
     """
     Represents a heuristic vector used in Particle Swarm Optimization.

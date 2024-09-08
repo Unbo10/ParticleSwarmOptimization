@@ -39,7 +39,7 @@ class Optimization:
         self.__index: int = index
         self._dimensions: int = dimensions
     
-    def heuristic(self, position: Position, selection: str = "1") -> float:
+    def heuristic(self, position: Position, selection: str = "4") -> float:
         """Heuristic function to be optimized."""
         # TODO: Make a better implementation of choosing the desired function, at the moment it's done manually, by modifying the variable selection through the parameters
         # TODO: Implement the second function to the dimension that the user selects. It is set to two dimensions. ? A dimension parameter in the heuristic ? 
@@ -84,6 +84,11 @@ class Optimization:
                     # * To record the initial states of the particles before optimizing them
                     particle._update_velocity(swarm.get_gbest())
                     particle.get_position()._update(particle.get_velocity())
+                    
+                    new_position = particle.get_position().get_coordinates()
+                    #new_position = np.clip(new_position, -3, 3)
+                    particle.get_position().set_coordinates(new_position) 
+                    
                     # ! Gbest is not actually gbest
                     particle.get_heuristic()._update(particle.get_position())
                     particle._update_pbest()
@@ -109,7 +114,7 @@ class Optimization:
             # * Seems to be working fine
             if iteration_num != self.__iterations:
                 optimization_df = pd.concat([optimization_df, nan_df])
-            print(f"Global best: {swarm.get_gbest()}\n")
+            print(f"Global best: {swarm.get_gbest()}, {swarm.get_heuristic()(swarm.get_gbest())}\n")
 
         # * Append the indexes of the particles with the best heuristic to the
         # * database and create a spreadsheet with the optimization results.
@@ -131,6 +136,6 @@ class Optimization:
 
 if __name__ == "__main__":
     data = Data(excel_file_name="session1_results")
-    main = Optimization(0, data=data, cognitive_coefficient=2.8, inertia_coefficient=0.8, social_coefficient=2.5, particle_amount=20, dimensions=2, iterations=50) # ! CHECK: Minimum dimension
+    main = Optimization(0, data=data, cognitive_coefficient=2.8, inertia_coefficient=0.8, social_coefficient=2.5, particle_amount=20, dimensions=3, iterations=50) # ! CHECK: Minimum dimension
     main.optimize()
-    # print(main.get_swarm().get_gbest())
+    print(main.get_swarm().get_gbest())
