@@ -148,7 +148,9 @@ class ParticleSwarm:
         dimensions: int = self.__particles[0].get_position().get_dimensions() # ? Might be a better way to do it
         gbest_index: int = 0
         for particle in self.__particles:
-            if particle.get_heuristic().get_coordinates()[dimensions] < self._heuristic_f(self.__gbest, 0):
+            #if particle.get_heuristic().get_coordinates()[dimensions] < self._heuristic_f(self.__gbest):
+            if self._heuristic_f(particle.get_position().get_coordinates()) < self._heuristic_f(self.__gbest):
+                print(f"{particle.get_heuristic().get_coordinates()[dimensions]}  <  {self._heuristic_f(self.__gbest)}")
                 self.__gbest.set_coordinates(particle.get_position().get_coordinates().copy())
                 gbest_index = particle.get_index()
         self.__particles[gbest_index].has_gbest = True
