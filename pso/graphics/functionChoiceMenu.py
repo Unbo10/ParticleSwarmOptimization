@@ -14,9 +14,7 @@ class FunctionChoiceMenu():
         self.__label: tk.Label = tk.Label(parent_frame, text=text, bg=Color.create_label_bg, fg=Color.create_label_fg, font=font.Font(family=FontName.label, size=12))
 
     def __trigger_graph_change(self, *args) -> None:
-        print("0")
         self.__display_graph(self.__choice.get())
-        print("1")
 
     def grid(self, label_row: int, column: int, sticky: str) -> None:
         self.__label.grid(row=label_row, column=column, sticky=sticky, padx=(10, 0), pady=20)

@@ -17,7 +17,7 @@ class GUI:
     def __init__(self, optimization_history: list[Optimization], program_version: str = "Error") -> None:
         # ? Future versions could include thread management. Could be an interesting way to start learning about parallelism and concurrency.
         self._master_frame: tk.Frame = tk.Frame(GUI.__root, bg=Color.test2_bg)
-        self._optimization_history: list[Optimization] = [Optimization(0), Optimization(1), Optimization(2), Optimization(3), Optimization(4)] # ? Would this one be protected or public?
+        self._optimization_history: list[Optimization] = [Optimization(0), Optimization(1), Optimization(2), Optimization(3)] # ? Would this one be protected or public?
         self._window_height: int = 0
         self._window_width: int = 0
         self.__create_menu: CreateMenu = CreateMenu(self._master_frame, initialize_window=self._initialize_root, change_menu=self._change_menu, optimization_history=self._optimization_history, window_width=750, window_height=500)
@@ -62,7 +62,7 @@ class GUI:
         GUI.__root.configure(bg=Color.window_bg)
 
     def run(self):
-        self._change_menu("main")
+        self._change_menu("select")
         print(GUI.__root.mainloop())
 
 if __name__ == "__main__":
