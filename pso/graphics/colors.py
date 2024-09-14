@@ -13,10 +13,27 @@ class Color:
     window_bg: str = "#f0f0f0"
     goodbye_frame_bg: str = "#1b1b1b"
 
+    # ! Consider implementing hbg in all buttons
+
         # * Select menu
-    select_inner_frame_bg: str = "#91b5e4"
+    select_inner_frame_bg: str = "#afcff8"
     select_inner_frame_fg: str = "#000000"
     select_inner_button_bg: str = "#f0f0f0"
+
+    # * Create optimization menu
+    create_entry_bg: str = "#d3d3d3"
+    create_entry_fg: str = "#000000"
+
+    create_label_bg: str = "#d3d3d3"
+    create_label_fg: str = "#000000"
+
+    create_button_bg: str = "#95d8ec"
+    create_button_fg: str = "#000000"
+    create_button_abg: str = "#d3d3d3"
+    create_button_afg: str = "#000000"
+    create_button_hbg: str = "#d3d3d3"
+    create_button_hcolor: str = "#000000"
+    create_button_cbg: str = ""
 
     # * BUTTONS, LABELS AND TEXT
 

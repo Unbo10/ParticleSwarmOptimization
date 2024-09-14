@@ -1,3 +1,4 @@
+from copy import deepcopy
 import os
 
 import tkinter as tk
@@ -13,7 +14,8 @@ from pso.graphics.optimizationFrame import OptimizationFrame
 class SelectMenu():
     def __init__(self, parent_frame: tk.Frame, initialize_window: callable, change_menu: callable, optimization_history: list[Optimization], window_width: int, window_height: int):
         # ! Add highlight color to the back button as well as KeyRelease-Return binding support
-        self.__optimization_history: list[Optimization] = optimization_history
+        self.__optimization_history: list[Optimization] = deepcopy(optimization_history)
+        self.__optimization_history.reverse()
         self.__window_width: int = window_width
         self.__window_height: int = window_height
         self.__title_height: int = 2 # * Text units, not pixels. It doesn't correspond exactly to the size of the font. Default is 17, Ubuntu size 15 is 15 + 9 = 24 px.
@@ -32,6 +34,8 @@ class SelectMenu():
         self.__no_optimizations_label: tk.Label = tk.Label(self.root, height=2, text="No optimizations have been made yet.", bg=Color.select_label_no_optim_bg, fg=Color.select_label_no_optim_fg)
         self.__create_optimization_button: OptionsButton = OptionsButton(self.root, text="Create optimization", callable=change_menu, callable_args={"menu_name": "create"}, padx=(self.__window_width//2 - 250,)*2, pady=(0,0))
         self.__optimization_frames: list[OptimizationFrame] = []
+
+    # ! BUG IN CANVAS: Not all optimizations are visible (scrolling region too short).
 
     def __scroll_mouse_wheel(self, event: tk.Event):
         if os.name == "nt":

@@ -32,6 +32,6 @@ class ExitMenu():
         self.__parent_frame.after(500, self.__parent_frame.quit)
 
     def forget(self):
-        pass
+        self.root.forget()
 
     
