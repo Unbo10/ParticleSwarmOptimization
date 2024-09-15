@@ -6,6 +6,7 @@ from pso.graphics.fonts import FontName
 
 class FunctionChoiceMenu():
     def __init__(self, parent_frame: tk.Frame, text: str, options: list[str], display_graph: callable) -> None:
+        self.__options: list[str] = options
         self.__display_graph: callable = display_graph
         self.__choice: tk.StringVar = tk.StringVar()
         self.__choice.set(options[0])
@@ -17,5 +18,9 @@ class FunctionChoiceMenu():
         self.__display_graph(self.__choice.get())
 
     def grid(self, label_row: int, column: int, sticky: str) -> None:
+        self.__choice.set(self.__options[0])
         self.__label.grid(row=label_row, column=column, sticky=sticky, padx=(10, 0), pady=20)
         self.__dropdown_menu.grid(row=label_row, column=column + 1, sticky=sticky, padx=(0, 10), pady=20) # ! Padding seems to have a limited effect in an OptionMenu
+
+    def get_choice(self) -> str:
+        return self.__choice.get()

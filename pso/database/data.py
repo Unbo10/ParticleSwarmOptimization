@@ -27,7 +27,7 @@ class Data:
             
         # ? We may want to implement this using with
         
-        if self.__xlsx_name not in os.listdir():
+        if not os.path.exists(self.__xlsx_path):
             self.create_spreadsheet()
         
         # * Open the workbook and CREATE THE SHEET
@@ -70,7 +70,7 @@ class Data:
         # * Setting and styling the TITLE
         sheet.merge_cells("B2:G2")
         sheet.row_dimensions[2].height = 45
-        sheet["B2"] = f"PSO optimization session {self.__number_of_optimizations} results"
+        sheet["B2"] = f"PSO optimization {self.__number_of_optimizations} results"
         title_cell = sheet.cell(row=2, column=2)
         title_cell.alignment = px_styles.Alignment(horizontal="center",
             vertical="center")

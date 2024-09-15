@@ -29,40 +29,53 @@ from pso.vector.position import Position
 from pso.database.data import Data
 
 class Optimization:
-    def __init__(self, index: int, data: Data = Data("test"), cognitive_coefficient: float = 2.05, inertia_coefficient: float = 0.7, social_coefficient: float = 2.05, particle_amount: int = 10, dimensions: int = 3, iterations: int = 20) -> None:
+    def __init__(self, index: int, data: Data = Data("test"), cognitive_coefficient: float = 2.05, inertia_coefficient: float = 0.7, social_coefficient: float = 2.05, function_selection: str = "Sphere", particle_amount: int = 10, dimensions: int = 3, iterations: int = 20) -> None:
         self.__data: Data = data
         # ? Might need to make a heuristic function class or at least a
         # ? heuristic function attribute to display it in the select menu of the GUI.
         self.__iterations: int = iterations
         # * So it doesn't create two particle swarms with different dimensions
-        self.__swarm: ParticleSwarm = ParticleSwarm(inertia_coefficient, cognitive_coefficient, social_coefficient, dimensions, particle_amount, self.heuristic)
+        self.__function_selection: str = function_selection
+        self.__swarm: ParticleSwarm = ParticleSwarm(self.heuristic(function_selection), inertia_coefficient, cognitive_coefficient, social_coefficient, dimensions, particle_amount)
         self.__index: int = index
         self._dimensions: int = dimensions
+
+    def sphere_f(self, position: Position):
+        return np.sum(np.square(position.get_coordinates()))
     
-    def heuristic(self, position: Position, selection: str = "1") -> float:
+    def booth_f(self, position: Position):
+        x = position.get_coordinates()[0]
+        y = position.get_coordinates()[1]
+        return (x + 2*y - 7)**2 + (2*x + y - 5)**2
+    
+    def goldstein_price_f(self, position: Position):
+        x = position.get_coordinates()[0]
+        y = position.get_coordinates()[1]
+        return((1 + (x+y+1)**2 * (19 - 14 * x + 3 * x**2 - 14 * y + 6*x*y + 3*y**2)) * (30 + (2*x - 3*y)**2 * (18 - 32 * x + 12 * x**2 + 48 * y - 36*x*y + 27 * y**2)))
+
+    def rastrigin_f(self, position: Position):
+        return 20 + np.sum(np.square(position.get_coordinates()) - 10*np.cos(2 * np.pi *position.get_coordinates()))
+    
+    def heuristic(self, selection: str) -> float:
         """Heuristic function to be optimized."""
         # TODO: Make a better implementation of choosing the desired function, at the moment it's done manually, by modifying the variable selection through the parameters
         # TODO: Implement the second function to the dimension that the user selects. It is set to two dimensions. ? A dimension parameter in the heuristic ? 
         # * Agree, but what should be then the type of the heuristic_value? A list or maybe an ndarray?
         
-        if selection == "1":
-            return np.sum(np.square(position.get_coordinates()))
+        if selection == "Sphere":
+            return self.sphere_f
         
-        elif selection == "2":
-            return 20 + np.sum(np.square(position.get_coordinates()) - 10*math.cos(2 * math.pi *position.get_coordinates()))
+        if selection == "Booth":
+            return self.booth_f
         
-        elif selection == "3":
-            x = position.get_coordinates()[0]
-            y = position.get_coordinates()[1]
-            return((1 + (x+y+1)**2 * (19 - 14 * x + 3 * x**2 - 14 * y + 6*x*y + 3*y**2)) * (30 + (2*x - 3*y)**2 * (18 - 32 * x + 12 * x**2 + 48 * y - 36*x*y + 27 * y**2)))
+        if selection == "Goldstein-Price":
+            return self.goldstein_price_f
         
-        elif selection == "4":
-            x = position.get_coordinates()[0]
-            y = position.get_coordinates()[1]
-            return (x + 2*y - 7)**2 + (2*x + y - 5)**2
-        
+        elif selection == "Rastrigin":
+            return self.rastrigin_f
+                                
         else:
-            return np.sum(np.square(position.get_coordinates()))
+            raise NotImplementedError(f"Function {selection} not implemented")
         
     def optimize(self) -> None:
         """Optimizes the heuristic function using the PSO algorithm."""
@@ -119,6 +132,9 @@ class Optimization:
     
     def get_dimensions(self) -> int:
         return self._dimensions
+    
+    def get_function_selection(self) -> str:
+        return self.__function_selection
     
     def get_index(self) -> int:
         return self.__index

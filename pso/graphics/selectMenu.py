@@ -1,4 +1,3 @@
-from copy import deepcopy
 import os
 
 import tkinter as tk
@@ -13,8 +12,7 @@ from pso.graphics.optimizationFrame import OptimizationFrame
 
 class SelectMenu():
     def __init__(self, parent_frame: tk.Frame, initialize_window: callable, change_menu: callable, optimization_history: list[Optimization], window_width: int, window_height: int):
-        # ! Add highlight color to the back button as well as KeyRelease-Return binding support
-        self.__optimization_history: list[Optimization] = deepcopy(optimization_history)
+        self.__optimization_history: list[Optimization] = optimization_history
         self.__optimization_history.reverse()
         self.__window_width: int = window_width
         self.__window_height: int = window_height
@@ -29,12 +27,10 @@ class SelectMenu():
         self.__container_frame: tk.Frame = tk.Frame(self.__canvas, bg=Color.test3_bg) # * Will be the basis for or the root of the canvas containing optimization frames and the scrollbar
         self.__scrollbar_width: int = 20
         self.__scrollbar: tk.Scrollbar = tk.Scrollbar(self.root, orient="vertical", command=self.__canvas.yview)
-        self.__back_button: BackButton = BackButton(self.root, image_path="assets/arrow-back.png", active_image_path="assets/arrow-back-active.png", width=self.__title_height*25, height=self.__title_height*25, change_menu=change_menu)
+        self.__back_button: BackButton = BackButton(self.root, image_path="graphics/assets/arrow-back.png", active_image_path="graphics/assets/arrow-back-active.png", width=self.__title_height*25, height=self.__title_height*25, change_menu=change_menu)
         self.__no_optimizations_label: tk.Label = tk.Label(self.root, height=2, text="No optimizations have been made yet.", bg=Color.select_label_no_optim_bg, fg=Color.select_label_no_optim_fg)
         self.__create_optimization_button: OptionsButton = OptionsButton(self.root, text="Create optimization", callable=change_menu, callable_args={"menu_name": "create"}, padx=(self.__window_width//2 - 250,)*2, pady=(0,0))
         self.__optimization_frames: list[OptimizationFrame] = []
-
-    # ! BUG IN CANVAS: Not all optimizations are visible (scrolling region too short).
 
     def __scroll_mouse_wheel(self, event: tk.Event):
         if os.name == "nt":
@@ -59,6 +55,8 @@ class SelectMenu():
             self.__create_optimization_button.pack_display(fill="x", anchor="center")
 
         else:
+            self.__no_optimizations_label.pack_forget()
+            self.__create_optimization_button.forget()
             index = 0
             for optimization in self.__optimization_history:
                 self.__optimization_frames.append(OptimizationFrame(self.__container_frame, optimization, width=self.__container_frame_width - 50, scrollbar_width=self.__scrollbar_width, height=120, separation=20, frame_index=index))
