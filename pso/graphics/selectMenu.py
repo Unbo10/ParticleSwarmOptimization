@@ -27,7 +27,9 @@ class SelectMenu():
         self.__container_frame: tk.Frame = tk.Frame(self.__canvas, bg=Color.test3_bg) # * Will be the basis for or the root of the canvas containing optimization frames and the scrollbar
         self.__scrollbar_width: int = 20
         self.__scrollbar: tk.Scrollbar = tk.Scrollbar(self.root, orient="vertical", command=self.__canvas.yview)
-        self.__back_button: BackButton = BackButton(self.root, image_path="graphics/assets/arrow-back.png", active_image_path="graphics/assets/arrow-back-active.png", width=self.__title_height*25, height=self.__title_height*25, change_menu=change_menu)
+        back_button_image: tk.PhotoImage = tk.PhotoImage(file="graphics/assets/arrow-back.png").subsample(4)
+        back_button_active_image: tk.PhotoImage = tk.PhotoImage(file="graphics/assets/arrow-back-active.png").subsample(4)
+        self.__back_button: BackButton = BackButton(self.root, image=back_button_image, active_image=back_button_active_image, width=self.__title_height*25, height=self.__title_height*25, change_menu=change_menu)
         self.__no_optimizations_label: tk.Label = tk.Label(self.root, height=2, text="No optimizations have been made yet.", bg=Color.select_label_no_optim_bg, fg=Color.select_label_no_optim_fg)
         self.__create_optimization_button: OptionsButton = OptionsButton(self.root, text="Create optimization", callable=change_menu, callable_args={"menu_name": "create"}, padx=(self.__window_width//2 - 250,)*2, pady=(0,0))
         self.__optimization_frames: list[OptimizationFrame] = []
@@ -63,7 +65,7 @@ class SelectMenu():
                 container_frame_height += 140
                 index += 1
             for optim_frame in self.__optimization_frames:
-                for child in optim_frame.frame.winfo_children() + [optim_frame.frame]:
+                for child in optim_frame.root.winfo_children() + [optim_frame.root]:
                     child.bind("<MouseWheel>", self.__scroll_mouse_wheel)
                     child.bind("<Button-4>", self.__scroll_mouse_wheel)
                     child.bind("<Button-5>", self.__scroll_mouse_wheel)

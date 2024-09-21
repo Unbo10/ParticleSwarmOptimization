@@ -26,7 +26,9 @@ class CreateMenu:
         # ! Inheritance could also be applied with title -it's literally the same save the text
         self.__title_height: int = 2
         self.__title: tk.Label = tk.Label(self.root, text="Create optimization", font=font.Font(family=FontName.title, size=15), height=self.__title_height, bg=Color.select_title_bg, fg=Color.select_title_fg)
-        self.__back_button: BackButton = BackButton(self.root, image_path="graphics/assets/arrow-back.png", active_image_path="graphics/assets/arrow-back-active.png", width=self.__title_height * 25, height=self.__title_height * 25, change_menu=change_menu, change_menu_args={"menu_name": "main"})
+        back_button_image: tk.PhotoImage = tk.PhotoImage(file="graphics/assets/arrow-back.png").subsample(4)
+        back_button_active_image: tk.PhotoImage = tk.PhotoImage(file="graphics/assets/arrow-back-active.png").subsample(4)
+        self.__back_button: BackButton = BackButton(self.root, image=back_button_image, active_image=back_button_active_image, width=self.__title_height * 25, height=self.__title_height * 25, change_menu=change_menu, change_menu_args={"menu_name": "main"})
 
         self.__inputs_frame: tk.Frame = tk.Frame(self.root, bg=Color.test1_bg)
         entry_width: int = 20
