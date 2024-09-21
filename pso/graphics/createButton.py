@@ -10,8 +10,8 @@ class CreateButton(OptionsButton):
         super().__init__(parent_frame, text=text1, button_font=font.Font(family=FontName.button, size=10), padx=padx, pady=pady, callable=None, callable_args=None) # ? Callable is none here?
         if text1 == text2:
             raise NotImplementedError("text1 and text2 cannot be the same")
-        self.__text1: str = text1
-        self.__text2: str = text2
+        self.text1: str = text1
+        self.text2: str = text2
         self.__active_text: str = text1
         self.__callable1: callable = callable1
         self.__callable2: callable = callable2
@@ -21,13 +21,13 @@ class CreateButton(OptionsButton):
             pass
         elif event.type == '5':
             self.config(bg=Color.optim_button_abg, fg=Color.back_button_afg, activebackground=Color.optim_button_abg, activeforeground=Color.optim_button_afg)
-        if self.__active_text == self.__text1:
-            self.config(text=self.__text2)
-            self.__active_text = self.__text2
+        if self.__active_text == self.text1:
+            self.config(text=self.text2)
+            self.__active_text = self.text2
             self.__callable1()
-        elif self.__active_text == self.__text2:
-            self.config(text=self.__text1)
-            self.__active_text = self.__text1
+        elif self.__active_text == self.text2:
+            self.config(text=self.text1)
+            self.__active_text = self.text1
             self.__callable2()
         else:
             raise NotImplementedError("The text of the button doesn't match neither callable")

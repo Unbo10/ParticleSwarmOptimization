@@ -28,9 +28,6 @@ class CreateMenu:
         self.__title: tk.Label = tk.Label(self.root, text="Create optimization", font=font.Font(family=FontName.title, size=15), height=self.__title_height, bg=Color.select_title_bg, fg=Color.select_title_fg)
         self.__back_button: BackButton = BackButton(self.root, image_path="graphics/assets/arrow-back.png", active_image_path="graphics/assets/arrow-back-active.png", width=self.__title_height * 25, height=self.__title_height * 25, change_menu=change_menu, change_menu_args={"menu_name": "main"})
 
-        # TODO 1: Finish implementing the CreateInput class
-        # TODO 2: Finish implementing the CreateButton class
-
         self.__inputs_frame: tk.Frame = tk.Frame(self.root, bg=Color.test1_bg)
         entry_width: int = 20
         self.__w_coefficient_input: CreateInput = CreateInput(self.__inputs_frame, text="Intertia coefficiet",width=entry_width)
@@ -43,6 +40,7 @@ class CreateMenu:
 
         self.__buttons_frame: tk.Frame = tk.Frame(self.root, bg=Color.test2_bg)
         self.__run_view_button: CreateButton = CreateButton(parent_frame=self.__buttons_frame, text1="Run optimization", text2="View optimization", callable1=self.__run_optimization, callable2=self.__view_optimization, padx=20, pady=20)
+        self.__reset_button: CreateButton = CreateButton(parent_frame=self.__buttons_frame, text1="Reset", text2="New optimization", callable1=self.__reset_parameters, callable2=self.__reset_parameters, padx=20, pady=20)
         
         self.__plot_canvases: dict = {"Sphere": self.__create_graph("Sphere"), "Booth": self.__create_graph("Booth"), "Goldstein-Price": self.__create_graph("Goldstein-Price"), "Rastrigin": self.__create_graph("Rastrigin")}
 
@@ -50,6 +48,16 @@ class CreateMenu:
         new_optimization = Optimization(index=len(self.__optimization_history) + 1, data=self.__data, cognitive_coefficient=float(self.__cog_coefficient_input.get_input()), inertia_coefficient=float(self.__w_coefficient_input.get_input()), social_coefficient=float(self.__soc_coefficient_input.get_input()), function_selection=self.__function_option.get_choice(), particle_amount=int(self.__particle_amount_input.get_input()), dimensions=3, iterations=int(self.__iterations_input.get_input()))
         new_optimization.optimize()
         self.__optimization_history.append(new_optimization)
+
+    def __reset_parameters(self) -> None:
+        self.__w_coefficient_input.entry.delete(0, "end")
+        self.__cog_coefficient_input.entry.delete(0, "end")
+        self.__soc_coefficient_input.entry.delete(0, "end")
+        self.__particle_amount_input.entry.delete(0, "end")
+        self.__iterations_input.entry.delete(0, "end")
+        self.__function_option.choice = "Sphere"
+        self.__w_coefficient_input.entry.focus_set()
+        self.__run_view_button.config(text=self.__run_view_button.text1)
 
     def __view_optimization(self) -> None:
         self.__change_menu("select")
@@ -147,7 +155,8 @@ class CreateMenu:
         self.__buttons_frame.columnconfigure(0, weight=1)
         self.__buttons_frame.columnconfigure(1, weight=1)
         self.__run_view_button.grid_display(row=0, column=0, sticky="nsew")
-        self.__buttons_frame.pack(fill="both", expand=True, anchor="se", side="bottom")
+        self.__reset_button.grid_display(row=0, column=1, sticky="nsew")
+        self.__buttons_frame.pack(fill="both", expand=True, anchor="se", side="bottom", pady=(0, 10))
         self.__back_button.display(x=0, y=0)
         self.display_graph("Sphere")
         self.root.place(x=0, y=0, width=self.__width, height=self.__height)
