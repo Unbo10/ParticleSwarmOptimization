@@ -17,7 +17,8 @@ class SelectMenu():
         self.__window_width: int = window_width
         self.__window_height: int = window_height
         self.__title_height: int = 2 # * Text units, not pixels. It doesn't correspond exactly to the size of the font. Default is 17, Ubuntu size 15 is 15 + 9 = 24 px.
-        self.__initialize_window: callable = initialize_window
+        self.initialize_window: callable = initialize_window
+        self.change_menu: callable = change_menu
         self.root: tk.Frame = tk.Frame(parent_frame, bg=Color.test1_bg)
 
         self.__title: tk.Label = tk.Label(self.root, text="Select a previous optimization", height=self.__title_height, bg=Color.select_title_bg, fg=Color.select_title_fg, font=font.Font(family=FontName.title, size=15))
@@ -46,7 +47,7 @@ class SelectMenu():
     def display(self):
         self.__title_height = 2 # * To avoid recording the value from the previous display call
         container_frame_height: int = 20 # * Bottom 'padding' of the frame
-        self.__initialize_window(width=self.__window_width, height=self.__window_height, title="Select optimization - PSO")
+        self.initialize_window(width=self.__window_width, height=self.__window_height, title="Select optimization - PSO")
         self.__title.pack(fill="x", anchor="e")
         self.__back_button.display(x=0, y=0)
         self.__back_button.focus_set()
@@ -58,10 +59,12 @@ class SelectMenu():
 
         else:
             self.__no_optimizations_label.pack_forget()
+            for optim_frame in self.__optimization_frames:
+                optim_frame.view_button.view_frame.forget()
             self.__create_optimization_button.forget()
             index = 0
             for optimization in self.__optimization_history:
-                self.__optimization_frames.append(OptimizationFrame(self.__container_frame, optimization, width=self.__container_frame_width - 50, scrollbar_width=self.__scrollbar_width, height=120, separation=20, frame_index=index))
+                self.__optimization_frames.append(OptimizationFrame(self.__container_frame, optimization=optimization, forget_select_menu=self.forget, initialize_window=self.initialize_window, change_menu=self.change_menu, width=self.__container_frame_width - 50, scrollbar_width=self.__scrollbar_width, height=120, separation=20, frame_index=index))
                 container_frame_height += 140
                 index += 1
             for optim_frame in self.__optimization_frames:

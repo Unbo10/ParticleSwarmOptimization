@@ -32,22 +32,23 @@ class CreateMenu:
 
         self.__inputs_frame: tk.Frame = tk.Frame(self.root, bg=Color.test1_bg)
         entry_width: int = 20
-        self.__w_coefficient_input: CreateInput = CreateInput(self.__inputs_frame, text="Intertia coefficiet",width=entry_width)
-        self.__cog_coefficient_input: CreateInput = CreateInput(self.__inputs_frame, text="Cognitive coefficient", width=entry_width)
-        self.__soc_coefficient_input: CreateInput = CreateInput(self.__inputs_frame, text="Social coefficient", width=entry_width)
+        self.__w_coefficient_input: CreateInput = CreateInput(self.__inputs_frame, default_value="0.7", text="Intertia coefficiet",width=entry_width)
+        self.__cog_coefficient_input: CreateInput = CreateInput(self.__inputs_frame, default_value=2, text="Cognitive coefficient", width=entry_width)
+        self.__soc_coefficient_input: CreateInput = CreateInput(self.__inputs_frame, default_value=2, text="Social coefficient", width=entry_width)
         self.__function_option: FunctionChoiceMenu = FunctionChoiceMenu(self.__inputs_frame, text="Choose a function", options=["Sphere", "Booth", "Goldstein-Price", "Rastrigin"], display_graph=self.display_graph)
-        self.__particle_amount_input: CreateInput = CreateInput(self.__inputs_frame, text="Particle amount", width=entry_width)
-        self.__iterations_input: CreateInput = CreateInput(self.__inputs_frame, text="Iterations", width=entry_width)
+        self.__particle_amount_input: CreateInput = CreateInput(self.__inputs_frame, default_value="1", text="Particle amount", width=entry_width)
+        self.__iterations_input: CreateInput = CreateInput(self.__inputs_frame, default_value="1", text="Iterations", width=entry_width)
         self.__inputs: list[CreateInput] = [self.__w_coefficient_input, self.__cog_coefficient_input, self.__soc_coefficient_input, self.__function_option, self.__particle_amount_input, self.__iterations_input]
 
         self.__buttons_frame: tk.Frame = tk.Frame(self.root, bg=Color.test2_bg)
         self.__run_view_button: CreateButton = CreateButton(parent_frame=self.__buttons_frame, text1="Run optimization", text2="View optimization", callable1=self.__run_optimization, callable2=self.__view_optimization, padx=20, pady=20)
         self.__reset_button: CreateButton = CreateButton(parent_frame=self.__buttons_frame, text1="Reset", text2="New optimization", callable1=self.__reset_parameters, callable2=self.__reset_parameters, padx=20, pady=20)
         
-        self.__plot_canvases: dict = {"Sphere": self.__create_graph("Sphere"), "Booth": self.__create_graph("Booth"), "Goldstein-Price": self.__create_graph("Goldstein-Price"), "Rastrigin": self.__create_graph("Rastrigin")}
+        self.__figs: dict = {"Sphere": self.__create_fig("Sphere"), "Booth": self.__create_fig("Booth"), "Goldstein-Price": self.__create_fig("Goldstein-Price"), "Rastrigin": self.__create_fig("Rastrigin")}
+        self.__plot_canvases: dict = {"Sphere": self.__create_fig_canvas(self.__figs["Sphere"]), "Booth": self.__create_fig_canvas(self.__figs["Booth"]), "Goldstein-Price": self.__create_fig_canvas(self.__figs["Goldstein-Price"]), "Rastrigin": self.__create_fig_canvas(self.__figs["Rastrigin"])}
 
     def __run_optimization(self) -> None:
-        new_optimization = Optimization(index=len(self.__optimization_history) + 1, data=self.__data, cognitive_coefficient=float(self.__cog_coefficient_input.get_input()), inertia_coefficient=float(self.__w_coefficient_input.get_input()), social_coefficient=float(self.__soc_coefficient_input.get_input()), function_selection=self.__function_option.get_choice(), particle_amount=int(self.__particle_amount_input.get_input()), dimensions=3, iterations=int(self.__iterations_input.get_input()))
+        new_optimization = Optimization(index=len(self.__optimization_history) + 1, function_fig=self.__figs[self.__function_option.get_choice()], function_choice=self.__function_option.get_choice(), data=self.__data, cognitive_coefficient=float(self.__cog_coefficient_input.get_input()), inertia_coefficient=float(self.__w_coefficient_input.get_input()), social_coefficient=float(self.__soc_coefficient_input.get_input()), particle_amount=int(self.__particle_amount_input.get_input()), dimensions=3, iterations=int(self.__iterations_input.get_input()))
         new_optimization.optimize()
         self.__optimization_history.append(new_optimization)
 
@@ -83,7 +84,7 @@ class CreateMenu:
         y: np.ndarray = np.linspace(start=-bound, num=100, stop=bound)
         return np.meshgrid(x, y)
 
-    def __create_graph(self, option: str) -> tk.Canvas:
+    def __create_fig(self, option: str) -> Figure:
         fig = Figure(figsize=(5,5))
         plot = fig.add_subplot(111)
         levels_boundaries: list[float] = []
@@ -128,9 +129,12 @@ class CreateMenu:
         plot.set_xlabel("X axis")
         plot.set_ylabel("Y axis")
         fig.subplots_adjust(left=0.225, right=0.90, top=0.825, bottom=0.225) # * Centers the graph
-        plot_canvas: FigureCanvasTkAgg = FigureCanvasTkAgg(figure=fig, master=self.root)
-        plot_canvas.draw()
-        return plot_canvas.get_tk_widget()
+        return fig
+    
+    def __create_fig_canvas(self, fig: Figure) -> tk.Canvas:
+        fig_canvas: FigureCanvasTkAgg = FigureCanvasTkAgg(figure=fig, master=self.root)
+        fig_canvas.draw()
+        return fig_canvas.get_tk_widget()
 
     def display_graph(self, option: str):
         for canvas in self.__plot_canvases.values():
