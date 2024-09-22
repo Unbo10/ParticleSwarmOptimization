@@ -1,54 +1,3 @@
-"""
-This module defines the BottomFrame class, which represents the bottom part of the main menu. It has twoo buttons, info and help.
-The info button shows a frame with information about the program, while the help button shows a frame with instructions on how to use the program. (To be implemented)
-Additionally, it displays the version of the program.
-
-## Classes
-- BottomFrame: Represents a bottom frame in a graphical user interface.
-
-### Attributes
-- root: tk.Frame - The root frame for the bottom frame.
-- __window_width: int - The width of the window.
-- __window_height: int - The height of the window.
-- __title_height: int - The height of the title.
-- root_height: int - The height of the bottom frame.
-- __POP_UP_FRAME_HEIGHT: int - The height of the pop-up frame.
-- __button_parameters: dict - Parameters for the buttons.
-- __info_image: tk.PhotoImage - Image for the info button.
-- __info_active_image: tk.PhotoImage - Active image for the info button.
-- __help_image: tk.PhotoImage - Image for the help button.
-- __help_active_image: tk.PhotoImage - Active image for the help button.
-- __info_button: tk.Button - The info button.
-- __help_button: tk.Button - The help button.
-- __version_label: tk.Label - Label displaying the program version.
-- __frames_visibility: dict - Dictionary to track the visibility of frames.
-- __info_frame: tk.Frame - Frame for the info section.
-- __help_frame: tk.Frame - Frame for the help section.
-- __hide_button_parameters: dict - Parameters for the hide buttons.
-- __info_hide_button: tk.Button - Hide button for the info frame.
-- __help_hide_button: tk.Button - Hide button for the help frame.
-- __scrollbar_parameters: dict - Parameters for the scrollbars.
-- __info_scrollbar: tk.Scrollbar - Scrollbar for the info frame.
-- __help_scrollbar: tk.Scrollbar - Scrollbar for the help frame.
-- __text_parameters: dict - Parameters for the text widgets.
-- __info_text: tk.Text - Text widget for the info frame.
-- __help_text: tk.Text - Text widget for the help frame.
-
-### Methods
-- display(options_frame: tk.Frame): Displays the bottom frame and configures the buttons and labels.
-- __enter_info_button(e): Changes the image and background of the info button when the cursor enters.
-- __enter_help_button(e): Changes the image and background of the help button when the cursor enters.
-- __enter_hide_button(e, button: tk.Button): Changes the background and foreground of the hide button when the cursor enters.
-- __leave_info_button(e): Restores the image and background of the info button when the cursor leaves.
-- __leave_help_button(e): Restores the image and background of the help button when the cursor leaves.
-- __leave_hide_button(e, button: tk.Button): Restores the background and foreground of the hide button when the cursor leaves.
-- __click_info_button(e): Changes the image and active background of the info button when clicked.
-- __click_help_button(e): Changes the image and active background of the help button when clicked.
-- __click_hide_button(e, button: tk.Button): Changes the background and foreground of the hide button when clicked.
-- __release_info_button(e): Shows or hides the info frame when the info button is released.
-- __release_help_button(e): Shows or hides the help frame when the help button is released.
-- __release_hide_button(e): Hides the info and help frames and shows the options frame when the hide button is released.
-"""
 import tkinter as tk
 from tkinter import font
 
@@ -56,9 +5,9 @@ from pso.graphics.colors import Color
 from pso.graphics.fonts import FontName
 
 class BottomFrame():
-    def __init__(self, root_frame: tk.Frame, window_width: int, window_height, title_height: int, bottom_frame_height: int, program_version: str):
+    def __init__(self, parent_frame: tk.Frame, window_width: int, window_height, title_height: int, bottom_frame_height: int, program_version: str):
         # ! Pop-up frame must be another class
-        self.root: tk.Frame = tk.Frame(root_frame, bg=Color.test1_bg)
+        self.root: tk.Frame = tk.Frame(parent_frame, bg=Color.test1_bg)
         self.__window_width: int = window_width
         self.__window_height: int = window_height
         self.__title_height: int = title_height
@@ -99,8 +48,8 @@ class BottomFrame():
             )
 
         self.__frames_visibility: dict = {"info": False, "help": False}
-        self.__info_frame: tk.Frame = tk.Frame(root_frame)
-        self.__help_frame: tk.Frame = tk.Frame(root_frame)
+        self.__info_frame: tk.Frame = tk.Frame(parent_frame)
+        self.__help_frame: tk.Frame = tk.Frame(parent_frame)
         self.__hide_button_parameters: dict = {
             "bg": Color.hide_button_bg,
             "fg": Color.hide_button_fg,
@@ -179,6 +128,7 @@ class BottomFrame():
         self.__info_hide_button.bind("<Leave>", lambda event: self.__leave_hide_button(event, self.__info_hide_button))
         self.__info_hide_button.bind("<Button-1>", lambda event: self.__click_hide_button(event, self.__info_hide_button))
         self.__info_hide_button.bind("<ButtonRelease-1>", self.__release_hide_button)
+        self.__info_hide_button.bind("<KeyRelease-Return>", self.__release_hide_button)
         self.__info_hide_button.grid(row=0, column=0, columnspan=2, sticky="ew")
         self.__info_text.config(state="normal") # * Allow adding text
         self.__info_text.insert(index="end", chars="Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?")
@@ -198,7 +148,8 @@ class BottomFrame():
         self.__help_hide_button.bind("<Enter>", lambda event: self.__enter_hide_button(event, self.__help_hide_button))
         self.__help_hide_button.bind("<Leave>", lambda event: self.__leave_hide_button(event, self.__help_hide_button))
         self.__help_hide_button.bind("<Button-1>", lambda event: self.__click_hide_button(event, self.__help_hide_button))
-        self.__help_hide_button.bind("<ButtonRelease-1>", self.__release_hide_button) 
+        self.__help_hide_button.bind("<ButtonRelease-1>", self.__release_hide_button)
+        self.__help_hide_button.bind("<KeyRelease-Return>", self.__release_hide_button)
         self.__help_hide_button.grid(row=0, column=0, columnspan=2, sticky="ew")
         self.__help_text.config(state="normal") # * Allow adding text
         self.__help_text.insert(index="end", chars=" aaaaaaaaaaaaa Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?")
@@ -210,6 +161,8 @@ class BottomFrame():
         self.__help_text.grid(row=1, column=0)
         self.__help_scrollbar.grid(row=1, column=1, sticky="ns")
     
+    # TODO: Test in Windows if 
+
     def __enter_info_button(self, e):
         self.__info_button.config(image=self.__info_active_image, bg=Color.bottom_button_abg)
     
@@ -240,15 +193,20 @@ class BottomFrame():
             activebackground=Color.bottom_button_cbg
             )
     
-    def __click_hide_button(self, e, button:tk.Button):
+    def __click_hide_button(self, e: tk.Event, button:tk.Button):
         button.config(bg=Color.hide_button_cbg, fg=Color.hide_button_cfg, activebackground=Color.hide_button_cbg, activeforeground=Color.hide_button_cfg)
 
-    def __release_info_button(self, e):
-        self.__info_button.config(
-            image=self.__info_active_image,
-            activebackground=Color.bottom_button_abg,
-            activeforeground=Color.bottom_button_afg
-            )
+    def __release_info_button(self, event: tk.Event):
+        # * type 3 is KeyRelease-Return and type 5 is Button1-Release
+        # * Although they are printed as integers, they are strings, and they must be refered to with single quotes.
+        if event.type == '3':
+            pass
+        elif event.type == '5':
+            self.__info_button.config(
+                image=self.__info_active_image,
+                activebackground=Color.bottom_button_abg,
+                bg=Color.bottom_button_abg
+                )
         if self.__frames_visibility["info"] == False:
             self.options_frame.place_forget()
             self.__help_frame.place_forget()
@@ -265,13 +223,17 @@ class BottomFrame():
         
         else:
             raise NotImplementedError("Menu not implemented on release method.")
+
     
-    def __release_help_button(self, e):
-        self.__help_button.config(
-            image=self.__help_active_image,
-            bg=Color.bottom_button_abg,
-            fg=Color.bottom_button_afg
-            ) # ? Necessary? Apart from the user not seeing it, we are changing the active colors, not the default ones. So, unless it is necessary in Windows, it should be reviewed
+    def __release_help_button(self, event: tk.Event):
+        if event.type == '3':
+            pass
+        elif event.type == '5':
+            self.__help_button.config(
+                image=self.__help_active_image,
+                activebackground=Color.bottom_button_abg,
+                bg=Color.bottom_button_abg
+                )
         if self.__frames_visibility["help"] == False:
             self.options_frame.place_forget()
             self.__info_frame.place_forget()

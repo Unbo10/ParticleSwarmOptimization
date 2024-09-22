@@ -1,21 +1,3 @@
-"""
-This module defines the ExitMenu class, which represents an exit menu in the main menu. It is used to display a goodbye message to the user.
-
-## Classes
-- ExitMenu: Represents an exit menu in a graphical user interface.
-
-### Attributes
-- root: tk.Frame - The root frame for the exit menu.
-- __initialize_window: callable - A callable to initialize the window.
-- __image: tk.PhotoImage - Image for the exit menu.
-- __label: tk.Label - Label displaying the exit image.
-- __text: tk.Text - Text widget displaying the exit message.
-
-### Methods
-- display() -> None: Displays the exit menu and configures the label and text.
-"""
-
-
 import tkinter as tk
 from tkinter import font
 
@@ -23,8 +5,9 @@ from pso.graphics.colors import Color
 from pso.graphics.fonts import FontName
 
 class ExitMenu():
-    def __init__(self, root_frame: tk.Frame, initialize_window: callable):
-        self.root: tk.Frame = tk.Frame(root_frame,
+    def __init__(self, parent_frame: tk.Frame, initialize_window: callable):
+        self.__parent_frame: tk.Frame = parent_frame
+        self.root: tk.Frame = tk.Frame(parent_frame,
             bg=Color.goodbye_frame_bg)
         self.__initialize_window: callable = initialize_window
         self.__image: tk.PhotoImage = tk.PhotoImage(
@@ -46,4 +29,9 @@ class ExitMenu():
         # ? A more rigurous way of centering the label and the text could be implemented.
         self.__label.image = self.__image
         self.root.place(x=0, y=0, width=250, height=250)
+        self.__parent_frame.after(500, self.__parent_frame.quit)
+
+    def forget(self):
+        pass
+
     
