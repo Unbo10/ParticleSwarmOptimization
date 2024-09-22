@@ -181,6 +181,12 @@
         - dict callable_args
         - tuple padx
         - tuple pady
+        - str optim_button_fg
+        - str optim_button_hbg
+        - str optim_button_hcolor
+        - str optim_button_abg
+        - str optim_button_bg
+        - str back_button_afg
 
         - enter(tk.Event e)
         - leave(tk.Event e)
@@ -193,6 +199,73 @@
 
     OptionsButton "1" --|> "1" tkButton
     OptionsButton --> Color : "uses(?)"
+
+    class CreateButton {
+        - str text1
+        - str text2
+        - str __active_text
+        - callable __callable1
+        - callable __callable2
+
+        + __init__(tk.Frame parent_frame, str text1, str text2, callable callable1, callable callable2, int padx, int pady)
+        - _release(tk.Event event)
+    }
+
+    CreateButton "1" --|> "1" OptionsButton
+    CreateButton --> Color : "uses"
+
+
+    class CreateInput {
+        - tk.Label __label
+        - tk.StringVar input_value
+        - tk.Entry entry
+        - str __default_value
+
+        + __init__(tk.Frame parent_frame, str default_value, str text, int width)
+        - __select_text(tk.Event e) : None
+        + grid(int label_row, int column, str sticky)
+        + get_input() : str
+    }
+
+    CreateInput --> Color : "uses"
+    CreateInput --> FontName : "uses"
+
+    class CreateMenu {
+        - tk.Button __run_view_button
+        - tk.Button __reset_button
+        - tk.Frame __buttons_frame
+        - tk.Button __back_button
+        - tk.Tk root
+        - int __width
+        - int __height
+        - tk.Label __title
+        - tk.Frame __inputs_frame
+
+        + display_graph(str graph_type)
+        + forget() : None
+        + run_or_view_optimization(tk.Event e, bool create_optimization) : None
+        - __create_contour_levels(list[float] levels_boundaries) : np.linspace
+        - __create_x_y_values(int bound) : tuple[np.ndarray]
+        - __create_fig(str option) : Figure
+    }
+
+    CreateMenu --> Color : "uses"
+    CreateMenu --> FontName : "uses"
+
+    class FunctionChoiceMenu {
+        - list~str~ __options
+        - callable __display_graph
+        - tk.StringVar __choice
+        - tk.OptionMenu __dropdown_menu
+        - tk.Label __label
+
+        + __init__(tk.Frame parent_frame, str text, list~str~ options, callable display_graph)
+        - __trigger_graph_change(*args) : None
+        + grid(int label_row, int column, str sticky) : None
+    }
+
+    FunctionChoiceMenu --> Color : "uses"
+    FunctionChoiceMenu --> FontName : "uses"
 
     class SelectMenu {
         %% - __init__(tk.Frame parent_frame, callable initialize_window, callable change_menu, ~Optimization~ optimization_history, int window_width, int window_height)
@@ -241,6 +314,39 @@
         + display()
     }
 
+    class ViewButton {
+        - tk.Image __image
+        - tk.Image __active_image
+        - ViewFrame view_frame
+        - callable __forget_select_menu
+
+        + __init__(tk.Frame master, tk.Image image, tk.Image active_image, callable forget_select_menu, callable initialize_window, callable change_menu, Optimization optimization, str bg=Color.select_label_optim_bg, str fg=Color.select_label_optim_fg)
+        - __enter(tk.Event e) : None
+        - __leave(tk.Event e) : None
+        - __click(tk.Event e) : None
+        - __bind_to_events() : None
+    }
+
+    ViewButton --> Color : "uses"
+    ViewButton --> ViewFrame : "contains"
+    ViewButton --> Optimization : "uses"
+
+    class ViewFrame {
+        - callable __initialize_window
+        - Optimization __optimization
+        - Figure __function_fig
+        - tk.Label __title
+        - BackButton __back_button
+
+        + __init__(callable initialize_window, callable change_menu, Optimization optimization, Figure function_fig, str bg=Color.test3_bg) : ViewFrame
+    }
+
+    ViewFrame --> Color : "uses"
+    ViewFrame --> FontName : "uses"
+    ViewFrame --> BackButton : "contains"
+    ViewFrame --> Optimization : "uses"
+    ViewFrame --> Figure : "uses"
+
     class OptimizationFrame {
         %% - __init__(tk.Frame root, Optimization optimization, int width, int height, int separation, int scrollbar_width, int frame_index)
         - tk.Frame frame
@@ -250,7 +356,7 @@
         - int separation
         - int index
         - dict widget_parameters
-        - tk.Label name_label
+        - tk.Label Fontname_label
         - tk.Label function_label
         - tk.Label dimensions_label
         - tk.Label minima_indicator_label
