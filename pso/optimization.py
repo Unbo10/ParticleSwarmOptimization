@@ -20,6 +20,7 @@ Main: Main class to run the Particle Swarm Optimization (PSO) algorithm.
 - get_swarm() -> ParticleSwarm
 """
 import math
+from matplotlib.pyplot import Figure
 
 import numpy as np
 import pandas as pd
@@ -29,16 +30,23 @@ from pso.vector.position import Position
 from pso.database.data import Data
 
 class Optimization:
-    def __init__(self, index: int, data: Data = Data("test"), cognitive_coefficient: float = 2.05, inertia_coefficient: float = 0.7, social_coefficient: float = 2.05, function_selection: str = "Sphere", particle_amount: int = 10, dimensions: int = 3, iterations: int = 20) -> None:
+    def __init__(self, index: int, function_fig: Figure, function_choice: str = "Sphere", data: Data = Data("test"), cognitive_coefficient: float = 2.05, inertia_coefficient: float = 0.7, social_coefficient: float = 2.05, particle_amount: int = 10, dimensions: int = 3, iterations: int = 20) -> None:
         self.__data: Data = data
         # ? Might need to make a heuristic function class or at least a
         # ? heuristic function attribute to display it in the select menu of the GUI.
         self.__iterations: int = iterations
         # * So it doesn't create two particle swarms with different dimensions
-        self.__function_selection: str = function_selection
-        self.__swarm: ParticleSwarm = ParticleSwarm(self.heuristic(function_selection), inertia_coefficient, cognitive_coefficient, social_coefficient, dimensions, particle_amount)
+        self.__function_choice: str = function_choice
+        self.__swarm: ParticleSwarm = ParticleSwarm(self.heuristic(function_choice), inertia_coefficient, cognitive_coefficient, social_coefficient, dimensions, particle_amount)
         self.__index: int = index
         self._dimensions: int = dimensions
+        self.function_fig: Figure = function_fig
+        self.__optimization_df: pd.DataFrame = None
+        self.bound: float = 0
+
+    @property
+    def optimization_df(self) -> pd.DataFrame:
+        return self.__optimization_df
 
     def sphere_f(self, position: Position):
         return np.sum(np.square(position.get_coordinates()))
@@ -63,15 +71,19 @@ class Optimization:
         # * Agree, but what should be then the type of the heuristic_value? A list or maybe an ndarray?
         
         if selection == "Sphere":
+            self.bound = 2
             return self.sphere_f
         
         if selection == "Booth":
+            self.bound = 10
             return self.booth_f
         
         if selection == "Goldstein-Price":
+            self.bound = 2
             return self.goldstein_price_f
         
         elif selection == "Rastrigin":
+            self.bound = 5.12
             return self.rastrigin_f
                                 
         else:
@@ -79,8 +91,9 @@ class Optimization:
         
     def optimize(self) -> None:
         """Optimizes the heuristic function using the PSO algorithm."""
+        self.heuristic(self.__function_choice) # * So the bounds are initialized correctly.
         swarm = self.__swarm
-        swarm._initialize_particles_randomly()
+        swarm._initialize_particles_randomly(bound=self.bound)
         swarm.update_gbest()
         swarm_gbest_index: list[int] = []
         optimization_df: pd.DataFrame = pd.DataFrame(columns = ["Heuristic",
@@ -128,13 +141,15 @@ class Optimization:
         # * database and create a spreadsheet with the optimization results.
         self.__data.append_gbest_indexes(swarm_gbest_index)
         self.__data.append_optimization(optimization_df)
-        # self.__data.print_optimization(0)   
+        self.__optimization_df = optimization_df
     
+    @property
+    def function_choice(self) -> str:
+        return self.__function_choice
+
+    # TODO: Make this getters' attributes properties
     def get_dimensions(self) -> int:
         return self._dimensions
-    
-    def get_function_selection(self) -> str:
-        return self.__function_selection
     
     def get_index(self) -> int:
         return self.__index

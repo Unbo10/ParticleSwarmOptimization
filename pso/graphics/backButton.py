@@ -3,7 +3,7 @@ import tkinter as tk
 from pso.graphics.colors import Color
 
 class BackButton(tk.Button):
-    def __init__(self, menu_frame, image_path: str, active_image_path: str, width: int, height: int,  change_menu: callable, change_menu_args: dict = {"menu_name": "main"}, cbg: str = Color.back_button_cbg, args: dict = {
+    def __init__(self, menu_frame, image: tk.PhotoImage, active_image: tk.PhotoImage, width: int, height: int,  change_menu: callable, change_menu_args: dict = {"menu_name": "main"}, cbg: str = Color.back_button_cbg, args: dict = {
         "bg": Color.back_button_bg,
         "activebackground": Color.back_button_abg,
         "relief": "flat", 
@@ -11,9 +11,9 @@ class BackButton(tk.Button):
         "highlightcolor": Color.back_button_hcolor,
         "highlightthickness": 1
         }):
-        self.__image: tk.PhotoImage = tk.PhotoImage(file=image_path).subsample(4)
-        super().__init__(menu_frame, image=self.__image, **args)
-        self.__active_image: tk.PhotoImage = tk.PhotoImage(file=active_image_path).subsample(4)
+        super().__init__(menu_frame, image=image, **args)
+        self.__image: tk.PhotoImage = image
+        self.__active_image: tk.PhotoImage = active_image
         self.__width: int = width
         self.__height: int = height
         self.__change_menu: callable = change_menu
