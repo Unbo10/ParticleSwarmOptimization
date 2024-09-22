@@ -113,15 +113,16 @@ class ParticleSwarm:
             dimensions = 3
         # TODO: Except TypeError (double)
         # ? Should the following line be inside a finally block?
-        self.__particles: list[Particle] = [
-            Particle(heuristic_f=heuristic_f, index=p, has_gbest=False, cognitive_coefficient=cognitive_coefficient,
-            dimensions=dimensions, 
-            inertia_coefficient=inertia_coefficient, 
-            social_coefficient=social_coefficient) 
-            for p in range(self.__particle_amount)
-            ] # ! Test change of Particle's constructor
-        self.__gbest: Position = Position(dimensions - 1)
-        self._heuristic_f: callable = heuristic_f
+        finally:
+            self.__particles: list[Particle] = [
+                Particle(heuristic_f=heuristic_f, index=p, has_gbest=False, cognitive_coefficient=cognitive_coefficient,
+                dimensions=dimensions, 
+                inertia_coefficient=inertia_coefficient, 
+                social_coefficient=social_coefficient) 
+                for p in range(self.__particle_amount)
+                ] # ! Test change of Particle's constructor
+            self.__gbest: Position = Position(dimensions - 1)
+            self._heuristic_f: callable = heuristic_f
     
     def __repr__(self) -> str:
         return f"Particle swarm with {self.get_particle_amount()} particles, cognitive coefficient {self.get_cognitive_coefficient()}, inertia coefficient {self.get_inertia_coefficient()}, social coefficient {self.get_social_coefficient()} and global best position {self.get_gbest().get_coordinates()}."
