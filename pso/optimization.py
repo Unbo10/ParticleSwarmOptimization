@@ -64,21 +64,20 @@ class Optimization:
     def rastrigin_f(self, position: Position):
         return 20 + np.sum(np.square(position.get_coordinates()) - 10*np.cos(2 * np.pi *position.get_coordinates()))
     
-    def heuristic(self, selection: str) -> float:
+    def heuristic(self, selection: str) -> callable:
         """Heuristic function to be optimized."""
         # TODO: Make a better implementation of choosing the desired function, at the moment it's done manually, by modifying the variable selection through the parameters
         # TODO: Implement the second function to the dimension that the user selects. It is set to two dimensions. ? A dimension parameter in the heuristic ? 
         # * Agree, but what should be then the type of the heuristic_value? A list or maybe an ndarray?
-        
         if selection == "Sphere":
             self.bound = 2
             return self.sphere_f
         
-        if selection == "Booth":
+        if selection == "Booth": #(1,3)
             self.bound = 10
             return self.booth_f
         
-        if selection == "Goldstein-Price":
+        if selection == "Goldstein-Price": #(0,-1)
             self.bound = 2
             return self.goldstein_price_f
         
@@ -110,6 +109,12 @@ class Optimization:
                     # * To record the initial states of the particles before optimizing them
                     particle._update_velocity(swarm.get_gbest())
                     particle.get_position()._update(particle.get_velocity())
+                    particle.get_velocity().set_coordinates(np.clip(particle.get_position().get_coordinates(), -5, 5))
+                    
+                    new_position = particle.get_position().get_coordinates()
+                    new_position = np.clip(new_position, -10, 10)
+                    particle.get_position().set_coordinates(new_position) 
+                    
                     # ! Gbest is not actually gbest
                     particle.get_heuristic()._update(particle.get_position())
                     particle._update_pbest()
@@ -135,7 +140,7 @@ class Optimization:
             # * Seems to be working fine
             if iteration_num != self.__iterations:
                 optimization_df = pd.concat([optimization_df, nan_df])
-            print(f"Global best: {swarm.get_gbest()}\n")
+            print(f"Global best: {swarm.get_gbest()}, Heuristic value:{swarm.get_heuristic()(swarm.get_gbest())}\n")
 
         # * Append the indexes of the particles with the best heuristic to the
         # * database and create a spreadsheet with the optimization results.
@@ -162,6 +167,6 @@ class Optimization:
 
 if __name__ == "__main__":
     data = Data(excel_file_name="session1_results")
-    main = Optimization(0, data=data, cognitive_coefficient=2.8, inertia_coefficient=0.8, social_coefficient=2.5, particle_amount=20, dimensions=2, iterations=50) # ! CHECK: Minimum dimension
+    main = Optimization(0, data=data, cognitive_coefficient=1.5, inertia_coefficient=0.4, social_coefficient=1.5, particle_amount=20, dimensions=3, iterations=100) # ! CHECK: Minimum dimension
     main.optimize()
-    # print(main.get_swarm().get_gbest())
+    print(main.get_swarm().get_gbest())

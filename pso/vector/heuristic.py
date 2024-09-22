@@ -19,7 +19,7 @@ Other getters inherited from the Vector class of the base_vector module.
 """
 
 import numpy as np
-
+import math
 from pso.vector.base_vector import Vector
 
 class Heuristic(Vector):
