@@ -4,7 +4,7 @@
 
 ## Project explanation:
 
-- ![Wiki]([https://github.com/Unbo10/ParticleSwarmOptimization/wiki/PSO:-what-it-is](https://github.com/Unbo10/ParticleSwarmOptimization/wiki/PSO's-heuristic))
+- ![Wiki](https://github.com/Unbo10/ParticleSwarmOptimization/wiki/PSO's-heuristic)
 
 
 
