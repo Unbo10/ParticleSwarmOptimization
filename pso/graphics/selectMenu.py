@@ -46,7 +46,7 @@ class SelectMenu():
 
     def display(self):
         self.__title_height = 2 # * To avoid recording the value from the previous display call
-        container_frame_height: int = 20 # * Bottom 'padding' of the frame
+        container_frame_height: int = 20 + (len(self.__optimization_frames) * 140) # * Bottom 'padding' of the frame
         self.initialize_window(width=self.__window_width, height=self.__window_height, title="Select optimization - PSO")
         self.__title.pack(fill="x", anchor="e")
         self.__back_button.display(x=0, y=0)
@@ -62,11 +62,13 @@ class SelectMenu():
             for optim_frame in self.__optimization_frames:
                 optim_frame.view_button.view_frame.forget()
             self.__create_optimization_button.forget()
-            index = 0
-            for optimization in self.__optimization_history:
+            index = len(self.__optimization_frames)
+            while index < len(self.__optimization_history):
+                optimization = self.__optimization_history[index]
                 self.__optimization_frames.append(OptimizationFrame(self.__container_frame, optimization=optimization, forget_select_menu=self.forget, initialize_window=self.initialize_window, change_menu=self.change_menu, width=self.__container_frame_width - 50, scrollbar_width=self.__scrollbar_width, height=120, separation=20, frame_index=index))
                 container_frame_height += 140
                 index += 1
+            print(self.__optimization_frames, "1")
             for optim_frame in self.__optimization_frames:
                 for child in optim_frame.root.winfo_children() + [optim_frame.root]:
                     child.bind("<MouseWheel>", self.__scroll_mouse_wheel)

@@ -63,9 +63,9 @@ class GUI:
         GUI.__root.configure(bg=Color.window_bg)
 
     def run(self):
-        self._change_menu("create")
+        self._change_menu("main")
         print(GUI.__root.mainloop())
 
 if __name__ == "__main__":
-    gui = GUI(optimization_history=[], program_version="0.2.0") # * Version can be obtained from Main's method get_version(). Therefore, when GUI is created inside Main, the method will be called as an argument (?).
-    gui.run() # ? Should run be the only public method?
+    gui = GUI(optimization_history=[], program_version="0.9.9")
+    gui.run()

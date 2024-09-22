@@ -61,7 +61,7 @@ class Data:
         
         # * Setting the same FONT and size for all the cells
         # * It is only overwrittern in the headers (because of the font color)
-        for row in sheet.iter_rows(min_row=3, max_row=optimization_df.shape[0] + 2, min_col=2, max_col=7):
+        for row in sheet.iter_rows(min_row=3, max_row=optimization_df.shape[0] + 3, min_col=2, max_col=7):
             sheet.row_dimensions[row[0].row].height = 18
             for cell in row:
                 cell.font = px_styles.Font(name="FreeMono", size=11,
@@ -107,7 +107,6 @@ class Data:
         sheet.column_dimensions["B"].width = 10
 
         # * Couting the AMOUNT OF PARTICLES
-        # ? It could be passed as a parameter of the class's constructor
         number_of_particles: int = 0
         while optimization_records[number_of_particles][0] is not np.nan:
             number_of_particles += 1
@@ -134,7 +133,6 @@ class Data:
         starting_row: int = 4
         ending_row: str = number_of_particles + 3
         iteration_number: int = 0
-        # ! The condition of the while cycle is the reason the number_of_iterations is not needed
         while starting_row < optimization_df.shape[0]:
             sheet.merge_cells(f"B{starting_row}:B{ending_row}")
             sheet[f"B{starting_row}"] = iteration_number
@@ -142,11 +140,12 @@ class Data:
                 fill_type="solid") # ! Replace for a Color attribute once the branch is merged
             sheet.cell(row=starting_row, column=2).border = common_border
             sheet.cell(row=ending_row, column=2).border = common_border
-            iteration_number += 1
             sheet[f"B{starting_row}"].alignment = px_styles.Alignment(horizontal="center", vertical="center")
             sheet.cell(row=ending_row + 1, column=2).border = spacing_border
             starting_row = ending_row + 2
             ending_row = starting_row + number_of_particles - 1
+            iteration_number += 1
+            # ! Checked the style of the last row
 
         # * Appending the ARRAYS OF COORDINATES to the corresponding cell and styling them
         for row in range(optimization_df.shape[0]):
