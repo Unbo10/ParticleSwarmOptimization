@@ -11,6 +11,8 @@
 ## How to run the project using a virtual environment:
 First of all, what is a virtual envoronment? A virtual envirnment is a "separate folder" that creates an independent set of installed packages. This means that we can have different versions of some packages in that folder than those that we have globally installed. This is useful because some versions of this project might need specifically some requirements that change over time.
 
+### Steps for Windows:
+
 - First step, clone the repository:
 ```bash
 git clone https://github.com/Unbo10/ParticleSwarmOptimization.git
