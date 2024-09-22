@@ -3,9 +3,12 @@
 
 
 ## Project explanation:
-
+To know and understand better the PSO algorithm, we encourage you to check the Wiki of this project:
 - ![Wiki](https://github.com/Unbo10/ParticleSwarmOptimization/wiki/PSO's-heuristic)
 
+Once you are familiarized with it, we can proceed. We chose to work on this problem because it was a great way to apply all the concepts that we learned in class, to learn how to use external libraries to make a graphic interface or work with a database and finally, because it was a challenge. 
+
+The PSO algorithm consists of a set of Particles that "explore" the function, with the purpose of finding it's minimum. That's why the implementation that we made consists of a ```Vector``` class, that is the class from wich ```Position```, ```Heuristic``` and ```Velocity``` inherit. Then, we define the ```Particle``` class, that consists of the three previous classes and has methods such as ```initialize_randomly``` or ```_update_velocity```, that allows us to control the particles over the domain of the function. Finally, we have the ```ParticleSwarm``` class, which is the set of all the particles that we want to create. This is the abstraction of the project that enables us to solve the problem, with the algorithm. The steps to follow are detailed in the Wiki.
 
 
 ## How to run the project using a virtual environment:
