@@ -1,6 +1,172 @@
-# LaHerencia
+<h1 align="center">The Inheritance</h1>
 
 
+
+## Project explanation:
+
+- ![Wiki]([https://github.com/Unbo10/ParticleSwarmOptimization/wiki/PSO:-what-it-is](https://github.com/Unbo10/ParticleSwarmOptimization/wiki/PSO's-heuristic))
+
+
+
+## How to run the project using a virtual environment:
+First of all, what is a virtual envoronment? A virtual envirnment is a "separate folder" that creates an independent set of installed packages. This means that we can have different versions of some packages in that folder than those that we have globally installed. This is useful because some versions of this project might need specifically some requirements that change over time.
+
+- First step, clone the repository:
+```bash
+git clone https://github.com/Unbo10/ParticleSwarmOptimization.git
+```
+
+- Next, in the folder that you cloned the repository, create the virtual environment:
+```bash
+pip install virtualenv
+```
+
+- Create environment folder inside the current project directory:
+```bash
+python -m venv env
+```
+
+- Activate the virtual environment:
+```bash
+env\Scripts\activate.bat
+```
+- Once you activate it you should see ```(env)``` on the terminal.
+
+- Install the project package:
+```bash
+pip install -e.
+```
+
+- Go to the pso folder:
+```bash
+cd pso
+```
+- Run main.py:
+```bash
+py main.py
+```
+
+## Class Diagram of the swarm and vector packages:
+``` mermaid
+    classDiagram
+    class Optimization{
+        - I Data data
+        - float cognitive_coefficient
+        - float inertia_coefficient
+        - float social_coefficient
+        - int dimensions
+        - int iterations
+        - int particle_amount
+        - ParticleSwarm swarm
+
+        - heuristic(Position position, int selection)
+        - optimize()
+
+        + get_dimensions(): int
+        + get_index(): int
+        + get_iterations(): int
+        + get_swarm(): ParticleSwarm
+    }
+    Optimization "1" --o "1" ParticleSwarm
+
+
+    class ParticleSwarm{
+        - float cognitive_coefficient
+        - float inertia_coefficient
+        - float social_coefficient
+        - int particle_amount
+        - list[Particle] particles
+        - Position gbest
+        + callable heuristic_f
+
+        - __repr__() : str
+        # initialize_particles_randomly(int bound)
+        + update_gbest(): None
+
+        + get_cognitive_coefficient(): float
+        + get_inertia(): float
+        + get_social_coefficient(): float
+        + get_particles_amount(): int
+        + get_gbest(): Vector
+        + get_particles(): ~Particle~
+        + get_heuristic(): callable
+    }
+    ParticleSwarm "1" o--"*" Particle
+
+    class Particle{
+        <!-- ? Are r_1 and r_2 chosen for every iteration or at each iteration? -->
+        + dict color
+        - float cognitive_coefficient
+        - float inertia_coefficient
+        - float social_coefficient
+        - Heuristic heuristic
+        - Position pbest
+        - Position position
+        - Velocity velocity
+        - int index
+        - bool has_gbest
+
+        # update_pbest(position)
+        # update_velocity(Position gbest)
+        + initialize_randomly(int bound)
+        
+        + get_pbest()
+        + get_position()
+        + get_velocity()
+        + get_heuristic()
+        + get_index()
+
+        + set_heuristic(Heuristic heuristic)
+        + set_index(int index)
+        + set_pbest(Position pbest)
+        + set_position(Position position)
+        + set_velocity(Velocity velocity)
+    }
+    Particle "1" o-- "1" Heuristic
+    Particle "1" o-- "2" Position
+    Particle "1" o-- "1" Velocity
+
+
+    class Vector {
+        # np.ndarray coordinates
+        # int dimensions
+
+        - __repr__() : str
+        + initialize_randomly(float)
+        # update()
+        
+        + get_coordinates() : np.ndarray
+        + get_dimensions() : int
+        + set_coordinates(coordinates: np.ndarray)
+        + set_dimensions(dimensions: int)  
+    }
+
+    class Heuristic{
+        <!-- ? Should the inherited attributes be kept in the child class?-->
+        <!-- ? Should ndarrays be simply called arrays since the fact they are np has to do more with the implementation? -->
+        # callable heuristic
+        # update()
+        + get_heuristic_f()
+    }
+    Heuristic "1" --|> "1" Vector
+
+    class Position{
+        # update(Velocity: velocity)
+    }
+    Position "1" --|> "1" Vector
+
+    class Velocity {
+        
+        - __init__(int dimensions)
+    }
+    Velocity "1" --|> "1" Vector
+
+```
+
+
+
+
+## Complete Class Diagram, with the data and graphic user interface packages:
 ``` mermaid
     classDiagram
     direction TB
