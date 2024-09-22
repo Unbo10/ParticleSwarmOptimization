@@ -22,7 +22,7 @@ This module defines the Particle class, which represents a particle in a swarm i
 import numpy as np
 
 from pso.vector.base_vector import Vector
-from pso.vector.heuristic import Heuristic, default_heuristic
+from pso.vector.heuristic import Heuristic
 from pso.vector.position import Position
 from pso.vector.velocity import Velocity
 
@@ -74,14 +74,14 @@ class Particle:
     """
     # ! Update documentation
 
-    def __init__(self, index: int, has_gbest: bool, cognitive_coefficient: float = 2.0, dimensions: int = 3, heuristic: callable = default_heuristic, inertia_coefficient: float = 1.0, social_coefficient: float = 2.0) -> None:
+    def __init__(self, heuristic_f: callable, index: int, has_gbest: bool, cognitive_coefficient: float = 2.0, dimensions: int = 3, inertia_coefficient: float = 1.0, social_coefficient: float = 2.0) -> None:
         self.__cognitive_coefficient: float = cognitive_coefficient
         self.__index: int = index
         self.__inertia_coefficient: float = inertia_coefficient
         self.__social_coefficient: float = social_coefficient
         self.__position: Position = Position(dimensions-1)
         self.__pbest: Position = Position(dimensions-1)
-        self.__heuristic: Heuristic = Heuristic(dimensions, heuristic)
+        self.__heuristic: Heuristic = Heuristic(heuristic_f, dimensions)
         self.__heuristic._update(self.get_pbest())
         self.__velocity: Velocity = Velocity(dimensions-1)
         self.color : dict = {"r": 0, "g": 0, "b": 0}

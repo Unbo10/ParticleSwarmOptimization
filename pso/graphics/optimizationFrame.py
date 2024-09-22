@@ -3,7 +3,6 @@
 # * This could make a future implementation with ttk or any other module much easier
 import numpy as np
 import tkinter as tk
-from tkinter import font
 
 from pso.graphics.colors import Color
 from pso.optimization import Optimization
@@ -24,7 +23,7 @@ class OptimizationFrame:
         # TODO: Try to add the self.frame in the dictionary
         # * Seems to be working just fine! Could be implemented in other menus if the master declaration is repeated many times.
         self.__name_label: tk.Label = tk.Label(text=f"Optimization {optimization.get_index()}", **self.__widget_parameters)
-        self.__function_label: tk.Label = tk.Label(text=f"Function: TO BE DECIDED", **self.__widget_parameters)
+        self.__function_label: tk.Label = tk.Label(text=optimization.get_function_selection(), **self.__widget_parameters)
         self.__dimensions_label: tk.Label = tk.Label(text=f"Dimensions: {optimization.get_dimensions()}", **self.__widget_parameters)
         self.__minima_indicator_label: tk.Label = tk.Label(text=f"Minima: ", **self.__widget_parameters)
         minima_coordinates: np.ndarray = np.round(optimization.get_swarm().get_gbest().get_coordinates(), 3)
@@ -32,8 +31,8 @@ class OptimizationFrame:
         self.__cognitive_coefficient_label: tk.Label = tk.Label(text=f"c1: {optimization.get_swarm().get_cognitive_coefficient()}", **self.__widget_parameters)
         self.__num_particles_label: tk.Label = tk.Label(text=f"N. of particles: {optimization.get_swarm().get_particle_amount()}", **self.__widget_parameters)
         self.__social_coefficient_label: tk.Label = tk.Label(text=f"c2: {optimization.get_swarm().get_social_coefficient()}", **self.__widget_parameters)
-        self.__preview_image: tk.PhotoImage = tk.PhotoImage(file="assets/preview.png").subsample(4)
-        self.__preview_active_image: tk.PhotoImage = tk.PhotoImage(file="assets/preview-active.png").subsample(4)
+        self.__preview_image: tk.PhotoImage = tk.PhotoImage(file="graphics/assets/preview.png").subsample(4)
+        self.__preview_active_image: tk.PhotoImage = tk.PhotoImage(file="graphics/assets/preview-active.png").subsample(4)
 
         # TODO: Check the naming of immages across files
 
@@ -46,7 +45,6 @@ class OptimizationFrame:
         self.__preview_button.bind("<Leave>", self.__leave_preview_button)
         self.__preview_button.bind("<Button-1>", self.__click_preview_button)
         self.__preview_button.bind("ButtonRelease-1", self.__release_preview_button)
-
 
     def display(self, parent_width: int) -> None:
         # labels_list: list[tk.Label] = [attr for attr in dir(self) if attr[-5:] == "label"]

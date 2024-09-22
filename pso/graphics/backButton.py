@@ -32,6 +32,7 @@ class BackButton(tk.Button):
         self.__change_menu(**self.__change_menu_args)
 
     # ! Consider binding to events in the initializer so that every time a widget is displayed it doesn't need to bind events again.
+    # * To keep the code consistent, might be better to leave it there, because BottomButton objects do need it to be there
 
     def __bind_to_events(self) -> None:
         self.bind("<Enter>", self.__enter)

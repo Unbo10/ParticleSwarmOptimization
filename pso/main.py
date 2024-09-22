@@ -13,13 +13,14 @@ from pso.graphics.gui import GUI
 from pso.optimization import Optimization
 class Main:
     def __init__(self) -> None:
-        self.gui: GUI = GUI(program_version=self.get_version())
-        self.database: Data = Data(excel_file_name=self.get_last_xslx_file())
         self.optimization_history: list[Optimization] = []
+        self.database: Data = Data(excel_file_name=self.determine_xlsx_name())
+        print("Data object created")
+        self.gui: GUI = GUI(program_version=self.get_version(), data=self.database, optimization_history=self.optimization_history)
     
     def determine_xlsx_name(self) -> str:
         try:
-            session_number = len(os.listdir(path="database/optimization_results"))
+            session_number = len(os.listdir(path="database/optimization_results")) + 1
             if session_number == 0:
                 raise OSError
         except OSError:
@@ -35,24 +36,24 @@ class Main:
     def run_optimization(self) -> None:
         pass
 
-    def get_last_xlsx_file (self) -> str:
-        path: str = 'database'
-        files: list[str] = os.listdir(path)
-        last_session: int = 0
-        # * Refers to the number of the session to be looked at in the
-        # * for cycle
-        current_session: int = 0
-        xlsx_files: list[str] = [f for f in files if f.startswith("session")]
-        if len(xlsx_files) == 0:
-            last_session = 1
-        else:
-            for i in range(len(xlsx_files)):
-                current_session = int(re.findall(r'\d+', xlsx_files[i])[0])
-                # * Current session will be the first (and only) sequence of numbers found in the i-th xlsx file name.
-                if current_session > last_session:
-                    last_session = current_session
-            return f'session{last_session}_results'
-        raise OSError("No excel files found.")
+    # def get_last_xlsx_file (self) -> str:
+    #     path: str = 'database'
+    #     files: list[str] = os.listdir(path)
+    #     last_session: int = 0
+    #     # * Refers to the number of the session to be looked at in the
+    #     # * for cycle
+    #     current_session: int = 0
+    #     xlsx_files: list[str] = [f for f in files if f.startswith("session")]
+    #     if len(xlsx_files) == 0:
+    #         return "session1_results"
+    #     else:
+    #         for i in range(len(xlsx_files)):
+    #             current_session = int(re.findall(r'\d+', xlsx_files[i])[0])
+    #             # * Current session will be the first (and only) sequence of numbers found in the i-th xlsx file name.
+    #             if current_session > last_session:
+    #                 last_session = current_session
+    #         return f'session{last_session}_results'
+    #     raise OSError("No excel files found.")
 
     def get_version(self) -> str:
         conf_file_path = '../pyproject.toml'

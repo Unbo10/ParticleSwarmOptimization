@@ -5,6 +5,7 @@ import tkinter as tk
 from tkinter import font
 
 from pso.graphics.colors import Color
+from pso.graphics.createMenu import CreateMenu
 from pso.graphics.exitMenu import ExitMenu
 from pso.graphics.mainMenu import MainMenu
 from pso.graphics.selectMenu import SelectMenu
@@ -13,16 +14,19 @@ from pso.database.data import Data
 
 class GUI:
     __root: tk.Tk = tk.Tk()
-    def __init__(self, optimization_history: list[Optimization], program_version: str = "Error") -> None:
+    def __init__(self, optimization_history: list[Optimization], data: Data = Data("test"), program_version: str = "Error") -> None:
         # ? Future versions could include thread management. Could be an interesting way to start learning about parallelism and concurrency.
         self._master_frame: tk.Frame = tk.Frame(GUI.__root, bg=Color.test2_bg)
-        self.__optimization_history: list[Optimization] = [Optimization(0), Optimization(1), Optimization(2), Optimization(3), Optimization(4)]
         self._window_height: int = 0
         self._window_width: int = 0
+        self.__create_menu: CreateMenu = CreateMenu(self._master_frame, initialize_window=self._initialize_root, change_menu=self._change_menu, optimization_history=optimization_history, data=data, window_width=750, window_height=500)
         self.__exit_menu: ExitMenu = ExitMenu(self._master_frame, self._initialize_root)
         self.__main_menu: MainMenu = MainMenu(self._master_frame, self._initialize_root, self._change_menu, program_version)
-        self.__select_menu: SelectMenu = SelectMenu(self._master_frame, self._initialize_root, self._change_menu, self.__optimization_history, window_width=750, window_height=500)
-        self.__menus: dict = {"exit": self.__exit_menu, "main": self.__main_menu, "select": self.__select_menu}
+        self.__select_menu: SelectMenu = SelectMenu(self._master_frame, self._initialize_root, self._change_menu, optimization_history, window_width=750, window_height=500)
+        self.__menus: dict = {"exit": self.__exit_menu, "main": self.__main_menu, "select": self.__select_menu, "create": self.__create_menu}
+        self.optimization_history = optimization_history
+
+    # ! Consider organizing the module files in module packages so graphics/ isn't too messy
 
     def _change_menu(self, menu_name="") -> None:
         if menu_name in self.__menus:
@@ -30,6 +34,7 @@ class GUI:
                 menu.forget()
             self.__menus[menu_name].display()
             print(menu_name)
+            print(self.optimization_history)
         else:
             raise Exception(f"Menu {menu_name} not found.")
 
@@ -48,7 +53,7 @@ class GUI:
         self._master_frame.place(x=0, y=0, width=width, height=height)
 
         # * Setting icon for the application switcher, the dock and the taskbar (Windows)
-        small_logo_path: str = "assets/ubuntu-logo.png"
+        small_logo_path: str = "graphics/assets/ubuntu-logo.png"
         large_logo_path: str = small_logo_path
         small_logo: tk.PhotoImage = tk.PhotoImage(file=small_logo_path).subsample(10)
         large_logo: tk.PhotoImage = tk.PhotoImage(file=large_logo_path)
@@ -58,9 +63,9 @@ class GUI:
         GUI.__root.configure(bg=Color.window_bg)
 
     def run(self):
-        self._change_menu("main")
-        GUI.__root.mainloop()
+        self._change_menu("create")
+        print(GUI.__root.mainloop())
 
 if __name__ == "__main__":
-    gui = GUI("0.2.0") # * Version can be obtained from Main's method get_version(). Therefore, when GUI is created inside Main, the method will be called as an argument (?).
+    gui = GUI(optimization_history=[], program_version="0.2.0") # * Version can be obtained from Main's method get_version(). Therefore, when GUI is created inside Main, the method will be called as an argument (?).
     gui.run() # ? Should run be the only public method?

@@ -29,7 +29,6 @@ This module defines the ParticleSwarm class, which represents multiple Particle 
 - get_heuristic() -> callable: Returns the heuristic function to be optimized.
 """
 
-from pso.vector.heuristic import default_heuristic
 from pso.swarm.particle import Particle
 from pso.vector.position import Position
 
@@ -94,7 +93,7 @@ class ParticleSwarm:
     """
 
     # ? ARE THE PSO COEFFICIENTS REALLY NEEDED HERE?
-    def __init__(self, inertia_coefficient: float = 1, cognitive_coefficient: float = 2, social_coefficient: float = 2, dimensions: int = 3, particle_amount: int = 10, heuristic: callable = default_heuristic) -> None:
+    def __init__(self, heuristic_f: callable, inertia_coefficient: float = 1, cognitive_coefficient: float = 2, social_coefficient: float = 2, dimensions: int = 3, particle_amount: int = 10) -> None:
         self.__inertia_coefficient: float = inertia_coefficient
         self.__cognitive_coefficient: float = cognitive_coefficient
         self.__social_coefficient: float = social_coefficient
@@ -115,14 +114,14 @@ class ParticleSwarm:
         # TODO: Except TypeError (double)
         # ? Should the following line be inside a finally block?
         self.__particles: list[Particle] = [
-            Particle(index=p, has_gbest=False, cognitive_coefficient=cognitive_coefficient,
-            dimensions=dimensions, heuristic=heuristic, 
+            Particle(heuristic_f=heuristic_f, index=p, has_gbest=False, cognitive_coefficient=cognitive_coefficient,
+            dimensions=dimensions, 
             inertia_coefficient=inertia_coefficient, 
             social_coefficient=social_coefficient) 
             for p in range(self.__particle_amount)
             ] # ! Test change of Particle's constructor
         self.__gbest: Position = Position(dimensions - 1)
-        self._heuristic_f: callable = heuristic
+        self._heuristic_f: callable = heuristic_f
     
     def __repr__(self) -> str:
         return f"Particle swarm with {self.get_particle_amount()} particles, cognitive coefficient {self.get_cognitive_coefficient()}, inertia coefficient {self.get_inertia_coefficient()}, social coefficient {self.get_social_coefficient()} and global best position {self.get_gbest().get_coordinates()}."
@@ -148,7 +147,7 @@ class ParticleSwarm:
         dimensions: int = self.__particles[0].get_position().get_dimensions() # ? Might be a better way to do it
         gbest_index: int = 0
         for particle in self.__particles:
-            if particle.get_heuristic().get_coordinates()[dimensions] < self._heuristic_f(self.__gbest, 0):
+            if particle.get_heuristic().get_coordinates()[dimensions] < self._heuristic_f(self.__gbest):
                 self.__gbest.set_coordinates(particle.get_position().get_coordinates().copy())
                 gbest_index = particle.get_index()
         self.__particles[gbest_index].has_gbest = True
