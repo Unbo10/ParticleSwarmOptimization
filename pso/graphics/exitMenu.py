@@ -11,7 +11,7 @@ class ExitMenu():
             bg=Color.goodbye_frame_bg)
         self.__initialize_window: callable = initialize_window
         self.__image: tk.PhotoImage = tk.PhotoImage(
-            file="assets/goodbye.png").subsample(2)
+            file="graphics/assets/goodbye.png").subsample(2)
         self.__label: tk.Label = tk.Label(self.root, image=self.__image, bg=Color.goodbye_label_bg, borderwidth=0, highlightthickness=0) 
         self.__text: tk.Text = tk.Text(self.root, bg=Color.goodbye_frame_bg, wrap="word", font=font.Font(family=FontName.label, size=25), fg=Color.goodbye_text_fg, background=Color.goodbye_text_bg, borderwidth=0, highlightthickness=0)
         self.__text.insert(index="end", chars="Goodbye!")
@@ -32,6 +32,6 @@ class ExitMenu():
         self.__parent_frame.after(500, self.__parent_frame.quit)
 
     def forget(self):
-        pass
+        self.root.forget()
 
     

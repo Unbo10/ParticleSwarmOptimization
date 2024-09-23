@@ -4,7 +4,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name = "pso"
-version = "0.2.0"
+version = "1.0.0"
 description = "A Particle Swarm Optimization package"
 authors = ["Paula Isabella Moreno, Juan Sebastián Rueda, Santiago Rocha <srochap@unal.edu.co>"]
 readme = "README.md"
@@ -13,6 +13,7 @@ repository = "https://github.com/Unbo10/ParticleSwarmOptimization"
 [tool.poetry.dependencies]
 python = "^3.6"
 pandas = "*"
+matplotlib = "*"
 numpy = ">=1.26.4"
 openpyxl = "*"
 toml = ">=0.10.2"

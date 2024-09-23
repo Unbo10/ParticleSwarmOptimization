@@ -22,11 +22,6 @@ import numpy as np
 import math
 from pso.vector.base_vector import Vector
 
-def default_heuristic(position: Vector) -> float:
-    x = position.get_coordinates()[0]
-    y = position.get_coordinates()[1]
-    return((1 + (x+y+1)**2 * (19 - 14 * x + 3 * x**2 - 14 * y + 6*x*y + 3*y**2)) * (30 + (2*x - 3*y)**2 * (18 - 32 * x + 12 * x**2 + 48 * y - 36*x*y + 27 * y**2)))
-    #return np.sum(np.square(position.get_coordinates()))
 class Heuristic(Vector):
     """
     Represents a heuristic vector used in Particle Swarm Optimization.
@@ -56,9 +51,9 @@ class Heuristic(Vector):
     - Other getters and setters inherited.
     """
 
-    def __init__(self, dimensions=3, heuristic=default_heuristic):
-        super().__init__(dimensions)
-        self._heuristic_f: callable = heuristic
+    def __init__(self, heuristic_f, dimensions=3):
+        super().__init__(dimensions=dimensions)
+        self._heuristic_f: callable = heuristic_f
     
     def _update(self, position):
         """
