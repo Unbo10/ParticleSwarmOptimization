@@ -342,6 +342,7 @@ py main.py
         +display()
     }
 
+    OptionsFrame "1" --* "3" OptionsButton
     OptionsFrame --> Color : "uses(?)"
     OptionsFrame --> FontName : "uses(?)"
     OptionsFrame "1" --* "3" OptionsButton
