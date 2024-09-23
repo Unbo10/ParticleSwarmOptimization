@@ -7,6 +7,9 @@ from pso.graphics.fonts import FontName
 from pso.graphics.colors import Color
 
 class MainMenu():
+    """ 
+    Creates the main menu of the GUI.
+    """
     def __init__(self, master_frame: tk.Frame, initialize_window: callable, change_menu: callable, program_version: str, window_width: int=250, window_height: int=250):
         self._parent_frame: tk.Frame = master_frame # ! Check if this is the right root
         self.root: tk.Frame = tk.Frame(master_frame, bg=Color.test2_bg)

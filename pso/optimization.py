@@ -32,8 +32,6 @@ from pso.database.data import Data
 class Optimization:
     def __init__(self, index: int, function_fig: Figure, function_choice: str = "Sphere", data: Data = Data("test"), cognitive_coefficient: float = 2.05, inertia_coefficient: float = 0.7, social_coefficient: float = 2.05, particle_amount: int = 10, dimensions: int = 3, iterations: int = 20) -> None:
         self.__data: Data = data
-        # ? Might need to make a heuristic function class or at least a
-        # ? heuristic function attribute to display it in the select menu of the GUI.
         self.__iterations: int = iterations
         # * So it doesn't create two particle swarms with different dimensions
         self.__function_choice: str = function_choice
@@ -66,11 +64,7 @@ class Optimization:
     
     def heuristic(self, selection: str) -> callable:
         """Heuristic function to be optimized."""
-        # TODO: Make a better implementation of choosing the desired function, at the moment it's done manually, by modifying the variable selection through the parameters
-        # TODO: Implement the second function to the dimension that the user selects. It is set to two dimensions. ? A dimension parameter in the heuristic ? 
-        # * Agree, but what should be then the type of the heuristic_value? A list or maybe an ndarray?
-        # * Already solved
-
+        
         if selection == "Sphere":
             self.bound = 2
             return self.sphere_f
@@ -109,6 +103,7 @@ class Optimization:
             for particle in swarm.get_particles():
                 if iteration_num > 0: 
                     # * To record the initial states of the particles before optimizing them
+                    # * Each iteration the particles update their velocity and position.
                     particle._update_velocity(swarm.get_gbest())
                     particle.get_position()._update(particle.get_velocity())
                     particle.get_velocity().set_coordinates(np.clip(particle.get_position().get_coordinates(), -5, 5))
@@ -158,12 +153,11 @@ class Optimization:
         self.__data.append_optimization(optimization_df)
         self.__optimization_df = optimization_df
     
+    # Applying decorators to the project
     @property
     def function_choice(self) -> str:
         return self.__function_choice
 
-    # TODO: Make this getters' attributes properties
-    # * Done
     @property
     def dimensions(self) -> int:
         return self._dimensions

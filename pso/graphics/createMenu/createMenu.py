@@ -15,6 +15,9 @@ from pso.optimization import Optimization
 from pso.database.data import Data
 
 class CreateMenu:
+    """
+    This class manages all the inputs, buttons and the graph display for the create optimization menu.
+    """
     def __init__(self, master_frame, initialize_window: callable, change_menu: callable, optimization_history: list[Optimization], data: Data, window_width: int, window_height: int):
         self.__initialize_window: callable = initialize_window
         self.__change_menu: callable = change_menu
@@ -53,6 +56,7 @@ class CreateMenu:
         self.__optimization_history.append(new_optimization)
 
     def __reset_parameters(self) -> None:
+        # * Resets all the inputs to their default values
         self.__w_coefficient_input.entry.delete(0, "end")
         self.__cog_coefficient_input.entry.delete(0, "end")
         self.__soc_coefficient_input.entry.delete(0, "end")
@@ -72,6 +76,7 @@ class CreateMenu:
             self.__view_optimization()
 
     def __create_contour_levels(self, levels_boundaries: list[float]) -> np.linspace:
+        # * Creates the levels for the contour plot based on the boundaries of the test functions
         i = 1
         levels: np.ndarray = np.linspace(start=levels_boundaries[0], stop=levels_boundaries[1], num=10) # * So that levels isn't empty and can be concatenated
         while i < len(levels_boundaries) - 1:
@@ -85,6 +90,7 @@ class CreateMenu:
         return np.meshgrid(x, y)
 
     def __create_fig(self, option: str) -> Figure:
+        # * Generates the figure for the contour plot for each test function
         fig = Figure(figsize=(5,5))
         plot = fig.add_subplot(111)
         levels_boundaries: list[float] = []

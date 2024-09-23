@@ -42,6 +42,8 @@ class OptimizationFrame:
     def display(self, parent_width: int) -> None:
         # labels_list: list[tk.Label] = [attr for attr in dir(self) if attr[-5:] == "label"]
         # * There could be a better way of doing it using a list
+        
+        # * Sets the optimization frame in the parent frame
         for col in range(0, 5):
             self.root.columnconfigure(col, weight=1)
         for row in range(0, 3):

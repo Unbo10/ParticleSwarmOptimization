@@ -6,6 +6,9 @@ from pso.graphics.selectMenu.viewFrame import ViewFrame
 from pso.optimization import Optimization
 
 class ViewButton(tk.Button):
+    """ 
+    Sets the button to change the windonw and show the optimization.
+    """
     def __init__(self, master: tk.Frame, image: tk.Image, active_image: tk.Image, forget_select_menu: callable, initialize_window: callable, change_menu: callable,optimization: Optimization, bg: str = Color.select_label_optim_bg, fg: str=Color.select_label_optim_fg) -> "ViewButton":
         super().__init__(master=master, image=image, bg=bg, fg=fg)
         self.__image: tk.Image = image

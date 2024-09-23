@@ -12,6 +12,9 @@ from pso.graphics.backButton import BackButton
 from pso.optimization import Optimization
 
 class ViewFrame(tk.Frame):
+    """ 
+    Manages the view of an optimization by iterating through the positions of the particles.
+    """
     def __init__(self, initialize_window: callable, change_menu: callable, optimization: Optimization, function_fig: Figure, bg: str = Color.test3_bg) -> "ViewFrame": # ! Correct the type hint in the other classes
         super().__init__(bg=bg)
         self.__initialize_window: callable = initialize_window

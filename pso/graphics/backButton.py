@@ -3,6 +3,9 @@ import tkinter as tk
 from pso.graphics.colors import Color
 
 class BackButton(tk.Button):
+    """ 
+    A class that manages the back button in the GUI. Inherits from tk.Button.
+    """
     def __init__(self, menu_frame, image: tk.PhotoImage, active_image: tk.PhotoImage, width: int, height: int,  change_menu: callable, change_menu_args: dict = {"menu_name": "main"}, cbg: str = Color.back_button_cbg, args: dict = {
         "bg": Color.back_button_bg,
         "activebackground": Color.back_button_abg,
@@ -29,6 +32,7 @@ class BackButton(tk.Button):
         self.config(bg=Color.back_button_cbg, activebackground=Color.back_button_cbg, image=self.__image)
 
     def __release(self, e) -> None:
+        # * Goes back to the main menu
         self.__change_menu(**self.__change_menu_args)
 
     # ! Consider binding to events in the initializer so that every time a widget is displayed it doesn't need to bind events again.

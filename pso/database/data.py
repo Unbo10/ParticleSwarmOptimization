@@ -8,20 +8,50 @@ import pandas as pd
 from pso.graphics.colors import Color
 
 class Data:
+    """
+    This class is used to store the optimization results in an Excel file. It is used to store the history of the particles and the gbest indexes of each optimization.
+    
+    """
     def __init__(self, excel_file_name: str) -> None:
+        """
+        Initializes the Data object with the given Excel file name.
+        
+        Args:
+            excel_file_name (str): The name of the Excel file (without extension and directory).
+        """    
+
+        # List to store the history of particles for each optimization
         self.__particle_history: list[pd.DataFrame] = []
+        
+        # List to store the gbest indexes for each optimization
         self.__gbest_history: list[list[int]] = []
+        
+        # Counter to keep track of the number of optimizations
         self.__number_of_optimizations: int = 0
-        self.__xlsx_name: str = excel_file_name # * Without the extension and directory
-        self.__xlsx_path: str = f"database/optimization_results/{self.__xlsx_name}.xlsx" # * It is determined if it exists in Main
+        
+        # Name of the Excel file (without extension)
+        self.__xlsx_name: str = excel_file_name
+        
+        # Full path to the Excel file
+        self.__xlsx_path: str = f"database/optimization_results/{self.__xlsx_name}.xlsx"
+        
         # * The two dots are needed if the GUI is directly executed.
         # ! For now, the execution will continue to be done in the gui.py file, but the final version MUST CHANGE the paths to execute everything from the main.py file.
         # * Already done
+        
     def append_gbest_indexes(self, optimization_gbest_indexes: list[int]) -> None:
+        """
+        The gbest indexes are appended to the gbest history list. This method is called after each optimization.
+        
+        """
         self.__gbest_history.append(optimization_gbest_indexes)
         self.__number_of_optimizations += 1
     
     def append_optimization(self, optimization_df: pd.DataFrame) -> None:
+        """
+        This method styles the DataFrame and appends it to the Excel file. Creates the Excel file if it does not exist.
+        
+        """
         # TODO: Test the whole class with multiple sessions and files. Also, update and add documentation and the class diagram.
         # * Seems to be working alright
         if "optimization_results" not in os.listdir("database"):
@@ -29,6 +59,7 @@ class Data:
             
         # ? We may want to implement this using with
         
+        # * Creating the Excel file if it does not exist
         if not os.path.exists(self.__xlsx_path):
             self.create_spreadsheet()
         
