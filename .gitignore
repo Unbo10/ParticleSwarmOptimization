@@ -44,11 +44,8 @@ package-lock.json
 yarn.lock
 
 # Ignore environment-specific files
-.env
-.env.local
-.env.development
-.env.test
-.env.production
+.venv
+*.lock
 
 # Ignore sensitive or personal files
 config.ini

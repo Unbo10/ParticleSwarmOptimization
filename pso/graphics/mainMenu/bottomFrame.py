@@ -3,8 +3,8 @@ from tkinter import font
 
 from pso.graphics.colors import Color
 from pso.graphics.fonts import FontName
-from pso.graphics.bottomButton import BottomButton
-from pso.graphics.popUpFrame import PopUpFrame
+from pso.graphics.mainMenu.bottomButton import BottomButton
+from pso.graphics.mainMenu.popUpFrame import PopUpFrame
 
 class BottomFrame(tk.Frame):
     """ 

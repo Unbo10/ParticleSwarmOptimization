@@ -44,25 +44,31 @@ class ViewFrame(tk.Frame):
         figure_canvas.draw()
         return figure_canvas.get_tk_widget()
     
-    def display_iteration_canvas(self, iteration: int, exited_menu: bool = False) -> None:
+    def display_iteration_canvas(self, iteration: int) -> None:
+        print(self.__exited_menu)
+        if self.__exited_menu:
+            return None
         try:
             self.__iteration_canvases[iteration-1].pack_forget()
         except IndexError:
             pass
         finally:
             self.__iteration_canvases[iteration].pack(fill="none", expand=True)
-            if (iteration < self.__optimization.iterations) and not self.__exited_menu:
+            if iteration < self.__optimization.iterations:
                 self.after(1000, self.display_iteration_canvas, iteration + 1) # * Schedules the next iteration
 
     def display(self) -> None:
+        for iteration_canvas in self.__iteration_canvases:
+            iteration_canvas.pack_forget()
+        self.__back_button.focus_set()
         self.__exited_menu = False
         self.__initialize_window(width=500, height=600, title=
         "View optimization - PSO")
         self.__title.pack(fill="x", anchor="e")
         self.__back_button.display(x=0, y=0)
         self.place(x=0, y=0, width=500, height=600)
-        self.display_iteration_canvas(0)
+        print(self.display_iteration_canvas(0)) # ! Weird calls to this function
 
     def forget(self) -> None:
-        self.place_forget()
         self.__exited_menu = True
+        self.place_forget()

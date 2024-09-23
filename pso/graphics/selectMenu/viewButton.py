@@ -2,7 +2,7 @@
 import tkinter as tk
 
 from pso.graphics.colors import Color
-from pso.graphics.viewFrame import ViewFrame
+from pso.graphics.selectMenu.viewFrame import ViewFrame
 from pso.optimization import Optimization
 
 class ViewButton(tk.Button):

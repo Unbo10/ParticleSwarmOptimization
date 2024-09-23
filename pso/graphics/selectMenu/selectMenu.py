@@ -8,7 +8,7 @@ from pso.graphics.colors import Color
 from pso.graphics.fonts import FontName
 from pso.optimization import Optimization
 from pso.graphics.optionsButton import OptionsButton
-from pso.graphics.optimizationFrame import OptimizationFrame
+from pso.graphics.selectMenu.optimizationFrame import OptimizationFrame
 from pso.graphics.optionsButton import OptionsButton
 
 class SelectMenu():
@@ -63,9 +63,9 @@ class SelectMenu():
 
         else:
             self.__no_optimizations_label.pack_forget()
+            self.__create_optimization_button.forget()
             for optim_frame in self.__optimization_frames:
                 optim_frame.view_button.view_frame.forget()
-            self.__create_optimization_button.forget()
             index = len(self.__optimization_frames)
             while index < len(self.__optimization_history):
                 optimization = self.__optimization_history[index]
@@ -88,7 +88,6 @@ class SelectMenu():
                 frame.display(self.__container_frame_width)
             self.__canvas.create_window((0, 0), window=self.__container_frame, anchor="nw", width=self.__container_frame_width, height=container_frame_height) # * Creates a window inside the current tk.Tk() window, so it only displays a certain portion of the widgets contained inside.
             self.__canvas.configure(scrollregion=self.__canvas.bbox("all"))
-            print(self.__canvas.bbox("all"))
             self.__canvas.place(y=(self.__title_height) + 15, x=15, width=self.__window_width - (30 + self.__scrollbar_width), height=self.__window_height - (self.__title_height + 30))
             self.__canvas.yview_moveto(0) # * So that every time the menu is displayed it is showing the top optimizations and not the ones the user was seeing before they went back to the main menu.
         self.root.place(x=0, y=0, width=self.__window_width, height=self.__window_height)

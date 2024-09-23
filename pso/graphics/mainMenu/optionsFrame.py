@@ -3,7 +3,6 @@ from tkinter import font
 
 from pso.graphics.optionsButton import OptionsButton
 from pso.graphics.colors import Color
-from pso.graphics.fonts import FontName
 
 class OptionsFrame(tk.Frame):
     """

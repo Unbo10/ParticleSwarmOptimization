@@ -6,7 +6,7 @@ import tkinter as tk
 
 from pso.graphics.colors import Color
 from pso.optimization import Optimization
-from pso.graphics.viewButton import ViewButton
+from pso.graphics.selectMenu.viewButton import ViewButton
 
 class OptimizationFrame:
     def __init__(self, master: tk.Frame, optimization: Optimization, forget_select_menu: callable, initialize_window: callable, change_menu: callable, width: int, height: int, separation: int, scrollbar_width: int, frame_index: int) -> None:

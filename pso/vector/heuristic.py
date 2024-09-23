@@ -56,7 +56,7 @@ class Heuristic(Vector):
         super().__init__(dimensions=dimensions)
         self._heuristic_f: callable = heuristic_f
     
-    def _update(self, position):
+    def _update(self, position: Position):
         """
         Updates the vector based on the given position and the 
         heuristic function

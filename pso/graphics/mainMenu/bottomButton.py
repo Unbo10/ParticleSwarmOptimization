@@ -2,7 +2,7 @@
 import tkinter as tk
 
 from pso.graphics.colors import Color
-from pso.graphics.popUpFrame import PopUpFrame
+from pso.graphics.mainMenu.popUpFrame import PopUpFrame
 
 class BottomButton(tk.Button):
     """ 
