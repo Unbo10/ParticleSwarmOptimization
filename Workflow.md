@@ -60,6 +60,6 @@ Para subir el contenido al repositorio remoto:
 git push origin new_branch_name
 ```
 
-Esto implica que el cambio realizado en ``new_branch_name`` fue realizado correctamente y está listo para ser incorporado a ``master`` o a una rama 'padre'.
+Esto implica que el cambio realizado en ``new-branch-name`` fue realizado correctamente y está listo para ser incorporado a ``master`` o a una rama 'padre'.
 
-En el servidor de GitHub se programa el *Pull Request* (PR) de la rama “new_branch_name” a la rama de “master” con la etiqueta adecuada y se debe revisar por los otros dos miembros del equipo, quienes harán comentarios y/o correciones o aprobarán el PR.
+En el servidor de GitHub se programa la *Pull Request* (PR) de la rama “new-branch-name” a la rama de “master” con la etiqueta adecuada y se debe revisar por los otros dos miembros del equipo, quienes harán comentarios y/o correciones o aprobarán la PR.

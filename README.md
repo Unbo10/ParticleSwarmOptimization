@@ -1,8 +1,23 @@
 <h1 align="center">The Inheritance</h1>
 
+📋 Table of contents
+- [📖 About](#-about)
+- [🚀 How to run the project using a virtual environment](#-how-to-run-the-project-using-a-virtual-environment)
+  - [Using `poetry`](#using-poetry)
+  - [Using the prefered installer for Python (`pip`)](#using-the-prefered-installer-for-python-pip)
+- [📚 Class Diagrams](#-class-diagrams)
+  - [Sumarized Diagrams](#sumarized-diagrams)
+    - [Overview](#overview)
+    - [`Optimization` class](#optimization-class)
+    - [`GUI` class](#gui-class)
+  - [Vector and swarm diagrams](#vector-and-swarm-diagrams)
+  - [Complete Class Diagram](#complete-class-diagram)
 
 
-## Project explanation:
+## 📖 About
+
+This project was developed by [@Unbo10](https://github.com/Unbo10) and [@jsruedase](https://github.com/jsruedase) as the final project of the Object-Oriented Programming course, taught at Universidad Nacional de Colombia by [Prof. @fegonzalez7](https://github.com/fegonzalez7). It is an implementation of the Particle Swarm Optimization (PSO from now onwards) algorithm using Python and some of its libraries like `tkinter`, `openpyxl` and `numpy`.
+
 To know and understand better the PSO algorithm, we encourage you to check the Wiki of this project:
 - ![Wiki](https://github.com/Unbo10/ParticleSwarmOptimization/wiki/PSO's-heuristic)
 
@@ -10,48 +25,263 @@ Once you are familiarized with it, we can proceed. We chose to work on this prob
 
 The PSO algorithm consists of a set of Particles that "explore" the function, with the purpose of finding it's minimum. That's why the implementation that we made consists of a ```Vector``` class, that is the class from wich ```Position```, ```Heuristic``` and ```Velocity``` inherit. Then, we define the ```Particle``` class, that consists of the three previous classes and has methods such as ```initialize_randomly``` or ```_update_velocity```, that allows us to control the particles over the domain of the function. Finally, we have the ```ParticleSwarm``` class, which is the set of all the particles that we want to create. This is the abstraction of the project that enables us to solve the problem, with the algorithm. The steps to follow are detailed in the Wiki.
 
+## 🚀 How to run the project using a virtual environment
 
-## How to run the project using a virtual environment:
 First of all, what is a virtual envoronment? A virtual envirnment is a "separate folder" that creates an independent set of installed packages. This means that we can have different versions of some packages in that folder than those that we have globally installed. This is useful because some versions of this project might need specifically some requirements that change over time.
 
-### Steps for Windows:
+For this project, `poetry` was chosen to be the dependency manager and the packaging tool. It allows you to create virtual environments (just like `pip`), and has some additional features that make it more complete and easier to use. For this reason, we recommend following the instructions with `poetry`, but you may try with `pip` as well (it hasn't been tested thoroughly, but at least the dependencies seem to be installed).
 
-- First step, clone the repository:
+### Using `poetry`
+
+1. Open a terminal and clone the repository by executing `git clone` followed by the repository's URL:
 ```bash
 git clone https://github.com/Unbo10/ParticleSwarmOptimization.git
 ```
 
-- Next, in the folder that you cloned the repository, create the virtual environment:
+1. Change the directory to the project's folder:
+```bash
+cd ParticleSwarmOptimization/
+```
+
+1. Install `poetry`:
+```bash
+pip install poetry
+```
+
+1. Run the following command to make sure the virtual environment is created in the project's folder:
+```bash
+poetry config virtualenvs.in-project true
+```
+
+To chek if it was configured correctly, you can run `poetry config --list`, and you should see `virtualenvs.in-project = true`.
+
+5. Spawn a new shell and the virtual environment:
+```bash
+poetry shell
+```
+
+6. Install the project's dependencies:
+```bash
+poetry install
+```
+
+After completing these steps, you should see to the left of the terminal `(pso-py3.10)`, indicating that you're in the virtual environment. Now, you may change the directory to `pso/` by running `cd pso/` and then run the command
+```bash
+poetry run run
+```
+to execute the `run()` function from the module `main`. This will start the GUI.
+
+Whenever you want to exit the virtual environment, you can run `exit`, and whenever you wat to enter it again, you can navigate to the project's folder (if you were in the `pso/` folder you can run `cd ..`) and:
+- run `source .venv/bin/activate` if you are in Linux.
+- run `venv\Scripts\activate.bat` if you are in Windows.
+
+### Using the prefered installer for Python (`pip`)
+
+1. Clone the repository:
+```bash
+git clone https://github.com/Unbo10/ParticleSwarmOptimization.git
+```
+
+2. In the folder that you cloned the repository, create the virtual environment:
+
 ```bash
 pip install virtualenv
 ```
 
-- Create environment folder inside the current project directory:
+3. Create environment folder inside the current project directory:
 ```bash
 python -m venv env
 ```
 
-- Activate the virtual environment:
-```bash
-env\Scripts\activate.bat
-```
-- Once you activate it you should see ```(env)``` on the terminal.
+4. Activate the virtual environment:
+- In Linux: `source env/bin/activate`
+- In Windows: `.\env\Scripts\activate`
+  
+Once you activate it you should see ```(env)``` on the terminal.
 
-- Install the project package:
+5. Install the project package:
 ```bash
 pip install -e.
 ```
 
-- Go to the pso folder:
+6. Go to the pso folder:
 ```bash
 cd pso
 ```
-- Run main.py:
-```bash
-py main.py
+7. Run main.py:
+- In Linux: `python3 main.py`
+- In Windows: `py main.py`
+
+## 📚 Class Diagrams
+
+### Sumarized Diagrams
+
+#### Overview
+
+```mermaid
+    classDiagram
+    direction LR
+    class Main{
+
+    }
+    Main "1" --o "*" Optimization
+    Main "1" --* "1" Data
+    Main "1" --* "1" GUI
+    class GUI{
+
+    }
+    GUI "1" --o "1" Data
+    GUI "1" --* "*" Optimization
+    class Data{
+
+    }
+    Data "1" --o "*" Optimization
+    class Optimization{
+
+    }
+    Optimization "1" --o "1" Data
 ```
 
-## Class Diagram of the swarm and vector packages:
+#### `Optimization` class
+
+``` mermaid 
+    classDiagram
+    direction LR
+        class Optimization{
+    }
+    Optimization "1" --o "1" ParticleSwarm
+    Optimization "*" --o "1" Data
+
+    class Data {
+    }
+
+    class ParticleSwarm{
+    }
+    ParticleSwarm "1" o--"*" Particle
+
+    class Particle{
+    }
+    Particle "1" o-- "1" Heuristic
+    Particle "1" o-- "2" Position
+    Particle "1" o-- "1" Velocity
+
+
+    class Vector {
+    }
+
+    class Heuristic{
+    }
+    Heuristic "1" --|> "1" Vector
+
+    class Position{
+    }
+    Position "1" --|> "1" Vector
+
+    class Velocity {
+    }
+    Velocity "1" --|> "1" Vector
+
+```
+
+#### `GUI` class
+
+```mermaid
+    classDiagram
+    direction LR
+        class GUI {
+    }
+
+    GUI "1" --o "*" Optimization
+    GUI "1" --* "1" MainMenu
+    GUI "1" --* "1" CreateMenu
+    GUI "1" --* "1" SelectMenu
+    GUI "1" --* "1" ExitMenu
+
+    class ExitMenu {
+    }
+
+
+    class MainMenu {
+    }
+
+    MainMenu "1" --* "1" BottomFrame
+    MainMenu "1" --* "1" OptionsFrame
+
+    class BottomFrame {
+    }
+    
+    BottomFrame "1" --|> "1" tkFrame
+    BottomFrame "1" --* "2" BottomButton
+
+    class BottomButton {
+    }
+
+    BottomButton "1" --* "1" PopUpFrame
+    BottomButton "1" --|> "1" tkButton
+
+    class PopUpFrame {
+    }
+
+    PopUpFrame "1" --|> "1" tkFrame
+
+    class OptionsFrame {
+    }
+
+    OptionsFrame "1" --* "3" OptionsButton
+    OptionsFrame "1" --* "3" OptionsButton
+
+    class OptionsButton{
+    }
+
+    OptionsButton "1" --|> "1" tkButton
+
+    class CreateButton {
+    }
+    CreateButton "1" --|> "1" OptionsButton
+
+
+    class CreateInput {
+    }
+
+
+    class CreateMenu {
+    }
+    CreateMenu "1" --* "1" FunctionChoiceMenu
+    CreateMenu "1" --* "6" CreateInput
+    CreateMenu "1" --* "2" CreateButton
+
+
+    class FunctionChoiceMenu {
+    }
+
+
+    class SelectMenu {
+    }
+
+    SelectMenu "1" --* "1" OptionsButton
+    SelectMenu "1" *-- "*" OptimizationFrame
+    SelectMenu "1" --* "1" BackButton
+
+    class BackButton {
+    }
+
+    class OptimizationFrame {   
+    }
+    OptimizationFrame "1" --* "1" ViewButton
+    
+    class ViewButton {
+    }
+
+    ViewButton "1" --* "1" ViewFrame
+
+    class ViewFrame {
+    }
+
+    ViewFrame "1" --* "1" BackButton
+
+```
+
+### Vector and swarm diagrams
 ``` mermaid
     classDiagram
     class Optimization{
@@ -168,10 +398,10 @@ py main.py
 
 ```
 
+### Complete Class Diagram
 
+Includes `Data`, the class asociated to the database, and `GUI`, the class in charge of displaying and managing the graphic user interface.
 
-
-## Complete Class Diagram, with the data and graphic user interface packages:
 ``` mermaid
     classDiagram
     direction TB
@@ -500,7 +730,7 @@ py main.py
     }
 
     ViewButton --> Color : "uses"
-    ViewButton --> ViewFrame : "contains"
+    ViewButton "1" --* "1" ViewFrame
     ViewButton --> Optimization : "uses"
 
     class ViewFrame {
@@ -568,7 +798,7 @@ py main.py
         + get_swarm(): ParticleSwarm
     }
     Optimization "1" --o "1" ParticleSwarm
-    Optimization "*" --* "1" Data
+    Optimization "*" --o "1" Data
 
     class Data {
         - __init__(str excel_file_name)

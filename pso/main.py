@@ -40,14 +40,18 @@ class Main:
         conf_file_path = '../pyproject.toml'
         data = toml.load(conf_file_path)
         version = data.get('tool', {}).get('poetry', {}).get('version', 'Version not found')
-
         return version
+
+def run():
+    main = Main()
+    main.gui.run()
+
 
 if __name__ == "__main__":
     try:
-        main = Main()
-        main.gui.run()
+        run()
     except KeyboardInterrupt:
+        print()
         print("Exiting the program.")
         exit()
 

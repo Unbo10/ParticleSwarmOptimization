@@ -3,7 +3,6 @@ from tkinter import font
 
 from pso.graphics.optionsButton import OptionsButton
 from pso.graphics.colors import Color
-from pso.graphics.fonts import FontName
 
 class OptionsFrame(tk.Frame):
     def __init__(self, parent_frame: tk.Frame, change_menu: callable,  window_width: int, window_height: int, title_height, bottom_frame_height: int):

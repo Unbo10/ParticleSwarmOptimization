@@ -8,9 +8,9 @@ from tkinter import font
 from pso.graphics.backButton import BackButton
 from pso.graphics.colors import Color
 from pso.graphics.fonts import FontName
-from pso.graphics.createInput import CreateInput
-from pso.graphics.functionChoiceMenu import FunctionChoiceMenu
-from pso.graphics.createButton import CreateButton
+from pso.graphics.createMenu.createInput import CreateInput
+from pso.graphics.createMenu.functionChoiceMenu import FunctionChoiceMenu
+from pso.graphics.createMenu.createButton import CreateButton
 from pso.optimization import Optimization
 from pso.database.data import Data
 

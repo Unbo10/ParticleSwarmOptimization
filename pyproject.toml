@@ -6,21 +6,21 @@ build-backend = "poetry.core.masonry.api"
 name = "pso"
 version = "1.0.0"
 description = "A Particle Swarm Optimization package"
-authors = ["Paula Isabella Moreno, Juan Sebastián Rueda, Santiago Rocha <srochap@unal.edu.co>"]
+authors = [
+    "Santiago Rocha Pachón <srochap@unal.edu.co>, Juan Sebastián Rueda"
+    ]
 readme = "README.md"
 repository = "https://github.com/Unbo10/ParticleSwarmOptimization"
 
 [tool.poetry.dependencies]
-python = "^3.6"
-pandas = "*"
-matplotlib = "*"
-numpy = ">=1.26.4"
-openpyxl = "*"
+python = ">=3.10"
+pandas = ">=1.3.0"
+matplotlib = ">=3.4.3"
+numpy = ">=1.21.0"
+openpyxl = ">=3.0.9"
 toml = ">=0.10.2"
-xlsxwriter = "*"
-setuptools = ">=61.0"
-
-# ? Will we still have to check for built-in modules? Seems to me checking the Python version should be enough
+xlsxwriter = ">=1.4.3"
+setuptools = ">=57.0.0"
 
 [tool.poetry.dev-dependencies]
 
