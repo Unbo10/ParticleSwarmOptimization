@@ -7,8 +7,8 @@ name = "pso"
 version = "1.0.0"
 description = "A Particle Swarm Optimization package"
 authors = [
-    "Juan Sebastián Rueda",
-    "Santiago Rocha Pachón <srochap@unal.edu.co>"]
+    "Santiago Rocha Pachón <srochap@unal.edu.co>, Juan Sebastián Rueda"
+    ]
 readme = "README.md"
 repository = "https://github.com/Unbo10/ParticleSwarmOptimization"
 
