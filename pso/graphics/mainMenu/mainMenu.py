@@ -1,8 +1,8 @@
 import tkinter as tk
 from tkinter import font
 
-from pso.graphics.bottomFrame import BottomFrame
-from pso.graphics.optionsFrame import OptionsFrame
+from pso.graphics.mainMenu.bottomFrame import BottomFrame
+from pso.graphics.mainMenu.optionsFrame import OptionsFrame
 from pso.graphics.fonts import FontName
 from pso.graphics.colors import Color
 

@@ -1,14 +1,15 @@
 import os
+import time
 
 import numpy as np
 import tkinter as tk
 from tkinter import font
 
 from pso.graphics.colors import Color
-from pso.graphics.createMenu import CreateMenu
+from pso.graphics.createMenu.createMenu import CreateMenu
 from pso.graphics.exitMenu import ExitMenu
-from pso.graphics.mainMenu import MainMenu
-from pso.graphics.selectMenu import SelectMenu
+from pso.graphics.mainMenu.mainMenu import MainMenu
+from pso.graphics.selectMenu.selectMenu import SelectMenu
 from pso.optimization import Optimization
 from pso.database.data import Data
 
@@ -31,6 +32,7 @@ class GUI:
         if menu_name in self.__menus:
             for menu in self.__menus.values():
                 menu.forget()
+            time.sleep(0.5) # * Prevents the user from clicking ViewButton instances too fast.
             self.__menus[menu_name].display()
             print(menu_name)
             # print(self.optimization_history)

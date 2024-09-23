@@ -2,7 +2,7 @@
 import tkinter as tk
 
 from pso.graphics.colors import Color
-from pso.graphics.popUpFrame import PopUpFrame
+from pso.graphics.mainMenu.popUpFrame import PopUpFrame
 
 class BottomButton(tk.Button):
     def __init__(self, menu_frame: tk.Frame, parent_frame: tk.Frame, image: tk.PhotoImage, active_image: tk.PhotoImage, pop_up_text: str, name: str, pop_up_frame_height: int, pop_up_frame_width: int, pop_up_frame_y: int, abg: str = Color.bottom_button_abg, cbg: str = Color.bottom_button_cbg, args: dict = {
