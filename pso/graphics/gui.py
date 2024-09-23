@@ -27,14 +27,13 @@ class GUI:
         self.optimization_history = optimization_history
 
     # ! Consider organizing the module files in module packages so graphics/ isn't too messy
-
     def _change_menu(self, menu_name="") -> None:
         if menu_name in self.__menus:
             for menu in self.__menus.values():
                 menu.forget()
             self.__menus[menu_name].display()
             print(menu_name)
-            print(self.optimization_history)
+            # print(self.optimization_history)
         else:
             raise Exception(f"Menu {menu_name} not found.")
 

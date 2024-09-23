@@ -5,7 +5,6 @@ from pso.graphics.colors import Color
 from pso.graphics.fonts import FontName
 
 class OptionsButton(tk.Button):
-
     def __init__(self, parent_frame: tk.Frame, text: str, callable: callable, callable_args: dict, padx: tuple, pady: tuple, button_font: font.Font = None, args: dict = {
     "bg": Color.optim_button_bg,
     "fg": Color.optim_button_fg,
@@ -14,7 +13,7 @@ class OptionsButton(tk.Button):
     "highlightcolor": Color.optim_button_hcolor,
     "highlightthickness": 1,
     "cursor": "hand2",
-    }) -> None:
+    }) -> "OptionsButton":
         # ! button_font should be font
         # TODO: Make the color-related arguments attribute arguments so that it does depend in the initialization in case the default values are different (and for the mere purpose of keeping the code consistent and good)
         if button_font == None:

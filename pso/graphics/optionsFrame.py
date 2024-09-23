@@ -12,7 +12,6 @@ class OptionsFrame(tk.Frame):
         self.__window_height: int = window_height
         self.__title_height: int = title_height
         self.__bottom_frame_height: int = bottom_frame_height
-
         BUTTON_PADDING: int = 6
         self.__create_button: OptionsButton = OptionsButton(self, text="Create optimization", callable=change_menu, callable_args={"menu_name": "create"}, padx=BUTTON_PADDING*4, pady=(BUTTON_PADDING*2, BUTTON_PADDING))
         self.__select_button: OptionsButton = OptionsButton(self, text="Select optimization", callable=change_menu, callable_args={"menu_name": "select"}, padx=BUTTON_PADDING*4, pady=BUTTON_PADDING)

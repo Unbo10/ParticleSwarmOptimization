@@ -171,6 +171,7 @@
         +display()
     }
 
+    OptionsFrame "1" --* "3" OptionsButton
     OptionsFrame --> Color : "uses(?)"
     OptionsFrame --> FontName : "uses(?)"
     OptionsFrame "1" --* "3" OptionsButton
@@ -193,6 +194,23 @@
 
     OptionsButton "1" --|> "1" tkButton
     OptionsButton --> Color : "uses(?)"
+
+    class OptionsButton{
+        - tk.Frame parent_frame
+        - callable callable
+        - dict callable_args
+        - tuple padx
+        - tuple pady
+
+        - enter(event e)
+        - leave(event e)
+        - click(event e)
+        - release(event event)
+        - display(int row, int column, str sticky)
+    }
+
+    OptionsButton --> Color : "uses(?)"
+    OptionsButton "1" --|> "1" tkButton
 
     class SelectMenu {
         %% - __init__(tk.Frame parent_frame, callable initialize_window, callable change_menu, ~Optimization~ optimization_history, int window_width, int window_height)
