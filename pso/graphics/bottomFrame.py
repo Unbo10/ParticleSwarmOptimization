@@ -7,6 +7,9 @@ from pso.graphics.bottomButton import BottomButton
 from pso.graphics.popUpFrame import PopUpFrame
 
 class BottomFrame(tk.Frame):
+    """ 
+    Manages the bottom frame of the GUI that contains the buttons for the info and help pop up frames.
+    """
     def __init__(self, master_frame, menu_frame: tk.Frame, window_width: int, window_height, title_height: int, bottom_frame_height: int, program_version: str):
         super().__init__(menu_frame, bg=Color.test3_bg)
         self.__window_width: int = window_width

@@ -6,6 +6,9 @@ from pso.graphics.colors import Color
 from pso.graphics.fonts import FontName
 
 class OptionsFrame(tk.Frame):
+    """
+    OptionsFrame is a custom frame class that contains the main menu options.
+    """
     def __init__(self, parent_frame: tk.Frame, change_menu: callable,  window_width: int, window_height: int, title_height, bottom_frame_height: int):
         super().__init__(parent_frame, bg=Color.window_bg)
         self.__window_width: int = window_width

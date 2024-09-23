@@ -5,6 +5,9 @@ from pso.graphics.colors import Color
 from pso.graphics.fonts import FontName
 
 class FunctionChoiceMenu():
+    """ 
+    Class that manages teh function to get chosen from a dropdown menu.
+    """
     def __init__(self, parent_frame: tk.Frame, text: str, options: list[str], display_graph: callable) -> None:
         self.__options: list[str] = options
         self.__display_graph: callable = display_graph

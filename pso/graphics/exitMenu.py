@@ -5,6 +5,9 @@ from pso.graphics.colors import Color
 from pso.graphics.fonts import FontName
 
 class ExitMenu():
+    """ 
+    Class that manages the exit menu of the GUI.
+    """
     def __init__(self, parent_frame: tk.Frame, initialize_window: callable):
         self.__parent_frame: tk.Frame = parent_frame
         self.root: tk.Frame = tk.Frame(parent_frame,

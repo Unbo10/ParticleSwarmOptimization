@@ -13,13 +13,17 @@ from pso.graphics.gui import GUI
 from pso.optimization import Optimization
 class Main:
     def __init__(self) -> None:
+        # * The history object is going to store the results of the optimization
         self.optimization_history: list[Optimization] = []
+        # * The database object is going to store the results of the optimization
         self.database: Data = Data(excel_file_name=self.determine_xlsx_name())
         print("Data object created")
+        # * The GUI object is going to be the main interaction with the user
         self.gui: GUI = GUI(program_version=self.get_version(), data=self.database, optimization_history=self.optimization_history)
     
     def determine_xlsx_name(self) -> str:
         try:
+            # * Tries to find the number of sessions. If it fails, it will return session1_results
             session_number = len(os.listdir(path="database/optimization_results")) + 1
             if session_number == 0:
                 raise OSError
@@ -31,12 +35,14 @@ class Main:
             return f"session{session_number}_results"
 
     def initialize_optimization(self) -> None:
+        # * Appends a new optimization object to the optimization history
         self.__optimizations.append(Optimization(data=self.__history))
 
     def run_optimization(self) -> None:
         pass
 
     def get_version(self) -> str:
+        # * Gets the version from the pyproject.toml file
         conf_file_path = '../pyproject.toml'
         data = toml.load(conf_file_path)
         version = data.get('tool', {}).get('poetry', {}).get('version', 'Version not found')

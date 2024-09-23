@@ -5,6 +5,9 @@ from pso.graphics.colors import Color
 from pso.graphics.fonts import FontName
 
 class OptionsButton(tk.Button):
+    """ 
+    Manages the buttons in the options frame. 
+    """
     def __init__(self, parent_frame: tk.Frame, text: str, callable: callable, callable_args: dict, padx: tuple, pady: tuple, button_font: font.Font = None, args: dict = {
     "bg": Color.optim_button_bg,
     "fg": Color.optim_button_fg,

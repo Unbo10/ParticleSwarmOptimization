@@ -5,6 +5,9 @@ from pso.graphics.colors import Color
 from pso.graphics.popUpFrame import PopUpFrame
 
 class BottomButton(tk.Button):
+    """ 
+    This class manages the buttons in the bottom frame of the GUI. Inherits from tk.Button.
+    """
     def __init__(self, menu_frame: tk.Frame, parent_frame: tk.Frame, image: tk.PhotoImage, active_image: tk.PhotoImage, pop_up_text: str, name: str, pop_up_frame_height: int, pop_up_frame_width: int, pop_up_frame_y: int, abg: str = Color.bottom_button_abg, cbg: str = Color.bottom_button_cbg, args: dict = {
         "relief": "flat",
         "bg": Color.bottom_button_bg,
@@ -32,6 +35,7 @@ class BottomButton(tk.Button):
         self.config(bg=self.__cbg, activebackground=self.__cbg, image=self.__image)
 
     def __release(self, event: tk.Event, pop_up_frames: list["PopUpFrame"]):
+        # * Implements when the button is released, it will display the pop up frame
         other_frames: list[PopUpFrame] = [frame for frame in pop_up_frames if frame.get_name() != self.pop_up_frame.get_name()]
         if event.type == '3':
             pass

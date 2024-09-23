@@ -6,6 +6,9 @@ from pso.graphics.colors import Color
 from pso.graphics.fonts import FontName
 
 class PopUpFrame(tk.Frame):
+    """ 
+    Sets up a frame that pops up when a button is clicked.
+    """
     def __init__(self, menu_frame: tk.Frame, name: str, height: int, width: int, y: int, text: str):
         super().__init__(menu_frame)
         self.__name: str = name
