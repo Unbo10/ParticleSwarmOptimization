@@ -149,10 +149,6 @@ class ParticleSwarm:
         dimensions: int = self.__particles[0].get_position().get_dimensions()
         gbest_index: int = 0
         for particle in self.__particles:
-            current_coordinates: np.ndarray = particle.get_position().get_coordinates().copy()
-            new_coordinates: np.ndarray = np.clip(current_coordinates, -self.__bound, self.__bound)
-            particle.get_position().set_coordinates(new_coordinates)
-            particle.get_heuristic()._update(particle.get_position())
             if particle.get_heuristic().get_coordinates()[dimensions] < self._heuristic_f(self.__gbest):
                 # print(f"{particle.get_heuristic().get_coordinates()[dimensions]}  <  {self._heuristic_f(self.__gbest)}")
                 self.__gbest.set_coordinates(particle.get_position().get_coordinates().copy())

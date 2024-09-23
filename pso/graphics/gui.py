@@ -32,7 +32,6 @@ class GUI:
         if menu_name in self.__menus:
             for menu in self.__menus.values():
                 menu.forget()
-            time.sleep(0.5) # * Prevents the user from clicking ViewButton instances too fast.
             self.__menus[menu_name].display()
             print(menu_name)
             # print(self.optimization_history)

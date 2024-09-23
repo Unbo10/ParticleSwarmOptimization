@@ -25,7 +25,7 @@ from matplotlib.pyplot import Figure
 import numpy as np
 import pandas as pd
 
-from pso.swarm.particle_swarm import ParticleSwarm
+from pso.swarm.particleSwarm import ParticleSwarm
 from pso.vector.position import Position
 from pso.database.data import Data
 
@@ -106,6 +106,10 @@ class Optimization:
                     # * Each iteration the particles update their velocity and position.
                     particle._update_velocity(swarm.get_gbest())
                     particle.get_position()._update(particle.get_velocity())
+                    current_coordinates: np.ndarray = particle.get_position().get_coordinates().copy()
+                    new_coordinates: np.ndarray = np.clip(current_coordinates, -self.bound, self.bound)
+                    particle.get_position().set_coordinates(new_coordinates)
+                    particle.get_heuristic()._update(particle.get_position())
                     particle.get_velocity().set_coordinates(np.clip(particle.get_position().get_coordinates(), -5, 5))
                     
                     new_position = particle.get_position().get_coordinates()

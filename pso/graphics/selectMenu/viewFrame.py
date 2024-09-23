@@ -15,25 +15,30 @@ class ViewFrame(tk.Frame):
     """ 
     Manages the view of an optimization by iterating through the positions of the particles.
     """
-    def __init__(self, initialize_window: callable, change_menu: callable, optimization: Optimization, function_fig: Figure, bg: str = Color.test3_bg) -> "ViewFrame": # ! Correct the type hint in the other classes
+    def __init__(self, initialize_window: callable, change_menu: callable, optimization: Optimization, function_fig: Figure, bg: str = Color.test3_bg) -> "ViewFrame":
         super().__init__(bg=bg)
         self.__initialize_window: callable = initialize_window
+        self.__change_menu: callable = change_menu
         self.__optimization: Optimization = optimization
         self.__function_fig: Figure = function_fig
         back_button_image: tk.PhotoImage = tk.PhotoImage(file="graphics/assets/arrow-back.png").subsample(4)
         back_button_active_image: tk.PhotoImage = tk.PhotoImage(file="graphics/assets/arrow-back-active.png").subsample(4)
         self.__title: tk.Label = tk.Label(self, text=f"Optimization {optimization.index}", height=2, bg=Color.select_title_bg, fg=Color.select_title_fg, font=font.Font(family=FontName.title, size=15))
-        self.__back_button: BackButton = BackButton(self, image=back_button_image, active_image=back_button_active_image, width=50, height=50, change_menu=change_menu, change_menu_args={"menu_name": "select"})
+        self.__back_button: BackButton = BackButton(self, image=back_button_image, active_image=back_button_active_image, width=50, height=50, change_menu=self.back_button_callable, change_menu_args={"menu_name": "select"})
         # self.__pause_button # * Could be a BackButton object
         # self.__reset_button # * Could be a BackButton object
         self.__fig_main_axis: Axes = self.__function_fig.get_axes()[0]
         self.__iteration_canvases: list[tk.Canvas] = [self.__create_iteration_canvas(iteration) for iteration in range(0, optimization.iterations + 1)]
         self.__exited_menu: bool = False
 
+    def back_button_callable(self, **args) -> None:
+        self.__exited_menu = True
+        self.after(500, self.__change_menu(**args)) # * allows display_iteration_canvases to reach another iteration so the condition of exited_menu is checked
+
     def __create_iteration_canvas(self, iteration: int) -> tk.Canvas:
         fig: Figure = deepcopy(self.__function_fig)
         fig.set_size_inches(4.8, 4.8)
-        fig_main_axis: Axes = fig.get_axes()[0]
+        fig_main_axis: Axes = fig.get_axes()[0] # * Main axes: title, x-axis and y-axis
         fig_main_axis.set_title(f"{self.__optimization.function_choice} - Iteration {iteration}")
         iteration_df_start: int = (iteration * self.__optimization.swarm.get_particle_amount()) + iteration
         iteration_df_end: int = iteration_df_start + self.__optimization.swarm.get_particle_amount()
@@ -45,7 +50,6 @@ class ViewFrame(tk.Frame):
         return figure_canvas.get_tk_widget()
     
     def display_iteration_canvas(self, iteration: int) -> None:
-        print(self.__exited_menu)
         if self.__exited_menu:
             return None
         try:
@@ -67,7 +71,7 @@ class ViewFrame(tk.Frame):
         self.__title.pack(fill="x", anchor="e")
         self.__back_button.display(x=0, y=0)
         self.place(x=0, y=0, width=500, height=600)
-        print(self.display_iteration_canvas(0)) # ! Weird calls to this function
+        self.display_iteration_canvas(0)
 
     def forget(self) -> None:
         self.__exited_menu = True

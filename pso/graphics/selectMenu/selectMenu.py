@@ -55,6 +55,7 @@ class SelectMenu():
         self.__title.pack(fill="x", anchor="e")
         self.__back_button.display(x=0, y=0)
         self.__back_button.focus_set()
+        # print(self.root.focus_get())
 
         if len(self.__optimization_history) == 0:
             print("len 0")
@@ -72,7 +73,6 @@ class SelectMenu():
                 self.__optimization_frames.append(OptimizationFrame(self.__container_frame, optimization=optimization, forget_select_menu=self.forget, initialize_window=self.initialize_window, change_menu=self.change_menu, width=self.__container_frame_width - 50, scrollbar_width=self.__scrollbar_width, height=120, separation=20, frame_index=index))
                 container_frame_height += 140
                 index += 1
-            print(self.__optimization_frames, "1")
             for optim_frame in self.__optimization_frames:
                 for child in optim_frame.root.winfo_children() + [optim_frame.root]:
                     child.bind("<MouseWheel>", self.__scroll_mouse_wheel)
@@ -91,7 +91,6 @@ class SelectMenu():
             self.__canvas.place(y=(self.__title_height) + 15, x=15, width=self.__window_width - (30 + self.__scrollbar_width), height=self.__window_height - (self.__title_height + 30))
             self.__canvas.yview_moveto(0) # * So that every time the menu is displayed it is showing the top optimizations and not the ones the user was seeing before they went back to the main menu.
         self.root.place(x=0, y=0, width=self.__window_width, height=self.__window_height)
-        # print(self.__window_width, self.__window_height)
 
     def forget(self):
         self.root.place_forget()

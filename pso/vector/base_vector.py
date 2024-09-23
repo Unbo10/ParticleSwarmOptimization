@@ -71,7 +71,8 @@ class Vector:
         bound (float): 
             The maximum absolute value of the coordinates in all of its dimmensions.
         """
-        self._coordinates = np.random.uniform(low=-bound, high=np.nextafter(bound, bound + 1), size=dimensions)
+        self._coordinates = np.random.uniform(low=-bound, high=np.nextafter(bound, bound + 1), size=dimensions) 
+        self._coordinates = np.clip(self._coordinates, -bound, bound)
     
     # def __lt__(self, other) -> bool:
     #     if not isinstance(other, Vector):

@@ -149,8 +149,6 @@ class CreateMenu:
         self.__plot_canvases[option].pack(fill="x", expand=True, anchor="ne", side="right", padx=10, pady=(10, 10))
 
     def display(self):
-        # print("AOIDJA;WOIEFJW") # * The problem with not entering the method seemed to have been something with the installation of the package. Still doesn't quite make sense to me, so needs to be reviewed.
-        # * Update: It apparently is; if the command ``pip install -e .`` isn't run or without the ``-e`` option, files won't be updated. May be better to run everything on a venv
         self.__initialize_window(width=self.__width, height=self.__height, title="Create Optimization (PSO)")
         self.__title.pack(fill="x", anchor="n", side="top")
         self.__back_button.focus_set()
@@ -174,6 +172,7 @@ class CreateMenu:
         self.root.place(x=0, y=0, width=self.__width, height=self.__height)
 
     def forget(self) -> None:
+        self.root.focus_set()
         self.root.place_forget()
         self.__title.pack_forget()
         self.__inputs_frame.pack_forget()
