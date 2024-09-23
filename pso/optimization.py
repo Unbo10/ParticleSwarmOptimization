@@ -69,6 +69,8 @@ class Optimization:
         # TODO: Make a better implementation of choosing the desired function, at the moment it's done manually, by modifying the variable selection through the parameters
         # TODO: Implement the second function to the dimension that the user selects. It is set to two dimensions. ? A dimension parameter in the heuristic ? 
         # * Agree, but what should be then the type of the heuristic_value? A list or maybe an ndarray?
+        # * Already solved
+
         if selection == "Sphere":
             self.bound = 2
             return self.sphere_f
@@ -116,8 +118,16 @@ class Optimization:
                     particle.get_position().set_coordinates(new_position) 
                     
                     # ! Gbest is not actually gbest
+                    # * Seems to be solved
+                    
+                    # ! Check if the boundaries are necessary or correct, seems to graph prettier at least.
                     particle.get_heuristic()._update(particle.get_position())
                     particle._update_pbest()
+                    particle.get_velocity().set_coordinates(np.clip(particle.get_position().get_coordinates(), -5, 5))
+                    new_position = particle.get_position().get_coordinates()
+                    new_position = np.clip(new_position, -10, 10)
+                    particle.get_position().set_coordinates(new_position) 
+                    
 
                 # * Append the data of each particle after a certain iteration
                 # * to a temporary dictionary
@@ -153,18 +163,23 @@ class Optimization:
         return self.__function_choice
 
     # TODO: Make this getters' attributes properties
-    def get_dimensions(self) -> int:
+    # * Done
+    @property
+    def dimensions(self) -> int:
         return self._dimensions
     
-    def get_index(self) -> int:
+    @property
+    def index(self) -> int:
         return self.__index
     
-    def get_iterations(self) -> int:
+    @property
+    def iterations(self) -> int:
         return self.__iterations
 
-    def get_swarm(self) -> ParticleSwarm:
+    @property
+    def swarm(self) -> ParticleSwarm:
         return self.__swarm
-
+    
 if __name__ == "__main__":
     data = Data(excel_file_name="session1_results")
     main = Optimization(0, data=data, cognitive_coefficient=1.5, inertia_coefficient=0.4, social_coefficient=1.5, particle_amount=20, dimensions=3, iterations=100) # ! CHECK: Minimum dimension

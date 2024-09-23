@@ -21,6 +21,7 @@ Other getters inherited from the Vector class of the base_vector module.
 import numpy as np
 import math
 from pso.vector.base_vector import Vector
+from pso.vector.position import Position
 
 class Heuristic(Vector):
     """
@@ -64,7 +65,8 @@ class Heuristic(Vector):
         position : Position
             The position object used to update the vector.
         """
-        heuristic_value = self._heuristic_f(position) # TODO: Static type to be defined
+        heuristic_value: Position = self._heuristic_f(position) # TODO: Static type to be defined
+        # ? I think Position works
         new_coordinates: np.ndarray = self.get_coordinates().copy()
         for i in range(self.get_dimensions() - 1):
             new_coordinates[i] = position.get_coordinates().copy()[i]

@@ -29,6 +29,7 @@ class OptionsFrame(tk.Frame):
             button.grid_display(row=button_row, column=0, sticky="nsew")
             button_row += 1
         # ! CHECK: Functionality of the binding in Windows
+        # * Checked that it works properly in Windows
         frame_width = self.__window_width
         frame_height = self.__window_height - (self.__title_height + self.__bottom_frame_height)
         self.place(x=0, y=self.__title_height, width=frame_width, height=frame_height)

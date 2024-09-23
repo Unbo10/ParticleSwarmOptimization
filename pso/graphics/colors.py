@@ -136,3 +136,12 @@ class Color:
     bottom_scrollbar_abg: str = "#0f0f0f"
     bottom_scrollbar_hbg: str = bottom_label_bg
     bottom_scrollbar_hcolor: str = "#000000"
+    
+    # * Data colors
+    siders: str = "ffffff"
+    common_side: str = "000000"
+    title_cell: str = "f0f0f0"
+    grad_fill_start: str = "085063"
+    grad_fill_stop: str = "d6e416"
+    cell_fill: str = "042d53"
+    cell2_fill: str = "dfdfdf"

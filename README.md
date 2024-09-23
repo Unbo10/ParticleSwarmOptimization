@@ -1,6 +1,177 @@
-# LaHerencia
+<h1 align="center">The Inheritance</h1>
 
 
+
+## Project explanation:
+To know and understand better the PSO algorithm, we encourage you to check the Wiki of this project:
+- ![Wiki](https://github.com/Unbo10/ParticleSwarmOptimization/wiki/PSO's-heuristic)
+
+Once you are familiarized with it, we can proceed. We chose to work on this problem because it was a great way to apply all the concepts that we learned in class, to learn how to use external libraries to make a graphic interface or work with a database and finally, because it was a challenge. 
+
+The PSO algorithm consists of a set of Particles that "explore" the function, with the purpose of finding it's minimum. That's why the implementation that we made consists of a ```Vector``` class, that is the class from wich ```Position```, ```Heuristic``` and ```Velocity``` inherit. Then, we define the ```Particle``` class, that consists of the three previous classes and has methods such as ```initialize_randomly``` or ```_update_velocity```, that allows us to control the particles over the domain of the function. Finally, we have the ```ParticleSwarm``` class, which is the set of all the particles that we want to create. This is the abstraction of the project that enables us to solve the problem, with the algorithm. The steps to follow are detailed in the Wiki.
+
+
+## How to run the project using a virtual environment:
+First of all, what is a virtual envoronment? A virtual envirnment is a "separate folder" that creates an independent set of installed packages. This means that we can have different versions of some packages in that folder than those that we have globally installed. This is useful because some versions of this project might need specifically some requirements that change over time.
+
+### Steps for Windows:
+
+- First step, clone the repository:
+```bash
+git clone https://github.com/Unbo10/ParticleSwarmOptimization.git
+```
+
+- Next, in the folder that you cloned the repository, create the virtual environment:
+```bash
+pip install virtualenv
+```
+
+- Create environment folder inside the current project directory:
+```bash
+python -m venv env
+```
+
+- Activate the virtual environment:
+```bash
+env\Scripts\activate.bat
+```
+- Once you activate it you should see ```(env)``` on the terminal.
+
+- Install the project package:
+```bash
+pip install -e.
+```
+
+- Go to the pso folder:
+```bash
+cd pso
+```
+- Run main.py:
+```bash
+py main.py
+```
+
+## Class Diagram of the swarm and vector packages:
+``` mermaid
+    classDiagram
+    class Optimization{
+        - I Data data
+        - float cognitive_coefficient
+        - float inertia_coefficient
+        - float social_coefficient
+        - int dimensions
+        - int iterations
+        - int particle_amount
+        - ParticleSwarm swarm
+
+        - heuristic(Position position, int selection)
+        - optimize()
+
+        + get_dimensions(): int
+        + get_index(): int
+        + get_iterations(): int
+        + get_swarm(): ParticleSwarm
+    }
+    Optimization "1" --o "1" ParticleSwarm
+
+
+    class ParticleSwarm{
+        - float cognitive_coefficient
+        - float inertia_coefficient
+        - float social_coefficient
+        - int particle_amount
+        - list[Particle] particles
+        - Position gbest
+        + callable heuristic_f
+
+        - __repr__() : str
+        # initialize_particles_randomly(int bound)
+        + update_gbest(): None
+
+        + get_cognitive_coefficient(): float
+        + get_inertia(): float
+        + get_social_coefficient(): float
+        + get_particles_amount(): int
+        + get_gbest(): Vector
+        + get_particles(): ~Particle~
+        + get_heuristic(): callable
+    }
+    ParticleSwarm "1" o--"*" Particle
+
+    class Particle{
+        <!-- ? Are r_1 and r_2 chosen for every iteration or at each iteration? -->
+        + dict color
+        - float cognitive_coefficient
+        - float inertia_coefficient
+        - float social_coefficient
+        - Heuristic heuristic
+        - Position pbest
+        - Position position
+        - Velocity velocity
+        - int index
+        - bool has_gbest
+
+        # update_pbest(position)
+        # update_velocity(Position gbest)
+        + initialize_randomly(int bound)
+        
+        + get_pbest()
+        + get_position()
+        + get_velocity()
+        + get_heuristic()
+        + get_index()
+
+        + set_heuristic(Heuristic heuristic)
+        + set_index(int index)
+        + set_pbest(Position pbest)
+        + set_position(Position position)
+        + set_velocity(Velocity velocity)
+    }
+    Particle "1" o-- "1" Heuristic
+    Particle "1" o-- "2" Position
+    Particle "1" o-- "1" Velocity
+
+
+    class Vector {
+        # np.ndarray coordinates
+        # int dimensions
+
+        - __repr__() : str
+        + initialize_randomly(float)
+        # update()
+        
+        + get_coordinates() : np.ndarray
+        + get_dimensions() : int
+        + set_coordinates(coordinates: np.ndarray)
+        + set_dimensions(dimensions: int)  
+    }
+
+    class Heuristic{
+        <!-- ? Should the inherited attributes be kept in the child class?-->
+        <!-- ? Should ndarrays be simply called arrays since the fact they are np has to do more with the implementation? -->
+        # callable heuristic
+        # update()
+        + get_heuristic_f()
+    }
+    Heuristic "1" --|> "1" Vector
+
+    class Position{
+        # update(Velocity: velocity)
+    }
+    Position "1" --|> "1" Vector
+
+    class Velocity {
+        
+        - __init__(int dimensions)
+    }
+    Velocity "1" --|> "1" Vector
+
+```
+
+
+
+
+## Complete Class Diagram, with the data and graphic user interface packages:
 ``` mermaid
     classDiagram
     direction TB
@@ -182,6 +353,12 @@
         - dict callable_args
         - tuple padx
         - tuple pady
+        - str optim_button_fg
+        - str optim_button_hbg
+        - str optim_button_hcolor
+        - str optim_button_abg
+        - str optim_button_bg
+        - str back_button_afg
 
         - enter(tk.Event e)
         - leave(tk.Event e)
@@ -195,22 +372,72 @@
     OptionsButton "1" --|> "1" tkButton
     OptionsButton --> Color : "uses(?)"
 
-    class OptionsButton{
-        - tk.Frame parent_frame
-        - callable callable
-        - dict callable_args
-        - tuple padx
-        - tuple pady
+    class CreateButton {
+        - str text1
+        - str text2
+        - str __active_text
+        - callable __callable1
+        - callable __callable2
 
-        - enter(event e)
-        - leave(event e)
-        - click(event e)
-        - release(event event)
-        - display(int row, int column, str sticky)
+        + __init__(tk.Frame parent_frame, str text1, str text2, callable callable1, callable callable2, int padx, int pady)
+        - _release(tk.Event event)
     }
 
-    OptionsButton --> Color : "uses(?)"
-    OptionsButton "1" --|> "1" tkButton
+    CreateButton "1" --|> "1" OptionsButton
+    CreateButton --> Color : "uses"
+
+
+    class CreateInput {
+        - tk.Label __label
+        - tk.StringVar input_value
+        - tk.Entry entry
+        - str __default_value
+
+        + __init__(tk.Frame parent_frame, str default_value, str text, int width)
+        - __select_text(tk.Event e) : None
+        + grid(int label_row, int column, str sticky)
+        + get_input() : str
+    }
+
+    CreateInput --> Color : "uses"
+    CreateInput --> FontName : "uses"
+
+    class CreateMenu {
+        - tk.Button __run_view_button
+        - tk.Button __reset_button
+        - tk.Frame __buttons_frame
+        - tk.Button __back_button
+        - tk.Tk root
+        - int __width
+        - int __height
+        - tk.Label __title
+        - tk.Frame __inputs_frame
+
+        + display_graph(str graph_type)
+        + forget() : None
+        + run_or_view_optimization(tk.Event e, bool create_optimization) : None
+        - __create_contour_levels(list[float] levels_boundaries) : np.linspace
+        - __create_x_y_values(int bound) : tuple[np.ndarray]
+        - __create_fig(str option) : Figure
+    }
+
+    CreateMenu --> Color : "uses"
+    CreateMenu --> FontName : "uses"
+
+    class FunctionChoiceMenu {
+        - list~str~ __options
+        - callable __display_graph
+        - tk.StringVar __choice
+        - tk.OptionMenu __dropdown_menu
+        - tk.Label __label
+
+        + __init__(tk.Frame parent_frame, str text, list~str~ options, callable display_graph)
+        - __trigger_graph_change(*args) : None
+        + grid(int label_row, int column, str sticky) : None
+    }
+
+    FunctionChoiceMenu --> Color : "uses"
+    FunctionChoiceMenu --> FontName : "uses"
 
     class SelectMenu {
         %% - __init__(tk.Frame parent_frame, callable initialize_window, callable change_menu, ~Optimization~ optimization_history, int window_width, int window_height)
@@ -259,6 +486,39 @@
         + display()
     }
 
+    class ViewButton {
+        - tk.Image __image
+        - tk.Image __active_image
+        - ViewFrame view_frame
+        - callable __forget_select_menu
+
+        + __init__(tk.Frame master, tk.Image image, tk.Image active_image, callable forget_select_menu, callable initialize_window, callable change_menu, Optimization optimization, str bg=Color.select_label_optim_bg, str fg=Color.select_label_optim_fg)
+        - __enter(tk.Event e) : None
+        - __leave(tk.Event e) : None
+        - __click(tk.Event e) : None
+        - __bind_to_events() : None
+    }
+
+    ViewButton --> Color : "uses"
+    ViewButton --> ViewFrame : "contains"
+    ViewButton --> Optimization : "uses"
+
+    class ViewFrame {
+        - callable __initialize_window
+        - Optimization __optimization
+        - Figure __function_fig
+        - tk.Label __title
+        - BackButton __back_button
+
+        + __init__(callable initialize_window, callable change_menu, Optimization optimization, Figure function_fig, str bg=Color.test3_bg) : ViewFrame
+    }
+
+    ViewFrame --> Color : "uses"
+    ViewFrame --> FontName : "uses"
+    ViewFrame --> BackButton : "contains"
+    ViewFrame --> Optimization : "uses"
+    ViewFrame --> Figure : "uses"
+
     class OptimizationFrame {
         %% - __init__(tk.Frame root, Optimization optimization, int width, int height, int separation, int scrollbar_width, int frame_index)
         - tk.Frame frame
@@ -268,7 +528,7 @@
         - int separation
         - int index
         - dict widget_parameters
-        - tk.Label name_label
+        - tk.Label Fontname_label
         - tk.Label function_label
         - tk.Label dimensions_label
         - tk.Label minima_indicator_label

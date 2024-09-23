@@ -5,6 +5,7 @@ import openpyxl as px
 import openpyxl.styles as px_styles
 import openpyxl.worksheet.worksheet as px_worksheet
 import pandas as pd
+from pso.graphics.colors import Color
 
 class Data:
     def __init__(self, excel_file_name: str) -> None:
@@ -15,13 +16,14 @@ class Data:
         self.__xlsx_path: str = f"database/optimization_results/{self.__xlsx_name}.xlsx" # * It is determined if it exists in Main
         # * The two dots are needed if the GUI is directly executed.
         # ! For now, the execution will continue to be done in the gui.py file, but the final version MUST CHANGE the paths to execute everything from the main.py file.
+        # * Already done
     def append_gbest_indexes(self, optimization_gbest_indexes: list[int]) -> None:
         self.__gbest_history.append(optimization_gbest_indexes)
         self.__number_of_optimizations += 1
     
     def append_optimization(self, optimization_df: pd.DataFrame) -> None:
         # TODO: Test the whole class with multiple sessions and files. Also, update and add documentation and the class diagram.
-        
+        # * Seems to be working alright
         if "optimization_results" not in os.listdir("database"):
             os.mkdir("database/optimization_results")
             
@@ -46,16 +48,24 @@ class Data:
         sheet.freeze_panes = "A4"
 
         # * Variables for styling the BORDERS
-        title_side = px_styles.Side(style="slantDashDot", color="ffffff") # ! Replace for a Color attribute once the branch is merged
+        title_side = px_styles.Side(style="slantDashDot", color=Color.siders) 
+        # ! Replace for a Color attribute once the branch is merged
+        # * Done
         title_border = px_styles.Border(left=title_side, right=title_side,
             top=title_side, bottom=title_side)
-        header_side = px_styles.Side(style="thick", color="ffffff") # ! Replace for a Color attribute once the branch is merged
+        header_side = px_styles.Side(style="thick", color=Color.siders) 
+        # ! Replace for a Color attribute once the branch is merged
+        # * Done
         header_border = px_styles.Border(left=header_side,
             right=header_side, top=header_side, bottom=header_side)
-        common_side = px_styles.Side(style="thin", color="000000") # ! Replace for a Color attribute once the branch is merged
+        common_side = px_styles.Side(style="thin", color=Color.common_side) 
+        # ! Replace for a Color attribute once the branch is merged
+        # * Done
         common_border = px_styles.Border(left=common_side,
             right=common_side, top=common_side, bottom=common_side)
-        spacing_side = px_styles.Side(style="thin", color="ffffff") # ! Replace for a Color attribute once the branch is merged
+        spacing_side = px_styles.Side(style="thin", color=Color.siders) 
+        # ! Replace for a Color attribute once the branch is merged
+        # * Done
         spacing_border = px_styles.Border(left=spacing_side,
             right=spacing_side, top=common_side, bottom=common_side)
         
@@ -75,9 +85,13 @@ class Data:
         title_cell.alignment = px_styles.Alignment(horizontal="center",
             vertical="center")
         title_cell.font = px_styles.Font(name="FreeMono", size=18,
-            bold=True, color="f0f0f0") # ! Replace for a Color attribute once the branch is merged
-        title_cell.fill = px_styles.GradientFill(stop=("085063", "d6e416"),
-            type="linear", degree=90) # ! Replace for a Color attribute once the branch is merged. AND CHECK THE GRADIENT
+            bold=True, color=Color.title_cell) 
+        # ! Replace for a Color attribute once the branch is merged
+        # * Done
+        title_cell.fill = px_styles.GradientFill(stop=(Color.grad_fill_start, Color.grad_fill_stop),
+            type="linear", degree=90) 
+        # ! Replace for a Color attribute once the branch is merged. AND CHECK THE GRADIENT
+        # * Done
         title_cell.border = title_border
         
         # * Naming the columns by naming and styling their HEADERS
@@ -91,8 +105,10 @@ class Data:
             cell = sheet.cell(row=3, column=column)
             cell.alignment = px_styles.Alignment(horizontal="center",
                 vertical="center", wrap_text=True)
-            cell.font = px_styles.Font(name="FreeMono", size=11, bold=True, color="ffffff")
-            cell.fill = px_styles.PatternFill(start_color="042d53", end_color="042d53", fill_type="solid") # ! @U Replace for a Color attribute once the branch is merged
+            cell.font = px_styles.Font(name="FreeMono", size=11, bold=True, color= Color.siders)
+            cell.fill = px_styles.PatternFill(start_color= Color.cell_fill, end_color= Color.cell_fill, fill_type="solid") 
+            # ! @U Replace for a Color attribute once the branch is merged
+            # * Done
             cell.border = header_border
             sheet.row_dimensions[3].height = 40
 
@@ -118,8 +134,10 @@ class Data:
                 cell.value = particle_index
                 cell.alignment = px_styles.Alignment(horizontal="center",
                     vertical="center")
-                cell.fill = px_styles.PatternFill(start_color="dfdfdf", 
-                    end_color="dfdfdf", fill_type="solid") # ! Replace for a Color attribute once the branch is merged
+                cell.fill = px_styles.PatternFill(start_color= Color.cell2_fill, 
+                    end_color= Color.cell2_fill, fill_type="solid") 
+                # ! Replace for a Color attribute once the branch is merged
+                # * Done
                 cell.border = common_border
                 if particle_index == number_of_particles:
                     particle_index = 1
@@ -136,8 +154,10 @@ class Data:
         while starting_row < optimization_df.shape[0]:
             sheet.merge_cells(f"B{starting_row}:B{ending_row}")
             sheet[f"B{starting_row}"] = iteration_number
-            sheet.cell(row=starting_row, column=2).fill = px_styles.PatternFill(start_color="dfdfdf", end_color="dfdfdf",
-                fill_type="solid") # ! Replace for a Color attribute once the branch is merged
+            sheet.cell(row=starting_row, column=2).fill = px_styles.PatternFill(start_color= Color.cell2_fill, end_color= Color.cell2_fill,
+                fill_type="solid") 
+            # ! Replace for a Color attribute once the branch is merged
+            # * Done
             sheet.cell(row=starting_row, column=2).border = common_border
             sheet.cell(row=ending_row, column=2).border = common_border
             sheet[f"B{starting_row}"].alignment = px_styles.Alignment(horizontal="center", vertical="center")
@@ -146,6 +166,7 @@ class Data:
             ending_row = starting_row + number_of_particles - 1
             iteration_number += 1
             # ! Checked the style of the last row
+            # * Looks good 
 
         # * Appending the ARRAYS OF COORDINATES to the corresponding cell and styling them
         for row in range(optimization_df.shape[0]):
@@ -156,7 +177,9 @@ class Data:
                     # * To avoid iterating through NaNs
                     value: str = ', '.join(map(str, value))
                     # * Makes each value of the tuple of floats a string (using map) and then joins them with a comma in a single string
-                    cell.fill = px_styles.PatternFill(start_color="dfdfdf", end_color="dfdfdf", fill_type="solid") # ! Replace for a Color attribute once the branch is merged
+                    cell.fill = px_styles.PatternFill(start_color=Color.cell2_fill, end_color=Color.cell2_fill, fill_type="solid") 
+                    # ! Replace for a Color attribute once the branch is merged
+                    # * Done
                     cell.border = common_border
                 else:
                     cell.border = spacing_border

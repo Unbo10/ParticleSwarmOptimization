@@ -19,12 +19,12 @@ class ViewFrame(tk.Frame):
         self.__function_fig: Figure = function_fig
         back_button_image: tk.PhotoImage = tk.PhotoImage(file="graphics/assets/arrow-back.png").subsample(4)
         back_button_active_image: tk.PhotoImage = tk.PhotoImage(file="graphics/assets/arrow-back-active.png").subsample(4)
-        self.__title: tk.Label = tk.Label(self, text=f"Optimization {optimization.get_index()}", height=2, bg=Color.select_title_bg, fg=Color.select_title_fg, font=font.Font(family=FontName.title, size=15))
+        self.__title: tk.Label = tk.Label(self, text=f"Optimization {optimization.index}", height=2, bg=Color.select_title_bg, fg=Color.select_title_fg, font=font.Font(family=FontName.title, size=15))
         self.__back_button: BackButton = BackButton(self, image=back_button_image, active_image=back_button_active_image, width=50, height=50, change_menu=change_menu, change_menu_args={"menu_name": "select"})
         # self.__pause_button # * Could be a BackButton object
         # self.__reset_button # * Could be a BackButton object
         self.__fig_main_axis: Axes = self.__function_fig.get_axes()[0]
-        self.__iteration_canvases: list[tk.Canvas] = [self.__create_iteration_canvas(iteration) for iteration in range(0, optimization.get_iterations() + 1)]
+        self.__iteration_canvases: list[tk.Canvas] = [self.__create_iteration_canvas(iteration) for iteration in range(0, optimization.iterations + 1)]
         self.__exited_menu: bool = False
 
     def __create_iteration_canvas(self, iteration: int) -> tk.Canvas:
@@ -32,8 +32,8 @@ class ViewFrame(tk.Frame):
         fig.set_size_inches(4.8, 4.8)
         fig_main_axis: Axes = fig.get_axes()[0]
         fig_main_axis.set_title(f"{self.__optimization.function_choice} - Iteration {iteration}")
-        iteration_df_start: int = (iteration * self.__optimization.get_swarm().get_particle_amount()) + iteration
-        iteration_df_end: int = iteration_df_start + self.__optimization.get_swarm().get_particle_amount()
+        iteration_df_start: int = (iteration * self.__optimization.swarm.get_particle_amount()) + iteration
+        iteration_df_end: int = iteration_df_start + self.__optimization.swarm.get_particle_amount()
         iteration_df: pd.DataFrame = self.__optimization.optimization_df["Position"].iloc[iteration_df_start:iteration_df_end]
         for coordinates in iteration_df:
             fig_main_axis.scatter(coordinates[0], coordinates[1], color="red")
@@ -48,7 +48,7 @@ class ViewFrame(tk.Frame):
             pass
         finally:
             self.__iteration_canvases[iteration].pack(fill="none", expand=True)
-            if (iteration < self.__optimization.get_iterations()) and not self.__exited_menu:
+            if (iteration < self.__optimization.iterations) and not self.__exited_menu:
                 self.after(1000, self.display_iteration_canvas, iteration + 1) # * Schedules the next iteration
 
     def display(self) -> None:
