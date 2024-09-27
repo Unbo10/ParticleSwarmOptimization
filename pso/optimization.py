@@ -110,22 +110,8 @@ class Optimization:
                     new_coordinates: np.ndarray = np.clip(current_coordinates, -self.bound, self.bound)
                     particle.get_position().set_coordinates(new_coordinates)
                     particle.get_heuristic()._update(particle.get_position())
-                    particle.get_velocity().set_coordinates(np.clip(particle.get_position().get_coordinates(), -5, 5))
-                    
-                    new_position = particle.get_position().get_coordinates()
-                    new_position = np.clip(new_position, -10, 10)
-                    particle.get_position().set_coordinates(new_position) 
-                    
-                    # ! Gbest is not actually gbest
-                    # * Seems to be solved
-                    
-                    # ! Check if the boundaries are necessary or correct, seems to graph prettier at least.
-                    particle.get_heuristic()._update(particle.get_position())
+                    particle.get_velocity().set_coordinates(np.clip(particle.get_position().get_coordinates(), -5, 5))                    
                     particle._update_pbest()
-                    particle.get_velocity().set_coordinates(np.clip(particle.get_position().get_coordinates(), -5, 5))
-                    new_position = particle.get_position().get_coordinates()
-                    new_position = np.clip(new_position, -10, 10)
-                    particle.get_position().set_coordinates(new_position) 
                     
 
                 # * Append the data of each particle after a certain iteration

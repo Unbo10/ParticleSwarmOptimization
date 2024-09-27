@@ -31,6 +31,9 @@
 # Ignore lock files (created by Excel or similar apps when a file is opened)
 .~lock.*
 
+# Ignore local files (personal files containing an explanation or isolated tests
+local/
+
 # Ignore system files
 .DS_Store
 Thumbs.db

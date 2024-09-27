@@ -10,6 +10,7 @@ authors = [
     "Santiago Rocha Pachón <srochap@unal.edu.co>",
     "Juan Sebastián Rueda <jruedase@unal.edu.co>"
 ]
+license = "MIT"
 readme = "README.md"
 repository = "https://github.com/Unbo10/ParticleSwarmOptimization"
 
