@@ -3,7 +3,7 @@ requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
-name = "psogui"
+name = "psopackage"
 version = "1.0.0"
 description = "A Particle Swarm Optimization package"
 authors = [
@@ -27,7 +27,7 @@ setuptools = ">=57.0.0"
 [tool.poetry.dev-dependencies]
 
 [tool.poetry.scripts]
-run = "pso.main:run"
+run = "psopackage.main:run"
 
 [build]
 exclude = ["examples/**", "tools/**"]
