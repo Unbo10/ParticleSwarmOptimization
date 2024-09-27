@@ -1,68 +1,72 @@
-# Ignore compiled object files
+# * Ignore compiled object files
 *.o
 *.ko
 *.obj
 *.elf
 
-# Ignore executable files
+# * Ignore executable files
 *.exe
 *.out
 *.app
 
-# Ignore libraries
+# * Ignore libraries
 *.a
 *.lib
 
-# Ignore logs and temporary files
+# * Ignore logs and temporary files
 *.log
 *.tmp
 
-# Ignore build directories
+# * Ignore build directories
 /build/
 /dist/
 /node_modules/
 
-# Ignore pycache
+# * Ignore pycache
 **/__pycache__/
 
-# Ignore Excel files (optimization results)
+# * Ignore Excel files (optimization results)
 *.xlsx
 
-# Ignore lock files (created by Excel or similar apps when a file is opened)
+# * Ignore lock files (created by Excel or similar apps when a file is opened)
 .~lock.*
 
-# Ignore local files (personal files containing an explanation or isolated tests
+# * Ignore local files (personal files containing an explanation or isolated tests
 local/
 
-# Ignore system files
+# * Ignore system files
 .DS_Store
 Thumbs.db
 
-# Ignore IDE-specific files
+# * Ignore IDE-specific files
 .idea/
 .vscode/
 
-# Ignore package lock files
+# * Ignore package lock files
 package-lock.json
 yarn.lock
 
-# Ignore environment-specific files
+# * Ignore environment-specific files
 .venv
 *.lock
 
-# Ignore sensitive or personal files
+# * Ignore sensitive or personal files
 config.ini
 secrets.json
 
-# Ignore backup files
+# * Ignore backup files
 *.bak
 *.swp
 *.swo
 
-# Ignore generated documentation
+# * Ignore generated documentation
 /docs/
 
-# Ignore miscellaneous files
+# * Ignore miscellaneous files
 *.zip
 *.tar.gz
 *.rar
+
+# * Ignore Docker files (temporary)
+*Dockerfile
+*.dockerignore

@@ -1,4 +1,4 @@
-<h1 align="center">The Inheritance</h1>
+<h1 align="center">Particle Swarm Optimization (PSO) package/h1>
 
 📋 Table of contents
 - [📖 About](#-about)
